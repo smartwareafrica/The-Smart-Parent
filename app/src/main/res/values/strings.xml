@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">The_Smart_Parent</string>
+    <string name="app_name">The Smart Parent</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="header">Header</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+
 </resources>

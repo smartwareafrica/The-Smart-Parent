@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_login_fragment"
+            android:icon="@drawable/ic_one"
+            android:title="Login" />
+        <item
+            android:id="@+id/nav_register_fragment"
+            android:icon="@drawable/ic_two"
+            android:title="Register" />
+        <item
+            android:id="@+id/nav_growth_fragment"
+            android:icon="@drawable/ic_three"
+            android:title="Growth Analysis" />
+        <item
+            android:id="@+id/nav_reminders_fragment"
+            android:icon="@drawable/ic_three"
+            android:title="Reminders" />
+
+        <item
+            android:id="@+id/nav_baby_products_fragment"
+            android:icon="@drawable/ic_one"
+            android:title="Baby Products" />
+    </group>
+    <group android:id="@+id/group_menu">
+        <item
+            android:id="@+id/nav_share_fragment"
+            android:icon="@drawable/ic_three"
+            android:title="Share" />
+        <item
+            android:id="@+id/nav_feedback_fragment"
+            android:icon="@drawable/ic_three"
+            android:title="Feedback" />
+    </group>
+
+</menu>

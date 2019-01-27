@@ -1,5 +1,6 @@
 package com.mwandojrtechnologies.the_smart_parent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -10,9 +11,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    Button btnRegister;
 
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
@@ -32,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
         // Setup drawer view
         setupDrawerContent(nvDrawer);
 
+        btnRegister = (Button) findViewById(R.id.btnRegister);
+         btnRegister.setOnClickListener(this);
+    }
+    @Override
+    public  void onClick(View v){
+        switch (v.getId()){
+            case R.id.btnRegister:
+                startActivity(new Intent(this, RegisterActivity.class));
+        }
     }
 
     @Override
@@ -113,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
         // Close the navigation drawer
         mDrawer.closeDrawers();
     }
+
+
 
 }
 

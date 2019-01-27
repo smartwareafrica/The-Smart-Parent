@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "837309674522",
+    "firebase_url": "https://the-smart-parent-598c2.firebaseio.com",
+    "project_id": "the-smart-parent-598c2",
+    "storage_bucket": "the-smart-parent-598c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837309674522:android:1cf5eae344690d03",
+        "android_client_info": {
+          "package_name": "com.mwandojrtechnologies.the_smart_parent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "837309674522-uqt05p1ruqij0s2aig9e5v3evbes3f1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDldOQHm4H7T9W8Ut9Osj8jUr4sHJHSk8k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,6 +8,21 @@
     <string name="header">Header</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="please_input_your_email">Please input your email</string>
+    <string name="registered_please_sign_in_here">Registered? Please Sign in here</string>
+    <string name="register_user">Register User</string>
+    <string name="please_input_your_password">Please input your password</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="login_to_your_account">Login to your account</string>
+    <string name="register">register</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <string name="don_t_have_an_account_please_register_here">Don\'t have an account? Please register here</string>
+    <string name="login">Login</string>
+    <string name="log_into_your_account">Log into your account</string>
+    <string name="save_details">Save details</string>
+    <string name="enter_your_full_name">Enter your full name</string>
+    <string name="enter_your_address">Enter your address</string>
 
 
 </resources>

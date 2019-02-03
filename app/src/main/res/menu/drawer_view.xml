@@ -24,7 +24,9 @@
             android:icon="@drawable/ic_one"
             android:title="Baby Products" />
     </group>
-    <group android:id="@+id/group_menu">
+    <group
+        android:id="@+id/group_menu"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_share_fragment"
             android:icon="@drawable/ic_three"

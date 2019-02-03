@@ -12,39 +12,45 @@
     android:paddingRight="16dp"
     tools:context=".RegisterFragment">
 
-        <!-- commenting code
 
           <EditText
             android:layout_margin="15dp"
             android:inputType="textEmailAddress"
-            android:hint="Please input your email"
+            android:hint="@string/please_input_your_email"
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            tools:targetApi="o"/>
 
         <EditText
             android:layout_margin="15dp"
             android:inputType="textPassword"
-            android:hint="Please input your password"
+            android:hint="@string/please_input_your_password"
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            tools:targetApi="o"/>
 
         <Button
             android:layout_margin="15dp"
             android:id="@+id/buttonRegister"
-            android:text="Register User"
+            android:text="@string/register_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
 
 
         <TextView
+            android:id="@+id/textViewSignin"
             android:textAlignment="center"
-            android:text="Registered? Please Sign in here"
+            android:text="@string/registered_please_sign_in_here"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"/>
 
-             -->
+
 
 </LinearLayout>

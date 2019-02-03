@@ -3,20 +3,13 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
-        <item name="colorPrimary">#F50707</item>
-        <item name="colorPrimaryDark">#061DB1</item>
+        <item name="colorPrimary">#0F6A9C</item>
+        <item name="colorPrimaryDark">#0B1A69</item>
         <item name="colorAccent">#63B4DA</item>
-
     </style>
 
-    <!-- The launcher theme. It sets the main window background to the launch_screen drawable -->
-    <style name="AppTheme.Launcher">
-        <item name="android:windowBackground">@drawable/launch_screen</item>
-
-        <!-- Optional, on Android 5+ you can modify the colorPrimaryDark color to match the
-         windowBackground color for further branding-->
-         <item name="colorPrimaryDark">@android:color/white</item>
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/background</item>
     </style>
-
 
 </resources>

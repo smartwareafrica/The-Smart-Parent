@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FeedbackFragment">
+    tools:context=".ChatsFragment">
 
     <TextView
         android:paddingTop="100dp"
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Feedback" />
+        android:text="chats" />
 
 </FrameLayout>

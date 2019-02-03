@@ -1,14 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_centerVertical="true"
+    android:layout_centerHorizontal="true"
+    android:paddingBottom="16dp"
+    android:paddingTop="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     tools:context=".LoginFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:text="@string/log_into_your_account"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-</FrameLayout>
+    <EditText
+        android:layout_margin="15dp"
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/please_input_your_email"
+        android:hint="@string/please_input_your_email"
+        android:inputType="textEmailAddress"
+        tools:targetApi="o"/>
+
+    <EditText
+        android:layout_margin="15dp"
+        android:inputType="textPassword"
+        android:hint="@string/please_input_your_password"
+        android:id="@+id/editTextPassword"
+        android:autofillHints="@string/please_input_your_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:targetApi="o"/>
+
+    <Button
+        android:id="@+id/buttonSignin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login" />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:textAlignment="center"
+        android:text="@string/don_t_have_an_account_please_register_here"
+        android:id="@+id/textViewSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

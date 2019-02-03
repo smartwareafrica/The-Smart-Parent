@@ -2,12 +2,8 @@
     <string name="app_name">The Smart Parent</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="header">Header</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
     <string name="please_input_your_email">Please input your email</string>
     <string name="registered_please_sign_in_here">Registered? Please Sign in here</string>
     <string name="register_user">Register User</string>
@@ -23,6 +19,12 @@
     <string name="save_details">Save details</string>
     <string name="enter_your_full_name">Enter your full name</string>
     <string name="enter_your_address">Enter your address</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="tap_on_camera_to_choose_profile_picture">Tap on camera to choose profile picture</string>
+    <string name="todo">TODO</string>
+    <string name="enter_your_phone_number">Enter your Phone Number</string>
+    <string name="user_profile">User Profile</string>
 
 
 </resources>

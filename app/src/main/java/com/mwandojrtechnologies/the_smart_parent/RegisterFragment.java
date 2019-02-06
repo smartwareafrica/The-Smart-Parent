@@ -108,7 +108,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             //check if successful
-
+                            Toast.makeText(getActivity(), "Successfully registered", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getActivity(), ProfileActivity.class));
                         }else{
                             Toast.makeText(getActivity(), "Could not register. Please try again", Toast.LENGTH_SHORT).show();

@@ -1,6 +1,5 @@
 package com.mwandojrtechnologies.the_smart_parent;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -107,6 +105,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         if (task.isSuccessful()) {
                             //start the profile activity
                             startActivity(new Intent(getActivity(), ProfileActivity.class));
+                            Toast.makeText(getActivity(), "Login Succesful", Toast.LENGTH_SHORT);
                         }
                     }
                 });

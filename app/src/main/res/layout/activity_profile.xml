@@ -46,18 +46,16 @@
         android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
         android:hint="@string/enter_your_full_name"
-        android:inputType=""
+        android:inputType="text"
         tools:targetApi="o" />
 
     <EditText
         android:id="@+id/editTextContact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
         android:hint="@string/enter_your_phone_number"
-        android:inputType=""
+        android:inputType="text"
         tools:targetApi="o" />
 
     <Button
@@ -71,6 +69,7 @@
         android:id="@+id/buttonLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/logout" />
+        android:text="@string/logout"
+        android:layout_gravity="center"/>
+
 </LinearLayout>

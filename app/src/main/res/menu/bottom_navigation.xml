@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+    </group>
+    <item
+        android:id="@+id/bottom_nav_home"
+        android:title="Home"
+        android:icon="@drawable/ic_home_white_24dp"/>
+
+    <item
+        android:id="@+id/bottom_nav_stories"
+        android:title="Stories"
+        android:icon="@drawable/ic_story_white_24dp" />
+
+    <item android:title="Chats"
+        android:id="@+id/bottom_nav_chats"
+        android:icon="@drawable/ic_chat_white_24dp" />
+
+    <item android:title="Profile"
+        android:id="@+id/bottom_nav_profile"
+        android:icon="@drawable/ic_profile_white_24dp"/>
+</menu>

@@ -3,54 +3,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
-    android:layout_centerVertical="true"
-    android:layout_centerHorizontal="true"
-    android:paddingBottom="16dp"
-    android:paddingTop="16dp"
     android:paddingLeft="16dp"
+    android:paddingTop="16dp"
     android:paddingRight="16dp"
+    android:paddingBottom="16dp"
     tools:context=".RegisterFragment">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/please_create_an_account"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-          <EditText
-            android:layout_margin="15dp"
-            android:inputType="textEmailAddress"
-            android:hint="@string/please_input_your_email"
-            android:id="@+id/editTextEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            tools:targetApi="o"/>
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:autofillHints=""
+        android:hint="@string/please_input_your_email"
+        android:inputType="textEmailAddress"
+        tools:targetApi="o" />
 
-        <EditText
-            android:layout_margin="15dp"
-            android:inputType="textPassword"
-            android:hint="@string/please_input_your_password"
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            tools:targetApi="o"/>
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:autofillHints=""
+        android:hint="@string/please_input_your_password"
+        android:inputType="textPassword"
+        tools:targetApi="o" />
 
-        <Button
-            android:layout_margin="15dp"
-            android:id="@+id/buttonRegister"
-            android:text="@string/register_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="@string/register_user" />
 
 
-
-        <TextView
-            android:id="@+id/textViewSignin"
-            android:textAlignment="center"
-            android:text="@string/registered_please_sign_in_here"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"/>
-
+    <TextView
+        android:id="@+id/textViewSignin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/registered_please_sign_in_here"
+        android:textAlignment="center" />
 
 
 </LinearLayout>

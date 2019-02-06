@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -87,8 +88,40 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+        LoadUserInformation();
+
     }
 
+@Override
+protected void onStart() {
+    super.onStart();
+    if (firebaseAuth.getCurrentUser() ==null){
+        startActivity(new Intent (this, LoginFragment.class));
+    }
+}
+
+    // Display user information if they already have saved it
+    private void LoadUserInformation() {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        if (user != null) {
+            if (user.getPhotoUrl() != null) {
+                Glide.with(this)
+                        .load(user.getPhotoUrl().toString())
+                        .into(imageView);
+            }
+            if (user.getDisplayName() != null) {
+                editTextName.setText(user.getDisplayName());
+            }
+            if (user.getDisplayName() != null) {
+                editTextContact.setText(user.getDisplayName());
+            }
+        }
+
+
+    }
+
+    //confirm image has been selected
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -111,7 +144,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void uploadImageToFireBaseStorage() {
         StorageReference profileImageRef =
                 FirebaseStorage.getInstance()
-                        .getReference("profilepics/" + System.currentTimeMillis() + ".jpg");
+                        .getReference("ProfilePics/" + System.currentTimeMillis() + ".jpg");
 
         if (uriProfileImage != null) {
             progressBar.setVisibility(View.VISIBLE);
@@ -133,6 +166,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    //to choose an image from storage
     private void showImageChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -140,6 +174,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         startActivityForResult(Intent.createChooser(intent, "Select Profile Picture"), CHOOSE_IMAGE);
     }
 
+    //Validation where both Name and Contact must be filled
     private void saveUserInformation() {
         String name = editTextName.getText().toString().trim();
         if (name.isEmpty()) {
@@ -147,29 +182,31 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             editTextName.requestFocus();
             return;
         }
-        String add = editTextContact.getText().toString().trim();
-        if (add.isEmpty()) {
-            editTextContact.setError("Name is required");
+        String contact = editTextContact.getText().toString().trim();
+        if (contact.isEmpty()) {
+            editTextContact.setError("Contact is required");
             editTextContact.requestFocus();
             return;
         }
-
-        UserInformation userInformation = new UserInformation(name, add);
+            //create username and contact in the database
+        UserInformation userInformation = new UserInformation(name, contact);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        if (user!=null && profileImageUrl != null){
+        if (user != null && profileImageUrl != null) {
             UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(name)
                     .setPhotoUri(Uri.parse(profileImageUrl))
+                    .setDisplayName(name)
+                    .setDisplayName(contact)
                     .build();
 
             user.updateProfile(profile)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Toast.makeText(ProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();;
+                            if (task.isSuccessful()) {
+
+                                Toast.makeText(ProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -179,8 +216,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Toast.makeText(this, "Information has been saved successfully...", Toast.LENGTH_LONG).show();
     }
 
-
-
+    //save user information or log out of account
     @Override
     public void onClick(View view) {
         //logout button pressed

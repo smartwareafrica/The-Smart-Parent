@@ -3,14 +3,14 @@ package com.mwandojrtechnologies.the_smart_parent;
 public class UserInformation {
 
     public String name;
-    public String address;
+    public String contact;
 
     public UserInformation(){
 
     }
 
-    public UserInformation(String name, String address) {
+    public UserInformation(String name, String contact) {
         this.name = name;
-        this.address = address;
+        this.contact = contact;
     }
 }

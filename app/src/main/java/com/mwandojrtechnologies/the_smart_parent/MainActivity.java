@@ -1,13 +1,15 @@
 package com.mwandojrtechnologies.the_smart_parent;
 
+import android.content.Context;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +21,10 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
+import com.mwandojrtechnologies.the_smart_parent.Newsfeed.HomeFragment;
+import com.mwandojrtechnologies.the_smart_parent.Profile.LoginFragment;
+import com.mwandojrtechnologies.the_smart_parent.Profile.ProfileFragment;
+import com.mwandojrtechnologies.the_smart_parent.Profile.RegisterFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private ChatsFragment chatsFragment;
     private ProfileFragment profileFragment;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
 
         setContentView(R.layout.activity_main);
+
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Home");
@@ -68,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
         storiesFragment = new StoriesFragment();
         chatsFragment = new ChatsFragment();
         profileFragment = new ProfileFragment();
+        setFragment(homeFragment);
+
 
         // For the bottom navigation
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -77,9 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 // Create a new fragment and specify the fragment to show based on nav item clicked
                 switch (item.getItemId()) {
                     case R.id.bottom_nav_home:
-                        //navigationView.setBackgroundResource(R.color.colorPrimary);
                         setFragment(homeFragment);
-                        Toast.makeText(getApplicationContext(), "home", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "home", Toast.LENGTH_SHORT).show();
                         toolbar.setTitle("Home");
                         return true;
 
@@ -97,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.bottom_nav_profile:
                         setFragment(profileFragment);
-                        Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
                         toolbar.setTitle("Profile");
                         return true;
 
@@ -129,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
+
+
     }
 
     //navigation drawer toggle
@@ -166,12 +178,12 @@ public class MainActivity extends AppCompatActivity {
                 Class fragmentClass;
                 switch (menuItem.getItemId()) {
                     case R.id.nav_login_fragment:
-                        Toast.makeText(getApplicationContext(), "Please login", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Please login", Toast.LENGTH_SHORT).show();
                         fragmentClass = LoginFragment.class;
                         toolbar.setTitle("Log In");
                         break;
                     case R.id.nav_register_fragment:
-                        Toast.makeText(getApplicationContext(), "Please register", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getApplicationContext(), "Please register", Toast.LENGTH_SHORT).show();
                         fragmentClass = RegisterFragment.class;
                         toolbar.setTitle("Register");
 
@@ -208,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     default:
-                        fragmentClass = LoginFragment.class;
+                        fragmentClass = HomeFragment.class;
                 }
 
                 try {

@@ -10,6 +10,8 @@
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#EE5221"
+        android:textSize="40dp"
         android:text="Stories"/>
 
 </FrameLayout>

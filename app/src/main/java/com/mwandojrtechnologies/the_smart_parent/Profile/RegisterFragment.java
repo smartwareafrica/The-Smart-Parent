@@ -1,4 +1,4 @@
-package com.mwandojrtechnologies.the_smart_parent;
+package com.mwandojrtechnologies.the_smart_parent.Profile;
 
 
 import android.app.ProgressDialog;
@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mwandojrtechnologies.the_smart_parent.R;
 
 
 /**

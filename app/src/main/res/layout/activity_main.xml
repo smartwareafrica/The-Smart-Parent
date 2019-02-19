@@ -30,6 +30,7 @@
             android:layout_height="56dp"
             android:layout_alignBottom="@id/fragment_container"
             android:background="#0F6A9C"
+            android:layout_alignEnd="@+id/fragment_container"
             app:itemIconTint="@color/bottom_nav_item_colors"
             app:itemTextColor="@color/bottom_nav_item_colors"
             app:menu="@menu/bottom_navigation" />

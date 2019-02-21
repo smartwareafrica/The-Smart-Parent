@@ -1,4 +1,4 @@
-package com.mwandojrtechnologies.the_smart_parent.Profile;
+package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,14 +24,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.mwandojrtechnologies.the_smart_parent.MainActivity;
-import com.mwandojrtechnologies.the_smart_parent.R;
-import com.mwandojrtechnologies.the_smart_parent.UserInformation;
+import com.MwandoJrTechnologies.the_smart_parent.MainActivity;
+import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.MwandoJrTechnologies.the_smart_parent.UserInformation;
 
 import java.io.IOException;
 
@@ -43,13 +46,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private TextView textViewUserEmail;
     private EditText editTextName;
     private EditText editTextContact;
-    private Button buttonLogout;
+    private EditText editTextCreateUsername;
     private ImageView imageView;
+    private Button buttonSave;
+    private Toolbar toolbar;
 
     private DatabaseReference databaseReference;
-    private Button buttonSave;
-
-    private Toolbar toolbar;
 
     Uri uriProfileImage;
     ProgressBar progressBar;
@@ -62,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_profile);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       getSupportActionBar().setTitle("Edit profile");
+        getSupportActionBar().setTitle("Edit profile");
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -71,9 +73,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             startActivity(new Intent(this, LoginFragment.class));
         }
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Profiles");
         editTextContact = (EditText) findViewById(R.id.editTextContact);
         editTextName = (EditText) findViewById(R.id.editTextName);
+        editTextCreateUsername = (EditText) findViewById(R.id.editTextCreateUsername);
         buttonSave = (Button) findViewById(R.id.buttonSave);
         imageView = (ImageView) findViewById(R.id.imageView);
 
@@ -82,11 +85,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
-
         textViewUserEmail.setText("Welcome to THE SMART PARENT " + user.getEmail());
-        buttonLogout = (Button) findViewById(R.id.buttonLogout);
 
-        buttonLogout.setOnClickListener(this);
         buttonSave.setOnClickListener(this);
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -96,38 +96,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        LoadUserInformation();
-
     }
 
-@Override
-protected void onStart() {
-    super.onStart();
-    if (firebaseAuth.getCurrentUser() == null){
-        startActivity(new Intent (this, LoginFragment.class));
-    }
-}
-
-    // Display user information if they already have saved it
-    private void LoadUserInformation() {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
-        if (user != null) {
-            if (user.getPhotoUrl() != null) {
-                Glide.with(this)
-                        .load(user.getPhotoUrl().toString())
-                        .into(imageView);
-            }
-            if (user.getDisplayName() != null) {
-                editTextName.setText(user.getDisplayName());
-            }
-            if (user.getDisplayName() != null) {
-                editTextContact.setText(user.getDisplayName());
-            }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (firebaseAuth.getCurrentUser() == null) {
+            startActivity(new Intent(this, LoginFragment.class));
         }
-
-
     }
+
 
     //confirm image has been selected
     @Override
@@ -150,9 +128,9 @@ protected void onStart() {
 
     // to send image selected to FireBase storage
     private void uploadImageToFireBaseStorage() {
+
         StorageReference profileImageRef =
-                FirebaseStorage.getInstance()
-                        .getReference("ProfilePics/" + System.currentTimeMillis() + ".jpg");
+                FirebaseStorage.getInstance().getReference("ProfilePics/" + System.currentTimeMillis() + ".jpg");
 
         if (uriProfileImage != null) {
             progressBar.setVisibility(View.VISIBLE);
@@ -182,22 +160,26 @@ protected void onStart() {
         startActivityForResult(Intent.createChooser(intent, "Select Profile Picture"), CHOOSE_IMAGE);
     }
 
+
     //Validation where both Name and Contact must be filled
     private void saveUserInformation() {
         String name = editTextName.getText().toString().trim();
         if (name.isEmpty()) {
             editTextName.setError("Name is required");
             editTextName.requestFocus();
-            return;
         }
         String contact = editTextContact.getText().toString().trim();
         if (contact.isEmpty()) {
             editTextContact.setError("Contact is required");
             editTextContact.requestFocus();
-            return;
         }
-            //create username and contact in the database
-        UserInformation userInformation = new UserInformation(name, contact);
+
+        //creating a username and checking if any other exists
+        final String username = editTextCreateUsername.getText().toString();
+
+
+        //create name contact and username in the database
+        UserInformation userInformation = new UserInformation(name, contact, username, profileImageUrl);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
@@ -221,23 +203,45 @@ protected void onStart() {
         }
         databaseReference.child(user.getUid()).setValue(userInformation);
         Toast.makeText(this, "Information has been saved successfully...", Toast.LENGTH_LONG).show();
-        //startActivity(new Intent(this, ProfileFragment.class));
+
     }
+
 
     //save user information or log out of account
     @Override
     public void onClick(View view) {
-        //logout button pressed
-        if (view == buttonLogout) {
-            //logout the user
-            firebaseAuth.signOut();
-            //start main activity
-            finish();
-            startActivity(new Intent(this, MainActivity.class));
-        }
+        checkIfUserNameExists();
 
-        if (view == buttonSave) {
-            saveUserInformation();
-        }
+    }
+
+    private boolean checkIfUserNameExists() {
+
+        String username = editTextCreateUsername.getText().toString().trim();
+        Query usernameQuery = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Profiles")
+                .orderByChild("username")
+                .equalTo(username);
+        usernameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getChildrenCount() > 0) {
+                    Toast.makeText(ProfileActivity.this, "Choose a different Username", Toast.LENGTH_SHORT).show();
+                } else {
+                    saveUserInformation();
+                    //start home fragment
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //display error
+            }
+        });
+        return true;
     }
 }

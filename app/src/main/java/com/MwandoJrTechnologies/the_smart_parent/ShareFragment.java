@@ -1,4 +1,4 @@
-package com.mwandojrtechnologies.the_smart_parent;
+package com.MwandoJrTechnologies.the_smart_parent;
 
 
 import android.os.Bundle;
@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RemindersFragment extends Fragment {
+public class ShareFragment extends Fragment {
 
 
-    public RemindersFragment() {
+    public ShareFragment() {
         // Required empty public constructor
     }
 
@@ -23,7 +23,7 @@ public class RemindersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reminders, container, false);
+        return inflater.inflate(R.layout.fragment_share, container, false);
     }
 
 }

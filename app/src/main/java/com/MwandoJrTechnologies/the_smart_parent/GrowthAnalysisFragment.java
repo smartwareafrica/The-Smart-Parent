@@ -1,4 +1,4 @@
-package com.mwandojrtechnologies.the_smart_parent;
+package com.MwandoJrTechnologies.the_smart_parent;
 
 
 import android.os.Bundle;
@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StoriesFragment extends Fragment {
+public class GrowthAnalysisFragment extends Fragment {
 
 
-    public StoriesFragment() {
+    public GrowthAnalysisFragment() {
         // Required empty public constructor
     }
 
@@ -23,7 +23,7 @@ public class StoriesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stories, container, false);
+        return inflater.inflate(R.layout.fragment_growth_analysis, container, false);
     }
 
 }

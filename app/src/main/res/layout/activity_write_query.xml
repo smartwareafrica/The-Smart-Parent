@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
-    tools:context=".Newsfeed.WriteQueryActivity">
+    tools:context=".NewsFeed.WriteQueryActivity">
 
     <include
         android:id="@+id/toolbar"

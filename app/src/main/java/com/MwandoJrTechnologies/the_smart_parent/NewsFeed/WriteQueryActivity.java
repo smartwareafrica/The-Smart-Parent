@@ -1,4 +1,4 @@
-package com.mwandojrtechnologies.the_smart_parent.Newsfeed;
+package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,12 +10,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.mwandojrtechnologies.the_smart_parent.MainActivity;
-import com.mwandojrtechnologies.the_smart_parent.Profile.LoginFragment;
-import com.mwandojrtechnologies.the_smart_parent.R;
+import com.MwandoJrTechnologies.the_smart_parent.MainActivity;
+import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginFragment;
+import com.MwandoJrTechnologies.the_smart_parent.R;
 
 public class WriteQueryActivity extends AppCompatActivity implements View.OnClickListener {
 

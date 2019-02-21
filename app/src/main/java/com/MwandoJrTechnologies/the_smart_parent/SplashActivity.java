@@ -1,4 +1,4 @@
-package com.mwandojrtechnologies.the_smart_parent;
+package com.MwandoJrTechnologies.the_smart_parent;
 
 
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package com.mwandojrtechnologies.the_smart_parent.Newsfeed;
+package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
 public class ListItem {
 

@@ -1,4 +1,4 @@
-package com.mwandojrtechnologies.the_smart_parent.Newsfeed;
+package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mwandojrtechnologies.the_smart_parent.R;
+import com.MwandoJrTechnologies.the_smart_parent.R;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {

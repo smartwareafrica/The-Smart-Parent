@@ -1,4 +1,4 @@
-package com.mwandojrtechnologies.the_smart_parent.Profile;
+package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,7 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.mwandojrtechnologies.the_smart_parent.R;
+import com.MwandoJrTechnologies.the_smart_parent.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,6 +89,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             //password is empty
             Toast.makeText(getActivity(), "Please enter password", Toast.LENGTH_SHORT).show();
             //stopping execution further
+
             return;
         }
 

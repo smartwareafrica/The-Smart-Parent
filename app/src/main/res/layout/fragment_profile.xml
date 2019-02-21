@@ -29,9 +29,7 @@
             android:layout_gravity="center"
             android:layout_margin="20dp"
             android:background="@drawable/ic_menu_camera"
-            android:contentDescription="@string/todo"
             android:scaleType="centerCrop"
-            android:text="@string/tap_on_camera_to_choose_profile_picture"
             android:textAlignment="center" />
 
         <ProgressBar
@@ -43,6 +41,14 @@
             android:visibility="gone" />
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textViewUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Username"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
     <TextView
         android:id="@+id/textViewName"

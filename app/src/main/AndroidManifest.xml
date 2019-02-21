@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mwandojrtechnologies.the_smart_parent">
+    package="com.MwandoJrTechnologies.the_smart_parent">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -14,9 +16,9 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".MainActivity" />
+        <activity android:name="com.MwandoJrTechnologies.the_smart_parent.MainActivity" />
         <activity
-            android:name=".SplashActivity"
+            android:name="com.MwandoJrTechnologies.the_smart_parent.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,8 +28,8 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".Newsfeed.WriteQueryActivity"/>
-        <activity android:name=".Profile.ProfileActivity" />
+        <activity android:name="com.MwandoJrTechnologies.the_smart_parent.NewsFeed.WriteQueryActivity"/>
+        <activity android:name="com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileActivity" />
     </application>
 
 </manifest>

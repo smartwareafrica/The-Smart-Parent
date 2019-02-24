@@ -26,10 +26,10 @@ import com.MwandoJrTechnologies.the_smart_parent.R;
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
-    private Button buttonSignin;
+    private Button buttonSignIn;
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private TextView textViewSignup;
+    private TextView textViewSignUp;
 
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
@@ -63,13 +63,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         editTextEmail = (EditText) view.findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) view.findViewById(R.id.editTextPassword);
-        buttonSignin = (Button) view.findViewById(R.id.buttonSignin);
-        textViewSignup = (TextView) view.findViewById(R.id.textViewSignup);
+        buttonSignIn = (Button) view.findViewById(R.id.buttonSignIn);
+        textViewSignUp = (TextView) view.findViewById(R.id.textViewSignUp);
 
         progressDialog = new ProgressDialog(getContext());
 
-        buttonSignin.setOnClickListener(this);
-        textViewSignup.setOnClickListener(this);
+        buttonSignIn.setOnClickListener(this);
+        textViewSignUp.setOnClickListener(this);
     }
 
     private void userLogin() {
@@ -115,10 +115,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (view == buttonSignin) {
+        if (view == buttonSignIn) {
             userLogin();
         }
-        if (view == textViewSignup) {
+        if (view == textViewSignUp) {
 
             startActivity(new Intent(getActivity(), RegisterFragment.class));
         }

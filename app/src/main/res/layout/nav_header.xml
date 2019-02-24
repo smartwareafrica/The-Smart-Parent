@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="192dp"
         android:background="#0F6A9C"
+        android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
@@ -16,17 +17,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/mjrlogo" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:background="@drawable/mjrlogo"
+            app:civ_border_color="@color/colorWhite"
+            app:civ_border_width="10dp" />
 
         <TextView
+            style="@style/Base.TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/default_gap"
+            android:layout_marginStart="@dimen/default_gap"
             android:paddingTop="20dp"
-            android:text="THE SMART PARENT"
+            android:text="@string/the_smart_parent"
+            android:textAlignment="center"
             android:textColor="@android:color/white" />
 
     </LinearLayout>

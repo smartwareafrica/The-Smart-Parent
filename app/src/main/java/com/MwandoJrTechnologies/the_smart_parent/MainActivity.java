@@ -1,8 +1,6 @@
 package com.MwandoJrTechnologies.the_smart_parent;
 
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -32,11 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
-
     //bottom navigation variables
     protected BottomNavigationView navigationView;
     private FrameLayout mainFragmentScreen;
-
+    //fragments
     private HomeFragment homeFragment;
     private StoriesFragment storiesFragment;
     private ChatsFragment chatsFragment;
@@ -52,13 +49,14 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-
+        //inflate
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Home");
 
         // Find our drawer view
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         drawerToggle = setupDrawerToggle();
 
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
@@ -118,35 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        //checking for network status
-        if (haveNetwork()) {
-            //Proceed with app functioning
-
-        } else if (!haveNetwork()) {
-            Toast.makeText(MainActivity.this, "Network CONNECTION is not available", Toast.LENGTH_LONG).show();
-        }
 
     }
-    private boolean haveNetwork() {
-        boolean have_WIFI = false;
-        boolean have_MobileData = false;
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
-
-        for (NetworkInfo info : networkInfos) {
-
-            if (info.getTypeName().equalsIgnoreCase("WIFI"))
-
-                if (info.isConnected())
-                    have_WIFI = true;
-            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (info.isConnected())
-                    have_MobileData = true;
-        }
-        return have_MobileData || have_WIFI;
-    }
-//end checking for network status
 
     // There are 2 signatures and only `onPostCreate(Bundle state)` shows the hamburger icon.
     @Override

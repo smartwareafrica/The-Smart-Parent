@@ -6,6 +6,8 @@
     android:orientation="vertical"
     android:layout_margin="20dp"
     android:padding="@dimen/default_gap"
+    android:elevation="@dimen/default_gap"
+    android:background="#8AB5E4"
     tools:context=".Profile.ProfileFragment">
 
     <TextView

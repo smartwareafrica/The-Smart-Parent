@@ -32,7 +32,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private Button buttonRegister;
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private TextView textViewSignin;
+    private TextView textViewSignIn;
 
     private ProgressDialog progressDialog;
 
@@ -72,10 +72,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         editTextEmail = (EditText) view.findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) view.findViewById(R.id.editTextPassword);
 
-        textViewSignin = (TextView) view.findViewById(R.id.textViewSignin);
+        textViewSignIn = (TextView) view.findViewById(R.id.textViewSignIn);
 
         buttonRegister.setOnClickListener(this);
-        textViewSignin.setOnClickListener(this);
+        textViewSignIn.setOnClickListener(this);
     }
 
     private void registerUser(){
@@ -125,7 +125,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
             registerUser();
         }
 
-        if(v == textViewSignin){
+        if(v == textViewSignIn){
             //will open login fragment
             startActivity(new Intent(getActivity(), LoginFragment.class));
 

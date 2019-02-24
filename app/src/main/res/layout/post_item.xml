@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="true"
+    app:cardBackgroundColor="#CEDDEC"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_profile_white_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="7dp"
+            android:text="Username"
+            android:textColor="#0000ff" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/textViewHead"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Heading"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+        <TextView
+            android:id="@+id/textViewDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Description" />
+
+        <TextView
+            android:id="@+id/textViewComment"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="#0000ff"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:text="Comment" />
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

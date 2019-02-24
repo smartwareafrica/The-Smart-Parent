@@ -25,6 +25,7 @@
     <string name="enter_your_phone_number">Enter your Phone Number</string>
     <string name="user_profile">User Profile</string>
     <string name="please_create_an_account">Please create an account</string>
-
+    <string name="the_smart_parent">THE SMART PARENT</string>
+    <string name="confirm_password">Confirm Password</string>
 
 </resources>

@@ -17,7 +17,9 @@
         android:paddingLeft="16dp"
         android:paddingTop="16dp"
         android:paddingRight="16dp"
-        android:paddingBottom="16dp">
+        android:paddingBottom="16dp"
+        android:elevation="20dp"
+        android:background="#8AB5E4">
 
 
         <TextView

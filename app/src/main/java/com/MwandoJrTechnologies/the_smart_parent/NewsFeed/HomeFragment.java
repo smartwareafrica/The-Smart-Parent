@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.MwandoJrTechnologies.the_smart_parent.ConnectionChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,23 +87,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+            //checking internet state
+        if (ConnectionChecker.isConnectedToNetwork(getContext())) {
+            Toast.makeText(getActivity(), "Internet Connection", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "NETWORK ERROR! Please check your Internet connection", Toast.LENGTH_LONG).show();
+            newsFeedProgressBar.setVisibility(View.GONE);
 
+        }
         return rootView;
     }
-
 
     @Override
     public void onClick(View view) {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        Snackbar.make(view, "Please login", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-
         if (firebaseAuth.getCurrentUser() != null)
             startActivity(new Intent(getActivity(), WriteQueryActivity.class));
         else {
             Toast.makeText(getActivity(), "Please login", Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, "Please login", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
 
         }
     }

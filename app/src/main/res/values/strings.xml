@@ -11,7 +11,6 @@
     <string name="login_to_your_account">Login to your account</string>
     <string name="register">Register</string>
     <string name="profile">Profile</string>
-    <string name="logout">Logout</string>
     <string name="don_t_have_an_account_please_register_here">Don\'t have an account? Please register here</string>
     <string name="login">Login</string>
     <string name="log_into_your_account">Log into your account</string>
@@ -27,5 +26,9 @@
     <string name="please_create_an_account">Please create an account</string>
     <string name="the_smart_parent">THE SMART PARENT</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="tap_image_to_upload_profile_picture">Tap image to upload profile picture</string>
+    <string name="create_your_username">Create Your Username</string>
+    <string name="please_write_your_question_here">Please write your question here...</string>
+    <string name="logout">Logout</string>
 
 </resources>

@@ -28,7 +28,7 @@ import com.MwandoJrTechnologies.the_smart_parent.R;
 /**
  * Displays user profile
  */
-public class ProfileFragment extends Fragment implements View.OnClickListener {
+public class ViewProfileFragment extends Fragment implements View.OnClickListener {
 
     private FirebaseAuth firebaseAuth;
     private TextView textViewName;
@@ -46,7 +46,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     String profileImageUrl;
 
-    public ProfileFragment() {
+    public ViewProfileFragment() {
         // Required empty public constructor
     }
 
@@ -55,7 +55,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_view_profile, container, false);
 
         firebaseAuth = FirebaseAuth.getInstance();
 

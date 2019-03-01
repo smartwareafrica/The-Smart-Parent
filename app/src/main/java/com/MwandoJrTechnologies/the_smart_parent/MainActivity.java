@@ -1,5 +1,6 @@
 package com.MwandoJrTechnologies.the_smart_parent;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,11 +18,19 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.MwandoJrTechnologies.the_smart_parent.Profile.EditProfileActivity;
 import com.google.firebase.FirebaseApp;
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.HomeFragment;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginFragment;
-import com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileFragment;
+import com.MwandoJrTechnologies.the_smart_parent.Profile.ViewProfileFragment;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.RegisterFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,18 +41,35 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     //bottom navigation variables
     protected BottomNavigationView navigationView;
-    private FrameLayout mainFragmentScreen;
+   // private FrameLayout mainFragmentScreen;
     //fragments
     private HomeFragment homeFragment;
     private StoriesFragment storiesFragment;
     private ChatsFragment chatsFragment;
-    private ProfileFragment profileFragment;
+    private ViewProfileFragment viewProfileFragment;
 
+    private FirebaseAuth mAuth;
+    private DatabaseReference UserRef;
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mAuth = FirebaseAuth.getInstance();
+        UserRef = FirebaseDatabase.getInstance().getReference().child("Profiles");
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            SendUserToLoginFragment();
+        } else {
+            CheckUserExistence();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         FirebaseApp.initializeApp(this);
 
@@ -68,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         // for views on bottom navigation
-        mainFragmentScreen = (FrameLayout) findViewById(R.id.fragment_container);
+      //  mainFragmentScreen = (FrameLayout) findViewById(R.id.fragment_container);
         navigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
         homeFragment = new HomeFragment();
         storiesFragment = new StoriesFragment();
         chatsFragment = new ChatsFragment();
-        profileFragment = new ProfileFragment();
+        viewProfileFragment = new ViewProfileFragment();
         setFragment(homeFragment);
 
 
@@ -104,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.bottom_nav_profile:
-                        setFragment(profileFragment);
+                        setFragment(viewProfileFragment);
                         // Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
                         toolbar.setTitle("Profile");
                         return true;
@@ -138,8 +164,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
-
-
     }
 
     //navigation drawer toggle
@@ -214,9 +238,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Please give feedback", Toast.LENGTH_SHORT).show();
                         fragmentClass = FeedbackFragment.class;
                         toolbar.setTitle("Feedback");
-
                         break;
-
 
                     default:
                         fragmentClass = HomeFragment.class;
@@ -239,11 +261,42 @@ public class MainActivity extends AppCompatActivity {
                 // Close the navigation drawer
                 mDrawer.closeDrawers();
 
-
                 return false;
             }
-
         });
     }
 
+    private void SendUserToLoginFragment() {
+        LoginFragment nextFrag = new LoginFragment();
+        this.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, nextFrag, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    //checking if user exists in FireBase database
+    private void CheckUserExistence() {
+        final String current_user_id = mAuth.getCurrentUser().getUid();
+
+        UserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild(current_user_id)) {
+                    SendUserToEditProfileActivity();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //opening edit profile activity
+    private void SendUserToEditProfileActivity() {
+        Intent setupIntent = new Intent(MainActivity.this, EditProfileActivity.class);
+        setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(setupIntent);
+    }
 }

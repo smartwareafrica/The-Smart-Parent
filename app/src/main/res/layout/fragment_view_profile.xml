@@ -8,7 +8,7 @@
     android:padding="@dimen/default_gap"
     android:elevation="@dimen/default_gap"
     android:background="#8AB5E4"
-    tools:context=".Profile.ProfileFragment">
+    tools:context=".Profile.ViewProfileFragment">
 
     <TextView
         android:id="@+id/textViewUserEmail"

@@ -39,7 +39,7 @@ import com.MwandoJrTechnologies.the_smart_parent.UserInformation;
 
 import java.io.IOException;
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int CHOOSE_IMAGE = 101;
     private FirebaseAuth firebaseAuth;
@@ -106,7 +106,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
     //confirm image has been selected
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -129,13 +128,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     // to send image selected to FireBase storage
     private void uploadImageToFireBaseStorage() {
 
-        StorageReference profileImageRef =
+        final StorageReference profileImageRef =
                 FirebaseStorage.getInstance().getReference("ProfilePics/" + System.currentTimeMillis() + ".jpg");
 
         if (uriProfileImage != null) {
             progressBar.setVisibility(View.VISIBLE);
             profileImageRef.putFile(uriProfileImage)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressBar.setVisibility(View.GONE);
@@ -146,7 +146,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(ProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -160,7 +160,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         startActivityForResult(Intent.createChooser(intent, "Select Profile Picture"), CHOOSE_IMAGE);
     }
 
-
     //Validation where both Name and Contact must be filled
     private void saveUserInformation() {
         String name = editTextName.getText().toString().trim();
@@ -173,9 +172,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             editTextContact.setError("Contact is required");
             editTextContact.requestFocus();
         }
-
         //creating a username and checking if any other exists
-        final String username = editTextCreateUsername.getText().toString();
+        final String username = editTextCreateUsername.getText().toString().trim();
+        if (username.isEmpty()){
+            editTextCreateUsername.setError("You must select a username");
+            editTextCreateUsername.requestFocus();
+        }
 
 
         //create name contact and username in the database
@@ -196,13 +198,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
 
-                                Toast.makeText(ProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
         }
         databaseReference.child(user.getUid()).setValue(userInformation);
-        Toast.makeText(this, "Information has been saved successfully...", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Information saved successfully...", Toast.LENGTH_LONG).show();
 
     }
 
@@ -228,7 +230,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.getChildrenCount() > 0) {
-                    Toast.makeText(ProfileActivity.this, "Choose a different Username", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfileActivity.this, "Username Taken. Please choose a different Username", Toast.LENGTH_SHORT).show();
                 } else {
                     saveUserInformation();
                     //start home fragment

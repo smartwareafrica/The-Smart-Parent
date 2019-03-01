@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +40,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference firebaseDatabase;
     private ProgressBar newsFeedProgressBar;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private int position = 0;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -62,14 +66,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         listItems = new ArrayList<>();
 
 
+        //inflate swipe layout
+        swipeRefreshLayout = rootView.findViewById(R.id.swipeToRefresh);
+
+
         firebaseDatabase = FirebaseDatabase.getInstance().getReference("Posts");
         firebaseDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listItems.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ListItem listItem = snapshot.getValue(ListItem.class);
 
-                    listItems.add(listItem);
+                    listItems.add(position, listItem);
 
                 }
                 //gets the recycle view
@@ -87,14 +96,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-            //checking internet state
+        //checking internet state
         if (ConnectionChecker.isConnectedToNetwork(getContext())) {
             Toast.makeText(getActivity(), "Internet Connection", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getActivity(), "NETWORK ERROR! Please check your Internet connection", Toast.LENGTH_LONG).show();
             newsFeedProgressBar.setVisibility(View.GONE);
-
         }
+
+        //refresh on swipe
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
         return rootView;
     }
 

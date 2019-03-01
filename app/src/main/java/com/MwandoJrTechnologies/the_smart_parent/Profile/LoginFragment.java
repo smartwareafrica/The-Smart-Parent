@@ -15,11 +15,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.MwandoJrTechnologies.the_smart_parent.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,7 +42,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public LoginFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,8 +61,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         firebaseAuth = FirebaseAuth.getInstance();
 
         if (firebaseAuth.getCurrentUser() != null) {
-            //start profile activity here
-            startActivity(new Intent(getActivity(), ProfileActivity.class));
+            //start View profile fragment here
+            OpenViewProfileFragment();
         }
 
         editTextEmail = (EditText) view.findViewById(R.id.editTextEmail);
@@ -76,52 +80,64 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
-
         //checking if email and password is empty
         if (TextUtils.isEmpty(email)) {
             //email is empty
             Toast.makeText(getActivity(), "Please enter email", Toast.LENGTH_SHORT).show();
-            //stop function from executing further
-            return;
-        }
-
-        if (TextUtils.isEmpty(password)) {
+        } else if (TextUtils.isEmpty(password)) {
             //password is empty
             Toast.makeText(getActivity(), "Please enter password", Toast.LENGTH_SHORT).show();
-            //stopping execution further
+        }else{
+            //validations okay we show a progress bar
+            progressDialog.setTitle("Logging in User...");
+            progressDialog.setMessage("Logging in, Please wait...");
+            progressDialog.show();
+            progressDialog.setCanceledOnTouchOutside(true);
 
-            return;
-        }
-
-        //validations okay
-        //we show a progress bar
-        progressDialog.setMessage("Logging in...");
-        progressDialog.show();
-
-
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
-                        if (task.isSuccessful()) {
-                            //start the profile activity
-                            startActivity(new Intent(getActivity(), ProfileActivity.class));
-                            Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT);
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            progressDialog.dismiss();
+                            if (task.isSuccessful()) {
+                                OpenViewProfileFragment();
+                                //start the profile activity
+                                // startActivity(new Intent(getActivity(), ViewProfileFragment.class));
+                                Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT);
+                            } else {
+                                String message = task.getException().getMessage();
+                                Toast.makeText(getActivity(), "An Error Occurred: " + message, Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
-
     @Override
     public void onClick(View view) {
         if (view == buttonSignIn) {
             userLogin();
         }
         if (view == textViewSignUp) {
-
-            startActivity(new Intent(getActivity(), RegisterFragment.class));
+            OpenRegisterFragment();
         }
     }
 
+    //method to open fragment from another fragment
+    private void OpenViewProfileFragment() {
+        ViewProfileFragment nextFrag = new ViewProfileFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, nextFrag, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    //method to open fragment from another fragment
+    private void OpenRegisterFragment() {
+        RegisterFragment nextFrag = new RegisterFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, nextFrag, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
+    }
 }

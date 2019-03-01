@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.MwandoJrTechnologies.the_smart_parent.NewsFeed.WriteQueryActivity"/>
-        <activity android:name="com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileActivity" />
+        <activity android:name="com.MwandoJrTechnologies.the_smart_parent.Profile.EditProfileActivity" />
     </application>
 
 </manifest>

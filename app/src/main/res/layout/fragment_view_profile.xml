@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_margin="20dp"
     android:padding="@dimen/default_gap"
@@ -23,16 +24,16 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/imageView"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImageView"
+            android:layout_marginTop="10dp"
             android:layout_width="170dp"
             android:layout_height="170dp"
-            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
-            android:background="@drawable/ic_menu_camera"
+            android:layout_centerHorizontal="true"
             android:scaleType="centerCrop"
-            android:textAlignment="center" />
+            android:src="@drawable/profile_image_placeholder"
+           app:civ_border_width="1dp" />
 
         <ProgressBar
             android:id="@+id/progressBar"

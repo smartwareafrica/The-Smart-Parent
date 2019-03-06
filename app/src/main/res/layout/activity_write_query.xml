@@ -1,51 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical"
     tools:context=".NewsFeed.WriteQueryActivity">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="16dp">
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputInputEmail"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_input_email"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="80dp">
 
         <EditText
-            android:id="@+id/editTextWriteQuery"
+            android:id="@+id/edit_text_write_query"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:autofillHints="@string/please_write_your_question_here"
             android:hint="@string/please_write_your_question_here"
-            android:inputType="none"
+            android:inputType="textMultiLine"
+            android:padding="5dp"
             tools:targetApi="o" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/buttonPost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="#0F6A9C"
-            android:layout_gravity="center"
-            android:text="@string/save_details" />
+    <ImageButton
+        android:id="@+id/image_button_post"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/text_input_input_email"
+        android:contentDescription="@string/attach_an_image"
+        android:layout_marginStart="40dp"
+        android:background="#FFFFFF"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/ic_menu_camera" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/attach_image"
+        android:layout_below="@+id/image_button_post"
+        android:layout_marginStart="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Attach image"/>
 
-</android.widget.LinearLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_button_post"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:backgroundTint="#0F6A9C"
+        android:text="@string/save_details" />
+
+
+</RelativeLayout>

@@ -3,27 +3,29 @@ package com.MwandoJrTechnologies.the_smart_parent;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+
+import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.WriteQueryActivity;
+import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity;
+import com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileActivity;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import android.view.MenuItem;
-import android.widget.FrameLayout;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.MwandoJrTechnologies.the_smart_parent.Profile.EditProfileActivity;
-import com.google.firebase.FirebaseApp;
-import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.HomeFragment;
-import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginFragment;
-import com.MwandoJrTechnologies.the_smart_parent.Profile.ViewProfileFragment;
-import com.MwandoJrTechnologies.the_smart_parent.Profile.RegisterFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,121 +33,166 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    //initializing
     private DrawerLayout mDrawer;
-    private NavigationView nvDrawer;
+    private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
-    //bottom navigation variables
-    protected BottomNavigationView navigationView;
-   // private FrameLayout mainFragmentScreen;
-    //fragments
-    private HomeFragment homeFragment;
-    private StoriesFragment storiesFragment;
-    private ChatsFragment chatsFragment;
-    private ViewProfileFragment viewProfileFragment;
+
+    private CircleImageView navProfileImage;
+    private TextView navProfileName;
+    private ImageButton addNewPostButton;
+
 
     private FirebaseAuth mAuth;
-    private DatabaseReference UserRef;
+    private DatabaseReference usersRef;
+    String currentUserID;
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        mAuth = FirebaseAuth.getInstance();
-        UserRef = FirebaseDatabase.getInstance().getReference().child("Profiles");
-
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
-            SendUserToLoginFragment();
-        } else {
-            CheckUserExistence();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        FirebaseApp.initializeApp(this);
-
         setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         //inflate
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Home");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Find our drawer view
+        addNewPostButton = (ImageButton) findViewById(R.id.add_new_post_button);
 
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //navigation drawer toggle
         drawerToggle = setupDrawerToggle();
-
-        nvDrawer = (NavigationView) findViewById(R.id.nvView);
-        // Setup drawer view
-        setupDrawerContent(nvDrawer);
-
         // Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+        // Find our navigation drawer view
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        View navView = navigationView.getHeaderView(0);
 
-
-        // for views on bottom navigation
-      //  mainFragmentScreen = (FrameLayout) findViewById(R.id.fragment_container);
-        navigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-
-        homeFragment = new HomeFragment();
-        storiesFragment = new StoriesFragment();
-        chatsFragment = new ChatsFragment();
-        viewProfileFragment = new ViewProfileFragment();
-        setFragment(homeFragment);
-
-
-        // For the bottom navigation
-        navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        navProfileImage = (CircleImageView) navView.findViewById(R.id.nav_profile_image);
+        navProfileName = (TextView) navView.findViewById(R.id.nav_user_full_name);
+        //display current logged in user details only
+        usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
 
-                // Create a new fragment and specify the fragment to show based on nav item clicked
-                switch (item.getItemId()) {
-                    case R.id.bottom_nav_home:
-                        setFragment(homeFragment);
-                        //Toast.makeText(getApplicationContext(), "home", Toast.LENGTH_SHORT).show();
-                        toolbar.setTitle("Home");
-                        return true;
+                    //check for the profile image and name
+                    if (dataSnapshot.hasChild("fullName")) {
+                        //only display name if it exists
+                        String fullName = dataSnapshot.child("fullName").getValue().toString();
+                        //code to display
+                        navProfileName.setText(fullName);
+                    }
+                    if (dataSnapshot.hasChild("profileImage")) {
+                        //display only if there is an image
+                        String image = dataSnapshot.child("profileImage").getValue().toString();
+                        //code to display
+                        Picasso.get()
+                                .load(image)
+                                .placeholder(R.drawable.profile_image_placeholder)
+                                .into(navProfileImage);
+                    }else {
+                        Toast.makeText(getApplicationContext(), "You need to update your profile", Toast.LENGTH_SHORT).show();
 
-                    case R.id.bottom_nav_stories:
-                        setFragment(storiesFragment);
-                        Toast.makeText(getApplicationContext(), "Stories", Toast.LENGTH_SHORT).show();
-                        toolbar.setTitle("Stories");
-                        return true;
-
-                    case R.id.bottom_nav_chats:
-                        setFragment(chatsFragment);
-                        Toast.makeText(MainActivity.this, "My chats", Toast.LENGTH_SHORT).show();
-                        toolbar.setTitle("Chats");
-                        return true;
-
-                    case R.id.bottom_nav_profile:
-                        setFragment(viewProfileFragment);
-                        // Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
-                        toolbar.setTitle("Profile");
-                        return true;
-
-
-                    default:
-                        return false;
+                    }
                 }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                UserMenuSelector(menuItem);
+
+                return false;
+            }
+        });
+
+        addNewPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendUserToWriteQueryActivity();
             }
         });
 
     }
 
-    // There are 2 signatures and only `onPostCreate(Bundle state)` shows the hamburger icon.
+    //check user authentication
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        //check for current user
+        if (currentUser == null) {
+            SendUserToLoginActivity();
+        } else {
+            // if user has edited and provided profile details
+            CheckUserExistence();
+        }
+    }
+
+    // when user selects navigation drawer items
+    private void UserMenuSelector(MenuItem menuItem) {
+
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home:
+                SendUserToMainActivity();
+                // toolbar.setTitle("Home");
+                break;
+            case R.id.nav_stories:
+                //  toolbar.setTitle("Stories");
+                break;
+            case R.id.nav_chats:
+                // toolbar.setTitle("Chats");
+                break;
+            case R.id.nav_profile:
+                SendUserToProfileActivity();
+                //toolbar.setTitle("Profile");
+                break;
+            case R.id.nav_growthAnalysis:
+                // toolbar.setTitle("Monitor");
+                break;
+            case R.id.nav_reminders:
+                toolbar.setTitle("Reminders");
+                Toast.makeText(getApplicationContext(), "Reminders", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_baby_products:
+                toolbar.setTitle("Rate");
+                break;
+            case R.id.nav_share:
+                toolbar.setTitle("Share");
+                break;
+            case R.id.nav_feedback:
+                toolbar.setTitle("Feedback");
+                break;
+            case R.id.nav_logout:
+                mAuth.signOut();
+                SendUserToLoginActivity();
+                break;
+        }
+    }
+
+    // There are 2 signatures and only `onPostCreate(Bundle state) shows the hamburger icon.
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -158,12 +205,6 @@ public class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
         drawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    private void setFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
     }
 
     //navigation drawer toggle
@@ -188,101 +229,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setupDrawerContent(final NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
-
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-                //for navigation drawer
-                // Create a new fragment and specify the fragment to show based on nav item clicked
-                Fragment fragment = null;
-                Class fragmentClass;
-                switch (menuItem.getItemId()) {
-                    case R.id.nav_login_fragment:
-                        //Toast.makeText(getApplicationContext(), "Please login", Toast.LENGTH_SHORT).show();
-                        fragmentClass = LoginFragment.class;
-                        toolbar.setTitle("Log In");
-                        break;
-                    case R.id.nav_register_fragment:
-                        // Toast.makeText(getApplicationContext(), "Please register", Toast.LENGTH_SHORT).show();
-                        fragmentClass = RegisterFragment.class;
-                        toolbar.setTitle("Register");
-
-                        break;
-                    case R.id.nav_growth_fragment:
-                        Toast.makeText(getApplicationContext(), "Monitor the growth of your baby", Toast.LENGTH_SHORT).show();
-                        fragmentClass = GrowthAnalysisFragment.class;
-                        toolbar.setTitle("Monitor");
-
-                        break;
-                    case R.id.nav_reminders_fragment:
-                        Toast.makeText(getApplicationContext(), "Reminders", Toast.LENGTH_SHORT).show();
-                        fragmentClass = RemindersFragment.class;
-                        toolbar.setTitle("Reminders");
-
-                        break;
-                    case R.id.nav_baby_products_fragment:
-                        Toast.makeText(getApplicationContext(), "Rate baby products", Toast.LENGTH_SHORT).show();
-                        fragmentClass = BabyProductsFragment.class;
-                        toolbar.setTitle("Rate");
-
-                        break;
-                    case R.id.nav_share_fragment:
-                        Toast.makeText(getApplicationContext(), "Please share THE SMART PARENT", Toast.LENGTH_SHORT).show();
-                        fragmentClass = ShareFragment.class;
-                        toolbar.setTitle("Share");
-                        break;
-                    case R.id.nav_feedback_fragment:
-                        Toast.makeText(getApplicationContext(), "Please give feedback", Toast.LENGTH_SHORT).show();
-                        fragmentClass = FeedbackFragment.class;
-                        toolbar.setTitle("Feedback");
-                        break;
-
-                    default:
-                        fragmentClass = HomeFragment.class;
-                }
-
-                try {
-                    fragment = (Fragment) fragmentClass.newInstance();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                // Insert the fragment by replacing any existing fragment
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
-
-                // Highlight the selected item has been done by NavigationView
-                menuItem.setChecked(true);
-                // Set action bar title
-                setTitle(menuItem.getTitle());
-                // Close the navigation drawer
-                mDrawer.closeDrawers();
-
-                return false;
-            }
-        });
-    }
-
-    private void SendUserToLoginFragment() {
-        LoginFragment nextFrag = new LoginFragment();
-        this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, nextFrag, "findThisFragment")
-                .addToBackStack(null)
-                .commit();
-    }
-
-    //checking if user exists in FireBase database
     private void CheckUserExistence() {
         final String current_user_id = mAuth.getCurrentUser().getUid();
 
-        UserRef.addValueEventListener(new ValueEventListener() {
+        //create reference to fireBase db
+        usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //check if user has not completed filling up profile
                 if (!dataSnapshot.hasChild(current_user_id)) {
-                    SendUserToEditProfileActivity();
+                    SendUserToProfileActivity();
                 }
             }
 
@@ -293,10 +249,32 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //opening edit profile activity
-    private void SendUserToEditProfileActivity() {
-        Intent setupIntent = new Intent(MainActivity.this, EditProfileActivity.class);
-        setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(setupIntent);
+    //opening the login activity
+    private void SendUserToLoginActivity() {
+        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(loginIntent);
+        finish();
+    }
+
+    //opens profile activity
+    private void SendUserToProfileActivity() {
+        Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+        profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(profileIntent);
+        finish();
+    }
+
+    //opens activity for users to write their questions
+    private void SendUserToWriteQueryActivity() {
+        Intent writeQueryIntent = new Intent(MainActivity.this, WriteQueryActivity.class);
+        startActivity(writeQueryIntent);
+    }
+
+    //open main activity
+    private void SendUserToMainActivity() {
+        Intent mainActivityIntent = new Intent(MainActivity.this, MainActivity.class);
+        finish();
+        startActivity(mainActivityIntent);
     }
 }

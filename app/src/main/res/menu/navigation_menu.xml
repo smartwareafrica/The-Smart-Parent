@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_white_24dp"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_stories"
+            android:icon="@drawable/ic_story_white_24dp"
+            android:title="Stories" />
+        <item
+            android:id="@+id/nav_chats"
+            android:icon="@drawable/ic_chat_white_24dp"
+            android:title="Chats" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_profile_white_24dp"
+            android:title="Profile" />
+        <item
+            android:id="@+id/nav_growthAnalysis"
+            android:icon="@drawable/ic_growth_analysis_white_24dp"
+            android:title="Growth Analysis" />
+        <item
+            android:id="@+id/nav_reminders"
+            android:icon="@drawable/ic_reminders_white_24dp"
+            android:title="Reminders" />
+        <item
+            android:id="@+id/nav_baby_products"
+            android:icon="@drawable/ic_rate_white_24dp"
+            android:title="Baby Products" />
+    </group>
+    <group
+        android:id="@+id/group_menu"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_share_white_24dp"
+            android:title="Share" />
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback_white_24dp"
+            android:title="Feedback" />
+    </group>
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/user_profile_24"
+        android:title="Logout"/>
+
+</menu>

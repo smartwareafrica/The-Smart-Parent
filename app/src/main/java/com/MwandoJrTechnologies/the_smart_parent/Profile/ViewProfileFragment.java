@@ -1,11 +1,11 @@
 package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +15,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.MwandoJrTechnologies.the_smart_parent.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.squareup.picasso.Picasso;
 
 /**
  * Displays user profile
@@ -36,15 +38,16 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
     private TextView textViewUsername;
     private Button buttonLogout;
 
-    ImageView imageView;
+    ImageView profileImageView;
 
-    private DatabaseReference databaseReference;
-    private StorageReference ProfilePics;
+    private FirebaseAuth mAuth;
+    private StorageReference UserProfileImageRef;
+    private DatabaseReference UsersReference;
 
-    Uri uriProfileImage;
+    String currentUseID;
+
     ProgressBar progressBar;
 
-    String profileImageUrl;
 
     public ViewProfileFragment() {
         // Required empty public constructor
@@ -61,11 +64,10 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
 
         if (firebaseAuth.getCurrentUser() == null) {
             Toast.makeText(getContext(), "Please Log into your account", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getContext(), MainActivity.class));
+           // OpenLoginFragment();
         }
 
-
-        imageView = (ImageView) rootView.findViewById(R.id.imageView);
+        profileImageView = (ImageView) rootView.findViewById(R.id.profileImageView);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         textViewName = (TextView) rootView.findViewById(R.id.textViewName);
         textViewContact = (TextView) rootView.findViewById(R.id.textViewContact);
@@ -80,45 +82,31 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void LoadUserInformation() {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        // String photoUrl = user.getPhotoUrl().toString();
-        // String email = user.getEmail();
-        // String displayName = user.getDisplayName();
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("server/path/to/the-smart-parent-598c2");
+        //getting the user who is logged in as CurrentUser
+        mAuth = FirebaseAuth.getInstance();
+        currentUseID = mAuth.getCurrentUser().getUid();
+        UsersReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUseID);
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("ProfilePics");
 
-        if (user != null) {
-            if (user.getPhotoUrl() != null) {
+        //get image to profile
+        UsersReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    String image = dataSnapshot.child("profileImage").getValue().toString();
 
-                String photoUrl = user.getPhotoUrl().toString();
+                    Picasso.get().load(image).placeholder(R.drawable.profile_image_placeholder)
+                            .into(profileImageView);
+                }
+            }
 
-                Glide.with(getContext())
-                        .load(user
-                                .getPhotoUrl()
-                                .toString())
-                        .centerCrop()
-                        .placeholder(R.drawable.ic_menu_camera)
-                        .into(imageView);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-            if (user.getEmail() != null) {
-                textViewName.setText(user.getEmail());
-            }
-            if (user.getDisplayName() != null) {
-                textViewContact.setText(user.getDisplayName());
-            }
-            if (user.getUid() != null) {
-                textViewUsername.setText(user.getUid());
-            }
-        }
+        });
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
 
     @Override
     public void onClick(View view) {
@@ -134,7 +122,10 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
         }
 
     }
-}
+
+
+    }
+
 
 
 

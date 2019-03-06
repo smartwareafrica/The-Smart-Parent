@@ -14,21 +14,24 @@
     <string name="don_t_have_an_account_please_register_here">Don\'t have an account? Please register here</string>
     <string name="login">Login</string>
     <string name="log_into_your_account">Log into your account</string>
-    <string name="save_details">Save details</string>
+    <string name="save_details">Post</string>
     <string name="enter_your_full_name">Enter your full name</string>
     <string name="enter_your_address">Enter your address</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="tap_on_camera_to_choose_profile_picture">Tap on camera to choose profile picture</string>
+    <string name="tap_on_image_to_choose_profile_picture">Tap on image to choose profile picture</string>
     <string name="todo">TODO</string>
     <string name="enter_your_phone_number">Enter your Phone Number</string>
     <string name="user_profile">User Profile</string>
     <string name="please_create_an_account">Please create an account</string>
     <string name="the_smart_parent">THE SMART PARENT</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="tap_image_to_upload_profile_picture">Tap image to upload profile picture</string>
     <string name="create_your_username">Create Your Username</string>
     <string name="please_write_your_question_here">Please write your question here...</string>
     <string name="logout">Logout</string>
+    <string name="username">username</string>
+    <string name="confirm_email">Confirm Email</string>
+    <string name="reminders">Reminders</string>
+    <string name="attach_an_image">Attach an image</string>
 
 </resources>

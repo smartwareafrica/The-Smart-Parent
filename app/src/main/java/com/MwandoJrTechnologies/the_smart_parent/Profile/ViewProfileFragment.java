@@ -23,7 +23,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.MwandoJrTechnologies.the_smart_parent.MainActivity;
+import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.squareup.picasso.Picasso;
 
@@ -58,7 +58,7 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_view_profile, container, false);
+        View rootView = inflater.inflate(R.layout.activity_profile, container, false);
 
         firebaseAuth = FirebaseAuth.getInstance();
 

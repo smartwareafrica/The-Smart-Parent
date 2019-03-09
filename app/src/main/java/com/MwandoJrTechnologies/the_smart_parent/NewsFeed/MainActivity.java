@@ -1,28 +1,42 @@
-package com.MwandoJrTechnologies.the_smart_parent;
+package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
-import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.WriteQueryActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileActivity;
+import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,17 +56,20 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
+    private RecyclerView postList;
     private Toolbar toolbar;
 
     private CircleImageView navProfileImage;
     private TextView navProfileName;
-    private ImageButton addNewPostButton;
-
+    private ImageButton addNewQueryButton;
 
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
+    private DatabaseReference postsReference;
+    //private FirebaseRecyclerAdapter firebaseRecyclerAdapter;
     String currentUserID;
 
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        postsReference = FirebaseDatabase.getInstance().getReference().child("Posts");
 
         //inflate
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Home");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        addNewPostButton = (ImageButton) findViewById(R.id.add_new_post_button);
+        addNewQueryButton = (ImageButton) findViewById(R.id.add_new_query_button);
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         //navigation drawer toggle
@@ -81,13 +99,31 @@ public class MainActivity extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View navView = navigationView.getHeaderView(0);
 
+        postList = (RecyclerView) findViewById(R.id.all_users_query_list);
+        //give it a fixed size
+        postList.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        //new posts at top and old to bottom
+        postList.setLayoutManager(linearLayoutManager);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+
         navProfileImage = (CircleImageView) navView.findViewById(R.id.nav_profile_image);
         navProfileName = (TextView) navView.findViewById(R.id.nav_user_full_name);
+
+        progressDialog = new ProgressDialog(this);
+
+//for navigation drawer
         //display current logged in user details only
         usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+
+                    //show progress dialog
+                    progressDialog.setTitle("Profile Image");
+                    progressDialog.setMessage("Updating profile image, Please wait...");
+                    progressDialog.show();
 
                     //check for the profile image and name
                     if (dataSnapshot.hasChild("fullName")) {
@@ -99,12 +135,16 @@ public class MainActivity extends AppCompatActivity {
                     if (dataSnapshot.hasChild("profileImage")) {
                         //display only if there is an image
                         String image = dataSnapshot.child("profileImage").getValue().toString();
+
+
+                        Bitmap bm = StringToBitMap(image);
+                        navProfileImage.setImageBitmap(bm);
+
                         //code to display
-                        Picasso.get()
-                                .load(image)
-                                .placeholder(R.drawable.profile_image_placeholder)
-                                .into(navProfileImage);
-                    }else {
+                        //  Picasso.get().load(image).placeholder(R.drawable.profile_image_placeholder).into(navProfileImage);
+
+
+                    } else {
                         Toast.makeText(getApplicationContext(), "You need to update your profile", Toast.LENGTH_SHORT).show();
 
                     }
@@ -127,12 +167,78 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        addNewPostButton.setOnClickListener(new View.OnClickListener() {
+        addNewQueryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SendUserToWriteQueryActivity();
             }
         });
+
+        DisplayAllUsersQueries();
+
+    }
+
+    private void DisplayAllUsersQueries() {
+
+        final FirebaseRecyclerOptions<Posts> options =
+                new FirebaseRecyclerOptions.Builder<Posts>()
+                        .setQuery(postsReference, Posts.class)
+                        .build();
+
+        FirebaseRecyclerAdapter<Posts, PostsViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Posts, PostsViewHolder>(options) {
+                    @Override
+                    protected void onBindViewHolder(@NonNull PostsViewHolder viewHolder, int i, @NonNull Posts posts) {
+
+                        posts = getItem(i);
+                        Picasso.get().load(posts.getProfileImage()).placeholder(R.drawable.profile_image_placeholder).into(viewHolder.profileImg);
+                        viewHolder.usersName.setText(posts.getFullName());
+                        viewHolder.postTime.setText(posts.getTime());
+                        viewHolder.postDate.setText(posts.getDate());
+                        viewHolder.postDescription.setText(posts.getDescription());
+                        Picasso.get().load(posts.getPostImage()).placeholder(R.drawable.mjrlogo).into(viewHolder.postImg);
+
+                    }
+
+                    @NonNull
+                    @Override
+                    public PostsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        View view = LayoutInflater
+                                .from(parent.getContext())
+                                .inflate(R.layout.post_item, parent, false);
+                        PostsViewHolder viewHolder = new PostsViewHolder(view);
+                        return viewHolder;
+                    }
+                };
+
+        postList.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.startListening();
+
+    }
+
+    //creating a static class for displaying  queries from all users
+    public static class PostsViewHolder extends RecyclerView.ViewHolder {
+        TextView usersName;
+        CircleImageView profileImg;
+        TextView postTime;
+        TextView postDate;
+        TextView postDescription;
+        ImageView postImg;
+
+        // View mView;
+
+        public PostsViewHolder(@NonNull View itemView) {
+            super(itemView);
+            // mView = itemView;
+
+            usersName = itemView.findViewById(R.id.post_user_name);
+            profileImg = itemView.findViewById(R.id.post_profile_image);
+            postTime = itemView.findViewById(R.id.post_time);
+            postDate = itemView.findViewById(R.id.post_date);
+            postDescription = itemView.findViewById(R.id.post_query);
+            postImg = itemView.findViewById(R.id.post_image);
+
+        }
 
     }
 
@@ -149,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
             // if user has edited and provided profile details
             CheckUserExistence();
         }
+
     }
 
     // when user selects navigation drawer items
@@ -276,5 +383,19 @@ public class MainActivity extends AppCompatActivity {
         Intent mainActivityIntent = new Intent(MainActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
+    }
+
+
+
+    //convert string to bitmap
+    public Bitmap StringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte= Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 }

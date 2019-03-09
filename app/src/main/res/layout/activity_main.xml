@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".NewsFeed.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,34 +20,31 @@
             android:id="@+id/main_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar" >
+            android:layout_below="@+id/toolbar">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/all_users_query_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:stackFromEnd="true">
+
+            </androidx.recyclerview.widget.RecyclerView>
         </FrameLayout>
 
         <ImageButton
-            android:id="@+id/add_new_post_button"
+            android:id="@+id/add_new_query_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_above="@+id/main_container"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_create_post"
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="12dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="4dp"
             android:background="#0F6A9C"
             android:baselineAlignBottom="false"
-            android:focusableInTouchMode="false" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:padding="40dp"
-            android:layout_centerVertical="true"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:elegantTextHeight="true"
-            android:text="Am at tutorial 20, so help me God. I want to achieve"/>
+            android:focusableInTouchMode="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_create_post" />
 
     </RelativeLayout>
 

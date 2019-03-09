@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +27,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.MwandoJrTechnologies.the_smart_parent.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -209,7 +207,7 @@ public class WriteQueryActivity extends AppCompatActivity {
                     postsMap.put("uid", currentUserID);
                     postsMap.put("date", saveCurrentDate);
                     postsMap.put("time", saveCurrentTime);
-                    postsMap.put("Description", post);
+                    postsMap.put("description", post);
                     postsMap.put("postImage", downloadUrl);
                     postsMap.put("profileImage", userProfileImage);
                     postsMap.put("fullName", userFullName);

@@ -33,5 +33,13 @@
     <string name="confirm_email">Confirm Email</string>
     <string name="reminders">Reminders</string>
     <string name="attach_an_image">Attach an image</string>
+    <string name="full_name">Full name</string>
+    <string name="time">  Time</string>
+    <string name="date">  Date</string>
+    <string name="asked_question">Asked Question... </string>
+    <string name="users_query">Users query</string>
+    <string name="at">at</string>
+    <string name="post_image">post image</string>
+    <string name="please_select_your_date_of_birth">Please select your date of birth</string>
 
 </resources>

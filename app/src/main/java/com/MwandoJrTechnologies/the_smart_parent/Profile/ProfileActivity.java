@@ -2,23 +2,20 @@ package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-
-import androidx.appcompat.widget.Toolbar;
-import de.hdodenhof.circleimageview.CircleImageView;
-
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
+import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,8 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.MwandoJrTechnologies.the_smart_parent.MainActivity;
-import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -38,7 +33,19 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -58,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     final static int galleryPick = 1;
+    private String bmString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,11 +132,14 @@ public class ProfileActivity extends AppCompatActivity {
 
                     if (dataSnapshot.hasChild("profileImage")){
                         String image = dataSnapshot.child("profileImage").getValue().toString();
-
+                        /*
                         Picasso.get()
                                 .load(image)
                                 .placeholder(R.drawable.profile_image_placeholder)
                                 .into(profileImage);
+                                */
+                        Bitmap bm = StringToBitMap(image);
+                        profileImage.setImageBitmap(bm);
                     }else {
                         Toast.makeText(ProfileActivity.this, "Please select a profile picture first", Toast.LENGTH_LONG).show();
                     }
@@ -152,7 +163,7 @@ public class ProfileActivity extends AppCompatActivity {
             Uri imageUri = data.getData();
 
             //adding crop image functionality using arthurHub library on github
-            CropImage.activity()
+            CropImage.activity(imageUri)
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1, 1)
                     .start(this);
@@ -169,28 +180,40 @@ public class ProfileActivity extends AppCompatActivity {
                 progressDialog.setCanceledOnTouchOutside(true);
 
                 Uri resultUri = result.getUri();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+
+                    profileImage.setImageBitmap(bitmap);
+                    bmString = BitMapToString(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
 
                 //creating a filepath for pushing cropped image to fireBase storage by unique user id
-                StorageReference filePath = userProfileImageRef.child(currentUserID + ".jpg");
+                StorageReference filePath = userProfileImageRef.child(resultUri.getLastPathSegment() + currentUserID + ".jpg");
 
                 //now store in fireBase storage
-                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                final UploadTask uploadTask = filePath.putFile(resultUri);
+
+                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(ProfileActivity.this, "Profile Image Uploaded successfully", Toast.LENGTH_LONG).show();
 
                             //now store the image link to fireBase database
-                            final String downloadUrl = task.getResult().getMetadata().getReference().toString();
+                            //final String downloadUrl = task.getResult().getMetadata().getReference().toString();
                             //save link under unique user id
-                            usersReference.child("profileImage").setValue(downloadUrl)
+                            usersReference.child("profileImage").setValue(bmString)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 //send user to complete editing profile
-                                                Intent selfIntent = new Intent(ProfileActivity.this, ProfileActivity.class);
-                                                startActivity(selfIntent);
+                                               // Intent selfIntent = new Intent(ProfileActivity.this, ProfileActivity.class);
+                                              //  startActivity(selfIntent);
 
                                                 Toast.makeText(ProfileActivity.this, "Profile Image link saved Successfully ", Toast.LENGTH_LONG).show();
                                                 progressDialog.dismiss();
@@ -312,5 +335,26 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+//convert bitmap to string
+    public String BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+        return temp;
+    }
+
+
+    //convert string to bitmap
+    public Bitmap StringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 }

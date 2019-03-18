@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,12 +35,8 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
@@ -65,7 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     final static int galleryPick = 1;
-    private String bmString;
+    private String downloadImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +100,7 @@ public class ProfileActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
 
         textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
-        textViewUserEmail.setText("Welcome to THE SMART PARENT " + user.getEmail());
+        textViewUserEmail.setText(String.format("Welcome to THE SMART PARENT %s", user.getEmail()));
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,20 +125,19 @@ public class ProfileActivity extends AppCompatActivity {
         usersReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                 //load image from fireBase
+                //load image from fireBase
                 if (dataSnapshot.exists()) {
 
-                    if (dataSnapshot.hasChild("profileImage")){
+                    if (dataSnapshot.hasChild("profileImage")) {
                         String image = dataSnapshot.child("profileImage").getValue().toString();
-                        /*
                         Picasso.get()
                                 .load(image)
                                 .placeholder(R.drawable.profile_image_placeholder)
                                 .into(profileImage);
-                                */
-                        Bitmap bm = StringToBitMap(image);
-                        profileImage.setImageBitmap(bm);
-                    }else {
+
+                        //  Bitmap bm = StringToBitMap(image);
+                        // profileImage.setImageBitmap(bm);
+                    } else {
                         Toast.makeText(ProfileActivity.this, "Please select a profile picture first", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -163,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity {
             Uri imageUri = data.getData();
 
             //adding crop image functionality using arthurHub library on github
-            CropImage.activity(imageUri)
+            CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1, 1)
                     .start(this);
@@ -180,6 +177,7 @@ public class ProfileActivity extends AppCompatActivity {
                 progressDialog.setCanceledOnTouchOutside(true);
 
                 Uri resultUri = result.getUri();
+                /*
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
 
@@ -188,54 +186,73 @@ public class ProfileActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                */
 
 
                 //creating a filepath for pushing cropped image to fireBase storage by unique user id
-                StorageReference filePath = userProfileImageRef.child(resultUri.getLastPathSegment() + currentUserID + ".jpg");
+                final StorageReference filePath = userProfileImageRef.child(resultUri.getLastPathSegment() + currentUserID + ".jpg");
 
                 //now store in fireBase storage
                 final UploadTask uploadTask = filePath.putFile(resultUri);
 
-                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(ProfileActivity.this, "Profile Image Uploaded successfully", Toast.LENGTH_LONG).show();
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            //now store the image link to fireBase database
-                            //final String downloadUrl = task.getResult().getMetadata().getReference().toString();
-                            //save link under unique user id
-                            usersReference.child("profileImage").setValue(bmString)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                //send user to complete editing profile
-                                               // Intent selfIntent = new Intent(ProfileActivity.this, ProfileActivity.class);
-                                              //  startActivity(selfIntent);
+                        Task<Uri> UriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                            @Override
+                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                if (!task.isSuccessful()) {
+                                    throw task.getException();
+                                }
 
-                                                Toast.makeText(ProfileActivity.this, "Profile Image link saved Successfully ", Toast.LENGTH_LONG).show();
-                                                progressDialog.dismiss();
-                                            } else {
-                                                String message = task.getException().getMessage();
-                                                Toast.makeText(ProfileActivity.this, "Error Occurred : " + message,
-                                                        Toast.LENGTH_LONG).show();
-                                                progressDialog.dismiss();
-                                            }
-                                        }
-                                    });
+                                //get the url...INITIALISE downloadImageUrl at the most to ie....String downloadImageUrl
+                                downloadImageUrl = filePath.getDownloadUrl().toString();
+                                return filePath.getDownloadUrl();
 
-                        }
+
+                            }
+                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+
+                                if (task.isSuccessful()) {
+                                    //get the link
+                                    downloadImageUrl = task.getResult().toString();
+                                    addLinkToFireBaseDatabase();
+                                    Toast.makeText(ProfileActivity.this, "Good!! ", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
+
                     }
                 });
-
-            } else {
-                Toast.makeText(ProfileActivity.this, "Error occurred: Image Cant be cropped. Please try again",
-                        Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
             }
         }
+    }
+
+    private void addLinkToFireBaseDatabase() {
+
+        usersReference.child("profileImage").setValue(downloadImageUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Intent selfIntent = new Intent(ProfileActivity.this, ProfileActivity.class);
+                    startActivity(selfIntent);
+                    progressDialog.dismiss();
+                    Toast.makeText(ProfileActivity.this, "profile image uploaded successfully uploaded....wow... ", Toast.LENGTH_SHORT).show();
+                } else {
+                    progressDialog.dismiss();
+                    String message = task.getException().getMessage();
+                    Toast.makeText(ProfileActivity.this, "Error occurred  " + message, Toast.LENGTH_SHORT).show();
+
+
+                }
+            }
+
+
+        });
     }
 
     @Override
@@ -314,8 +331,8 @@ public class ProfileActivity extends AppCompatActivity {
         String username = editTextUsername.getText().toString().trim();
         Query usernameQuery = FirebaseDatabase.getInstance()
                 .getReference()
-                .child("Profiles")
-                .orderByChild("username")
+                .child("Users")
+                .orderByChild("userName")
                 .equalTo(username);
         usernameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -325,7 +342,6 @@ public class ProfileActivity extends AppCompatActivity {
                 if (dataSnapshot.getChildrenCount() > 0) {
                     //should stop further execution
                     Toast.makeText(ProfileActivity.this, "Username Taken. Please choose a different Username", Toast.LENGTH_SHORT).show();
-
                 }
             }
 
@@ -336,25 +352,29 @@ public class ProfileActivity extends AppCompatActivity {
         });
         return true;
     }
-//convert bitmap to string
-    public String BitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b=baos.toByteArray();
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+
+  /*
+    //convert bitmap to string
+
+    public String BitMapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String temp = Base64.encodeToString(b, Base64.DEFAULT);
         return temp;
     }
 
 
     //convert string to bitmap
-    public Bitmap StringToBitMap(String encodedString){
+    public Bitmap StringToBitMap(String encodedString) {
         try {
-            byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
-            Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
             return bitmap;
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.getMessage();
             return null;
         }
     }
+    */
 }

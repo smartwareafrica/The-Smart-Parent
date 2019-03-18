@@ -37,6 +37,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 
@@ -61,15 +63,15 @@ public class MainActivity extends AppCompatActivity {
 
     private CircleImageView navProfileImage;
     private TextView navProfileName;
+    private TextView navUsername;
     private ImageButton addNewQueryButton;
 
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
     private DatabaseReference postsReference;
-    //private FirebaseRecyclerAdapter firebaseRecyclerAdapter;
     String currentUserID;
 
-    private ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
 
         navProfileImage = (CircleImageView) navView.findViewById(R.id.nav_profile_image);
         navProfileName = (TextView) navView.findViewById(R.id.nav_user_full_name);
+        navUsername = (TextView) navView.findViewById(R.id.nav_username);
 
-        progressDialog = new ProgressDialog(this);
 
 //for navigation drawer
         //display current logged in user details only
@@ -119,30 +121,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-
-                    //show progress dialog
-                    progressDialog.setTitle("Profile Image");
-                    progressDialog.setMessage("Updating profile image, Please wait...");
-                    progressDialog.show();
-
-                    //check for the profile image and name
+                    //check for the profile image, username and name
                     if (dataSnapshot.hasChild("fullName")) {
                         //only display name if it exists
                         String fullName = dataSnapshot.child("fullName").getValue().toString();
                         //code to display
                         navProfileName.setText(fullName);
                     }
+                    if (dataSnapshot.hasChild("userName")) {
+                        //only display name if it exists
+                        String userName = dataSnapshot.child("userName").getValue().toString();
+                        //code to display
+                        navUsername.setText(userName);
+                    }
                     if (dataSnapshot.hasChild("profileImage")) {
                         //display only if there is an image
                         String image = dataSnapshot.child("profileImage").getValue().toString();
 
-
-                        Bitmap bm = StringToBitMap(image);
-                        navProfileImage.setImageBitmap(bm);
-
-                        //code to display
-                        //  Picasso.get().load(image).placeholder(R.drawable.profile_image_placeholder).into(navProfileImage);
-
+                        Picasso.get()
+                                .load(image)
+                                .placeholder(R.drawable.profile_image_placeholder)
+                                .into(navProfileImage);
 
                     } else {
                         Toast.makeText(getApplicationContext(), "You need to update your profile", Toast.LENGTH_SHORT).show();
@@ -185,18 +184,27 @@ public class MainActivity extends AppCompatActivity {
                         .setQuery(postsReference, Posts.class)
                         .build();
 
-        FirebaseRecyclerAdapter<Posts, PostsViewHolder> firebaseRecyclerAdapter =
+        FirebaseRecyclerAdapter<Posts, PostsViewHolder> fireBaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Posts, PostsViewHolder>(options) {
                     @Override
                     protected void onBindViewHolder(@NonNull PostsViewHolder viewHolder, int i, @NonNull Posts posts) {
 
                         posts = getItem(i);
+
+
+                       // Bitmap image = StringToBitMap(posts.getPostImage());
+                       // Bitmap img = StringToBitMap(posts.getProfileImage());
+
+                        //retrieve profile image from fireBase database
+                        //retrieve post image from storage
+
                         Picasso.get().load(posts.getProfileImage()).placeholder(R.drawable.profile_image_placeholder).into(viewHolder.profileImg);
                         viewHolder.usersName.setText(posts.getFullName());
                         viewHolder.postTime.setText(posts.getTime());
                         viewHolder.postDate.setText(posts.getDate());
                         viewHolder.postDescription.setText(posts.getDescription());
                         Picasso.get().load(posts.getPostImage()).placeholder(R.drawable.mjrlogo).into(viewHolder.postImg);
+                       // viewHolder.postImg.setImageBitmap(image);
 
                     }
 
@@ -211,8 +219,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
 
-        postList.setAdapter(firebaseRecyclerAdapter);
-        firebaseRecyclerAdapter.startListening();
+        postList.setAdapter(fireBaseRecyclerAdapter);
+        fireBaseRecyclerAdapter.startListening();
 
     }
 
@@ -386,14 +394,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     //convert string to bitmap
-    public Bitmap StringToBitMap(String encodedString){
+    public Bitmap StringToBitMap(String encodedString) {
         try {
-            byte [] encodeByte= Base64.decode(encodedString,Base64.DEFAULT);
-            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
             return bitmap;
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.getMessage();
             return null;
         }

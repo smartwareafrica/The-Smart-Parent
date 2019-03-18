@@ -1,31 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="#2F48C5">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/nav_profile_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
-        tools:src="@drawable/profile_image_placeholder"
+        android:layout_marginTop="5dp"
         app:civ_border_color="@color/colorPrimaryDark"
-        app:civ_border_width="2dp" />
+        app:civ_border_width="2dp"
+        tools:src="@drawable/profile_image_placeholder" />
 
     <TextView
         android:id="@+id/nav_user_full_name"
         style="@style/Base.TextAppearance.AppCompat.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
         android:layout_below="@+id/nav_profile_image"
-        android:text="@string/username"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"
+        android:text="@string/full_name"
         android:textAlignment="center"
         android:textColor="@android:color/white" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_cyclic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:minWidth="50dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nav_user_full_name"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/at2"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/nav_username"
+            style="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:text="@string/username"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+
+
+    </LinearLayout>
+
 
 </RelativeLayout>

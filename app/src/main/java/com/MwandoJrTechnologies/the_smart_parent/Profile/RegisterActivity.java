@@ -67,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
         textViewSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SenUserToLoginActivity();
+                SendUserToLoginActivity();
             }
         });
     }
@@ -143,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //opens login activity
-    private void SenUserToLoginActivity() {
+    private void SendUserToLoginActivity() {
         Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);

@@ -7,12 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +23,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -136,6 +142,7 @@ public class WriteQueryActivity extends AppCompatActivity {
         if (requestCode == galleryPick && resultCode == RESULT_OK && data != null) {
 
             imageUri = data.getData();
+            //display image on link
             selectPostImage.setImageURI(imageUri);
         }
     }
@@ -167,19 +174,18 @@ public class WriteQueryActivity extends AppCompatActivity {
         //setting current date
         Calendar callForTime = Calendar.getInstance();
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
-        saveCurrentTime = currentTime.format(callForDate.getTime());
+        saveCurrentTime = currentTime.format(callForTime.getTime());
 
         postRandomName = saveCurrentDate + saveCurrentTime;
 
-        StorageReference filePath = postImagesReference.child("PostsImages").child(imageUri.getLastPathSegment() + postRandomName + ".jpg");
+        final StorageReference filePath = postImagesReference.child("PostsImages").child(imageUri.getLastPathSegment() + postRandomName + ".jpg");
 
-        //adding image path to fireBase database
-        filePath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+       filePath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
                 if (task.isSuccessful()) {
-                    //adding link to fireBase database
-                    downloadUrl = task.getResult().getMetadata().toString();
+                    downloadUrl = task.getResult().getStorage().getDownloadUrl().toString();
 
                     Toast.makeText(WriteQueryActivity.this, "Image upload successfully", Toast.LENGTH_SHORT).show();
 
@@ -188,10 +194,10 @@ public class WriteQueryActivity extends AppCompatActivity {
                     String message = task.getException().getMessage();
                     Toast.makeText(WriteQueryActivity.this, "An Error Occurred: " + message, Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }
-
 
     //saves details of image to fireBase storage
     private void SavingPostInformationToDatabase() {
@@ -216,11 +222,11 @@ public class WriteQueryActivity extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener() {
                                 @Override
                                 public void onComplete(@NonNull Task task) {
-                                    if (task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         SendUserToMainActivity();
                                         Toast.makeText(WriteQueryActivity.this, "New Question Updated Successfully.", Toast.LENGTH_SHORT).show();
                                         progressDialog.dismiss();
-                                    }else {
+                                    } else {
                                         Toast.makeText(WriteQueryActivity.this, "Please try again. An error occurred", Toast.LENGTH_SHORT).show();
                                         progressDialog.dismiss();
                                     }
@@ -242,4 +248,15 @@ public class WriteQueryActivity extends AppCompatActivity {
         finish();
         startActivity(mainActivityIntent);
     }
+
+    /*
+    //convert bitmap to string
+    public String BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+        return temp;
+    }
+    */
 }

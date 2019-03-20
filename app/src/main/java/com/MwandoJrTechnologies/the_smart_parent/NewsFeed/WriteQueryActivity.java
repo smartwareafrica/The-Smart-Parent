@@ -7,15 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 
-import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,10 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -51,10 +45,8 @@ public class WriteQueryActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference usersReference;
     private DatabaseReference postsReference;
-    private StorageReference postImagesReference;
 
     private EditText editTextWriteQuery;
-    private ImageButton selectPostImage;
     private Button buttonPost;
 
     final static int galleryPick = 1;
@@ -66,7 +58,6 @@ public class WriteQueryActivity extends AppCompatActivity {
     private String saveCurrentDate;
     private String saveCurrentTime;
     private String postRandomName;
-    private String downloadUrl;
     private String currentUserID;
 
 
@@ -78,13 +69,11 @@ public class WriteQueryActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getUid();
 
-        postImagesReference = FirebaseStorage.getInstance().getReference();
         usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
         postsReference = FirebaseDatabase.getInstance().getReference().child("Posts");
 
         //cast to views
         editTextWriteQuery = (EditText) findViewById(R.id.edit_text_write_query);
-        selectPostImage = (ImageButton) findViewById(R.id.image_button_post);
         buttonPost = (Button) findViewById(R.id.button_post);
         progressDialog = new ProgressDialog(this);
 
@@ -93,14 +82,6 @@ public class WriteQueryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
         getSupportActionBar().setTitle("Write query");
-
-        //when clicked or touched
-        selectPostImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OpenGallery();
-            }
-        });
 
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,18 +115,6 @@ public class WriteQueryActivity extends AppCompatActivity {
         startActivityForResult(galleryIntent, galleryPick);
     }
 
-    //after selecting the image
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == galleryPick && resultCode == RESULT_OK && data != null) {
-
-            imageUri = data.getData();
-            //display image on link
-            selectPostImage.setImageURI(imageUri);
-        }
-    }
 
     //check that a query must be written
     private void ValidatePostInformation() {
@@ -161,6 +130,7 @@ public class WriteQueryActivity extends AppCompatActivity {
             progressDialog.setCanceledOnTouchOutside(true);
 
             StoreImageToFireBaseStorage();
+            SavingPostInformationToDatabase();
         }
     }
 
@@ -178,25 +148,6 @@ public class WriteQueryActivity extends AppCompatActivity {
 
         postRandomName = saveCurrentDate + saveCurrentTime;
 
-        final StorageReference filePath = postImagesReference.child("PostsImages").child(imageUri.getLastPathSegment() + postRandomName + ".jpg");
-
-       filePath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-
-                if (task.isSuccessful()) {
-                    downloadUrl = task.getResult().getStorage().getDownloadUrl().toString();
-
-                    Toast.makeText(WriteQueryActivity.this, "Image upload successfully", Toast.LENGTH_SHORT).show();
-
-                    SavingPostInformationToDatabase();
-                } else {
-                    String message = task.getException().getMessage();
-                    Toast.makeText(WriteQueryActivity.this, "An Error Occurred: " + message, Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
     }
 
     //saves details of image to fireBase storage
@@ -214,7 +165,6 @@ public class WriteQueryActivity extends AppCompatActivity {
                     postsMap.put("date", saveCurrentDate);
                     postsMap.put("time", saveCurrentTime);
                     postsMap.put("description", post);
-                    postsMap.put("postImage", downloadUrl);
                     postsMap.put("profileImage", userProfileImage);
                     postsMap.put("fullName", userFullName);
                     //now save inside fireBase database
@@ -249,14 +199,4 @@ public class WriteQueryActivity extends AppCompatActivity {
         startActivity(mainActivityIntent);
     }
 
-    /*
-    //convert bitmap to string
-    public String BitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b=baos.toByteArray();
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
-        return temp;
-    }
-    */
 }

@@ -1,11 +1,9 @@
 package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,10 +11,6 @@ import androidx.annotation.NonNull;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
-import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
@@ -37,7 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +41,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 
@@ -70,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference usersRef;
     private DatabaseReference postsReference;
     String currentUserID;
-
 
 
     @Override
@@ -191,20 +182,34 @@ public class MainActivity extends AppCompatActivity {
 
                         posts = getItem(i);
 
-
-                       // Bitmap image = StringToBitMap(posts.getPostImage());
-                       // Bitmap img = StringToBitMap(posts.getProfileImage());
-
-                        //retrieve profile image from fireBase database
-                        //retrieve post image from storage
+                        final String PostKey = getRef(i).getKey();
 
                         Picasso.get().load(posts.getProfileImage()).placeholder(R.drawable.profile_image_placeholder).into(viewHolder.profileImg);
                         viewHolder.usersName.setText(posts.getFullName());
                         viewHolder.postTime.setText(posts.getTime());
                         viewHolder.postDate.setText(posts.getDate());
                         viewHolder.postDescription.setText(posts.getDescription());
-                        Picasso.get().load(posts.getPostImage()).placeholder(R.drawable.mjrlogo).into(viewHolder.postImg);
-                       // viewHolder.postImg.setImageBitmap(image);
+
+
+                        //send post key to click post activity
+                        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent clickPostIntent = new Intent(MainActivity.this, ClickPostActivity.class);
+                                clickPostIntent.putExtra("PostKey", PostKey);
+                                startActivity(clickPostIntent);
+                            }
+                        });
+
+                        //open comments activity
+                        viewHolder.commentOnPost.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
+                                commentsIntent.putExtra("PostKey", PostKey);
+                                startActivity(commentsIntent);
+                            }
+                        });
 
                     }
 
@@ -213,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                     public PostsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                         View view = LayoutInflater
                                 .from(parent.getContext())
-                                .inflate(R.layout.post_item, parent, false);
+                                .inflate(R.layout.all_post_items_layout, parent, false);
                         PostsViewHolder viewHolder = new PostsViewHolder(view);
                         return viewHolder;
                     }
@@ -233,11 +238,12 @@ public class MainActivity extends AppCompatActivity {
         TextView postDescription;
         ImageView postImg;
 
-        // View mView;
+        //for comments
+        TextView commentOnPost;
+
 
         public PostsViewHolder(@NonNull View itemView) {
             super(itemView);
-            // mView = itemView;
 
             usersName = itemView.findViewById(R.id.post_user_name);
             profileImg = itemView.findViewById(R.id.post_profile_image);
@@ -245,6 +251,8 @@ public class MainActivity extends AppCompatActivity {
             postDate = itemView.findViewById(R.id.post_date);
             postDescription = itemView.findViewById(R.id.post_query);
             postImg = itemView.findViewById(R.id.post_image);
+
+            commentOnPost = itemView.findViewById(R.id.text_view_comment);
 
         }
 

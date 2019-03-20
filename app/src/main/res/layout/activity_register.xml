@@ -109,7 +109,7 @@
             android:id="@+id/button_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#0F6A9C"
+            android:backgroundTint="#FCFCFF"
             android:text="@string/register_user"
             android:layout_marginBottom="20dp"/>
 

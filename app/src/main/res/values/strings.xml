@@ -14,7 +14,7 @@
     <string name="don_t_have_an_account_please_register_here">Don\'t have an account? Please register here</string>
     <string name="login">Login</string>
     <string name="log_into_your_account">Log into your account</string>
-    <string name="save_details">Post</string>
+    <string name="save_details">Save Details</string>
     <string name="enter_your_full_name">Enter your full name</string>
     <string name="enter_your_address">Enter your address</string>
     <string name="drawer_open">Open navigation drawer</string>
@@ -27,7 +27,7 @@
     <string name="the_smart_parent">THE SMART PARENT</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="create_your_username">Create Your Username</string>
-    <string name="please_write_your_question_here">Please write your question here...</string>
+    <string name="please_write_your_question_here">Please write your question here…</string>
     <string name="logout">Logout</string>
     <string name="username">username</string>
     <string name="confirm_email">Confirm Email</string>
@@ -36,12 +36,27 @@
     <string name="full_name">Full Name</string>
     <string name="time">  Time</string>
     <string name="date">  Date</string>
-    <string name="asked_question">Asked Question... </string>
+    <string name="asked_question">Asked Question… </string>
     <string name="users_query">Users query</string>
-    <string name="at">at</string>
     <string name="post_image">post image</string>
     <string name="please_select_your_date_of_birth">Please select your date of birth</string>
     <string name="at2">\@</string>
     <string name="google">GOOGLE</string>
+    <string name="post_description">Post Description</string>
+    <string name="delete_query">Delete Query</string>
+    <string name="edit_query">Edit Query</string>
+    <string name="comment">Comment</string>
+    <string name="please_write_your_response_here">Please write your response here</string>
+    <string name="comment_on_post">Comment on post</string>
+    <string name="comment_text">comment text will display here</string>
+    <string name="replied_to_your_query">Replied to your query</string>
+    <string name="time_with_colon">Time:</string>
+    <string name="at">at</string>
+    <string name="forgot_password_please_reset_it_here">Forgot password? Please reset it here</string>
+    <string name="or_login_with">Or Login With...</string>
+    <string name="welcome_to_the_smart_parent">WELCOME TO THE SMART PARENT</string>
+    <string name="send_email">Send Email</string>
+    <string name="a_link_to_reset_your_password_will_be_sent_to_your_email">A link to reset your password will be sent to your Email.</string>
+    <string name="click_on_the_link_to_reset_your_password">Click on the link to reset your Password.</string>
 
 </resources>

@@ -40,7 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextEmail;
     private EditText editTextPassword;
     private TextView textViewRegister;
-    private ImageButton googleSignInButton;
+    private TextView textViewResetPassword;
+    private TextView googleSignInButton;
 
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
@@ -67,7 +68,8 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = (EditText) findViewById(R.id.login_password);
         buttonSignIn = (Button) findViewById(R.id.button_sign_in);
         textViewRegister = (TextView) findViewById(R.id.text_view_register);
-        googleSignInButton = (ImageButton) findViewById(R.id.google_sign_in_button);
+        textViewResetPassword = (TextView) findViewById(R.id.text_view_forgot_password);
+        googleSignInButton = (TextView) findViewById(R.id.google_sign_in_button);
 
         progressDialog = new ProgressDialog(this);
 
@@ -81,6 +83,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SendUserToRegisterActivity();
+            }
+        });
+        textViewResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendUserToResetPasswordActivity();
             }
         });
 
@@ -114,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
     // open Sign In with Google to select accounts
     private void signIn() {
@@ -246,5 +255,10 @@ public class LoginActivity extends AppCompatActivity {
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
 
+    }
+    private void SendUserToResetPasswordActivity() {
+        Intent resetPasswordIntent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+        resetPasswordIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(resetPasswordIntent);
     }
 }

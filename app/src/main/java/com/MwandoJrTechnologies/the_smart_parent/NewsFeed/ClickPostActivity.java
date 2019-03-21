@@ -1,10 +1,5 @@
 package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,24 +8,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 public class ClickPostActivity extends AppCompatActivity {
 
-    private ImageView postImage;
     private TextView postDescription;
     private Button editPostButton;
     private Button deletePostButton;
@@ -41,19 +38,16 @@ public class ClickPostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private String description;
-    private String image;
     private String postKey;
     private String currentUserID;
     private String databaseUserID;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_click_post);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
@@ -63,16 +57,13 @@ public class ClickPostActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
 
-
         //get the unique key for your post
         postKey = getIntent().getExtras().get("PostKey").toString();
         clickPostRef = FirebaseDatabase.getInstance().getReference().child("Posts").child(postKey);
 
-        postImage = (ImageView) findViewById(R.id.post_image);
-        postDescription = (TextView) findViewById(R.id.edit_post_description);
-        editPostButton  = (Button) findViewById(R.id.edit_post_button);
-        deletePostButton = (Button) findViewById(R.id.delete_post_button);
-
+        postDescription = findViewById(R.id.edit_post_description);
+        editPostButton = findViewById(R.id.edit_post_button);
+        deletePostButton = findViewById(R.id.delete_post_button);
 
         //when app opens buttons are invisible
         editPostButton.setVisibility(View.INVISIBLE);
@@ -85,13 +76,9 @@ public class ClickPostActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()){
 
                     description = dataSnapshot.child("description").getValue().toString();
-                    image = dataSnapshot.child("postImage").getValue().toString();
                     databaseUserID = dataSnapshot.child("uid").getValue().toString();
 
-
                     postDescription.setText(description);
-                    Picasso.get().load(image).into(postImage);
-
 
                     if (currentUserID.equals(databaseUserID)){
 
@@ -109,13 +96,11 @@ public class ClickPostActivity extends AppCompatActivity {
 
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-
 
         deletePostButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,14 +119,14 @@ public class ClickPostActivity extends AppCompatActivity {
         inputField.setText(description);
         builder.setView(inputField);
 
-
         //create two buttons to update and cancel
         builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 clickPostRef.child("description").setValue(inputField.getText().toString());
-                Toast.makeText(ClickPostActivity.this, "Post Updated Successfully.", Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Post Updated Successfully.", Snackbar.LENGTH_SHORT);
+                snackbar.show();
 
             }
         });
@@ -167,7 +152,8 @@ public class ClickPostActivity extends AppCompatActivity {
 
         clickPostRef.removeValue();
         SendUserToMainActivity();
-        Toast.makeText(this, "Query deleted", Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Query deleted", Snackbar.LENGTH_SHORT);
+        snackbar.show();
 
     }
 

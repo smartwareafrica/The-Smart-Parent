@@ -2,10 +2,6 @@ package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +11,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
+import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
-import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.squareup.picasso.Picasso;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 /**
  * Displays user profile
@@ -41,7 +40,6 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
     ImageView profileImageView;
 
     private FirebaseAuth mAuth;
-    private StorageReference UserProfileImageRef;
     private DatabaseReference UsersReference;
 
     String currentUseID;
@@ -58,7 +56,7 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.activity_profile, container, false);
+        View rootView = inflater.inflate(R.layout.activity_edit_profile, container, false);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -67,13 +65,13 @@ public class ViewProfileFragment extends Fragment implements View.OnClickListene
            // OpenLoginFragment();
         }
 
-        profileImageView = (ImageView) rootView.findViewById(R.id.profileImageView);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        textViewName = (TextView) rootView.findViewById(R.id.textViewName);
-        textViewContact = (TextView) rootView.findViewById(R.id.textViewContact);
-        textViewUsername = (TextView) rootView.findViewById(R.id.textViewUsername);
+        profileImageView = rootView.findViewById(R.id.profileImageView);
+        progressBar = rootView.findViewById(R.id.progressBar);
+        textViewName = rootView.findViewById(R.id.textViewName);
+        textViewContact = rootView.findViewById(R.id.textViewContact);
+        textViewUsername = rootView.findViewById(R.id.textViewUsername);
 
-        buttonLogout = (Button) rootView.findViewById(R.id.buttonLogout);
+        buttonLogout = rootView.findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(this);
 
         LoadUserInformation();

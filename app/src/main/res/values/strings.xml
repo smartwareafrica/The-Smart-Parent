@@ -45,7 +45,7 @@
     <string name="post_description">Post Description</string>
     <string name="delete_query">Delete Query</string>
     <string name="edit_query">Edit Query</string>
-    <string name="comment">Comment</string>
+    <string name="respond">Respond</string>
     <string name="please_write_your_response_here">Please write your response here</string>
     <string name="comment_on_post">Comment on post</string>
     <string name="comment_text">comment text will display here</string>
@@ -58,5 +58,7 @@
     <string name="send_email">Send Email</string>
     <string name="a_link_to_reset_your_password_will_be_sent_to_your_email">A link to reset your password will be sent to your Email.</string>
     <string name="click_on_the_link_to_reset_your_password">Click on the link to reset your Password.</string>
+    <string name="_0_responses">0 Responses</string>
+    <string name="add_query">Add query</string>
 
 </resources>

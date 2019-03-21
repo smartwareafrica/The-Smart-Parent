@@ -14,10 +14,10 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Profile.ResetPasswordActivity"></activity>
+        <activity android:name=".Profile.ProfileActivity"></activity>
+        <activity android:name=".Profile.ResetPasswordActivity" />
         <activity android:name=".NewsFeed.CommentsActivity" />
         <activity android:name=".NewsFeed.ClickPostActivity" />
-        <activity android:name=".Profile.ViewProfileActivity" />
         <activity android:name=".Profile.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,11 +29,8 @@
         </activity>
         <activity android:name=".Profile.RegisterActivity" />
         <activity android:name=".NewsFeed.MainActivity" />
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@style/SplashTheme" />
         <activity android:name=".NewsFeed.WriteQueryActivity" />
-        <activity android:name=".Profile.ProfileActivity" />
+        <activity android:name=".Profile.EditProfileActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

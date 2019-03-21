@@ -1,11 +1,5 @@
 package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,13 +10,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +28,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class CommentsActivity extends AppCompatActivity {
@@ -57,7 +57,7 @@ public class CommentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
@@ -72,15 +72,11 @@ public class CommentsActivity extends AppCompatActivity {
         postsReference = FirebaseDatabase.getInstance().getReference().child("Posts").child(post_key).child("Comments");
 
 
-        commentsList = (RecyclerView) findViewById(R.id.comments_list);
+        commentsList = findViewById(R.id.comments_list);
         commentsList.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-        commentsList.setLayoutManager(linearLayoutManager);
 
-        commentsInputText = (EditText) findViewById(R.id.comment_input);
-        postCommentButton = (ImageButton) findViewById(R.id.post_comment_button);
+        commentsInputText = findViewById(R.id.comment_input);
+        postCommentButton = findViewById(R.id.post_comment_button);
 
         postCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +109,11 @@ public class CommentsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        commentsList.setLayoutManager(linearLayoutManager);
+
         final FirebaseRecyclerOptions<Comments> options=
                 new FirebaseRecyclerOptions.Builder<Comments>()
                 .setQuery(postsReference, Comments.class)
@@ -142,6 +143,8 @@ public class CommentsActivity extends AppCompatActivity {
                 return commentsViewHolder;
             }
         };
+
+        commentsList.setLayoutManager(linearLayoutManager);
         commentsList.setAdapter(fireBaseRecyclerAdapter);
         fireBaseRecyclerAdapter.startListening();
 
@@ -170,7 +173,8 @@ public class CommentsActivity extends AppCompatActivity {
         String commentText = commentsInputText.getText().toString();
 
         if (TextUtils.isEmpty(commentText)) {
-            Toast.makeText(this, "Please write text to respond...", Toast.LENGTH_SHORT).show();
+            Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Please write text to respond...", Snackbar.LENGTH_SHORT);
+            snackBar.show();
         } else {
             //setting current date and time to generate random keys for the users images posted
             //setting current date
@@ -197,9 +201,11 @@ public class CommentsActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(CommentsActivity.this, "Response Added", Toast.LENGTH_SHORT).show();
+                                Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Response Added", Snackbar.LENGTH_SHORT);
+                                snackBar.show();
                             }else {
-                                Toast.makeText(CommentsActivity.this, "Could not comment, Please try again", Toast.LENGTH_SHORT).show();
+                                Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Could not comment, Please try again", Snackbar.LENGTH_SHORT);
+                                snackBar.show();
                             }
 
                         }

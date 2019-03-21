@@ -26,9 +26,9 @@ public class ConnectionChecker extends Application {
         boolean have_MobileData = false;
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+        NetworkInfo[] networkInformation = connectivityManager.getAllNetworkInfo();
 
-        for (NetworkInfo info : networkInfos) {
+        for (NetworkInfo info : networkInformation) {
 
             if (info.getTypeName().equalsIgnoreCase("WIFI"))
 

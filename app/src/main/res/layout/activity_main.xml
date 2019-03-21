@@ -22,16 +22,33 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/all_users_query_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:stackFromEnd="true">
+            <ProgressBar
+                android:id="@+id/news_feed_progress_bar"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
 
-            </androidx.recyclerview.widget.RecyclerView>
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeToRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="MissingConstraints">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/all_users_query_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/users_query"
+                    app:stackFromEnd="true">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </FrameLayout>
 
         <ImageButton
+            android:contentDescription="@string/add_query"
             android:id="@+id/add_new_query_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -42,11 +59,27 @@
             android:layout_marginBottom="4dp"
             android:background="#0F6A9C"
             android:baselineAlignBottom="false"
+            android:visibility="gone"
             android:focusableInTouchMode="false"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_create_post" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="end|bottom"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="70dp"
+            android:src="@drawable/ic_create_post"
+            app:elevation="@dimen/default_gap" />
+
     </RelativeLayout>
+
 
     <!-- The navigation drawer -->
     <com.google.android.material.navigation.NavigationView

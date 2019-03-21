@@ -2,38 +2,25 @@ package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-
-import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity;
-import com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileActivity;
-import com.MwandoJrTechnologies.the_smart_parent.R;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import de.hdodenhof.circleimageview.CircleImageView;
-
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.MwandoJrTechnologies.the_smart_parent.ConnectionChecker;
+import com.MwandoJrTechnologies.the_smart_parent.Profile.EditProfileActivity;
+import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity;
+import com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileActivity;
+import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +29,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -57,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView navProfileName;
     private TextView navUsername;
     private ImageButton addNewQueryButton;
+    private FloatingActionButton fab;
+    private ProgressBar newsFeedProgressBar;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
@@ -75,38 +77,64 @@ public class MainActivity extends AppCompatActivity {
         postsReference = FirebaseDatabase.getInstance().getReference().child("Posts");
 
         //inflate
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Home");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        addNewQueryButton = (ImageButton) findViewById(R.id.add_new_query_button);
+        addNewQueryButton = findViewById(R.id.add_new_query_button);
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = findViewById(R.id.drawer_layout);
         //navigation drawer toggle
         drawerToggle = setupDrawerToggle();
         // Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         // Find our navigation drawer view
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView = findViewById(R.id.navigation_view);
         View navView = navigationView.getHeaderView(0);
 
-        postList = (RecyclerView) findViewById(R.id.all_users_query_list);
+        postList = findViewById(R.id.all_users_query_list);
         //give it a fixed size
         postList.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        //new posts at top and old to bottom
-        postList.setLayoutManager(linearLayoutManager);
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-
-        navProfileImage = (CircleImageView) navView.findViewById(R.id.nav_profile_image);
-        navProfileName = (TextView) navView.findViewById(R.id.nav_user_full_name);
-        navUsername = (TextView) navView.findViewById(R.id.nav_username);
 
 
-//for navigation drawer
+        fab = findViewById(R.id.fab);
+        newsFeedProgressBar = findViewById(R.id.news_feed_progress_bar);
+        swipeRefreshLayout = findViewById(R.id.swipeToRefresh);
+
+        navProfileImage = navView.findViewById(R.id.nav_profile_image);
+        navProfileName = navView.findViewById(R.id.nav_user_full_name);
+        navUsername = navView.findViewById(R.id.nav_username);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendUserToWriteQueryActivity();
+            }
+        });
+
+
+        //checking internet state
+        if (ConnectionChecker.isConnectedToNetwork(this)) {
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Internet Connection", Snackbar.LENGTH_SHORT);
+            snackbar.show();
+
+        } else {
+            newsFeedProgressBar.setVisibility(View.GONE);
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "NETWORK ERROR! Please check your Internet connection", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+
+        //refresh on swipe
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        //for navigation drawer
         //display current logged in user details only
         usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -135,7 +163,9 @@ public class MainActivity extends AppCompatActivity {
                                 .into(navProfileImage);
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "You need to update your profile", Toast.LENGTH_SHORT).show();
+                        Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "You need to update your profile", Snackbar.LENGTH_LONG);
+                        snackBar.show();
+
 
                     }
                 }
@@ -152,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 UserMenuSelector(menuItem);
-
                 return false;
             }
         });
@@ -165,10 +194,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
         DisplayAllUsersQueries();
+        newsFeedProgressBar.setVisibility(View.INVISIBLE);
 
     }
 
+
     private void DisplayAllUsersQueries() {
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        //new posts at top and old to bottom
+        postList.setLayoutManager(linearLayoutManager);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
 
         final FirebaseRecyclerOptions<Posts> options =
                 new FirebaseRecyclerOptions.Builder<Posts>()
@@ -181,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
                     protected void onBindViewHolder(@NonNull PostsViewHolder viewHolder, int i, @NonNull Posts posts) {
 
                         posts = getItem(i);
-
                         final String PostKey = getRef(i).getKey();
 
                         Picasso.get().load(posts.getProfileImage()).placeholder(R.drawable.profile_image_placeholder).into(viewHolder.profileImg);
@@ -189,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
                         viewHolder.postTime.setText(posts.getTime());
                         viewHolder.postDate.setText(posts.getDate());
                         viewHolder.postDescription.setText(posts.getDescription());
-
 
                         //send post key to click post activity
                         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -210,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(commentsIntent);
                             }
                         });
-
                     }
 
                     @NonNull
@@ -224,8 +258,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
 
+        postList.setLayoutManager(linearLayoutManager);
         postList.setAdapter(fireBaseRecyclerAdapter);
         fireBaseRecyclerAdapter.startListening();
+
 
     }
 
@@ -236,7 +272,6 @@ public class MainActivity extends AppCompatActivity {
         TextView postTime;
         TextView postDate;
         TextView postDescription;
-        ImageView postImg;
 
         //for comments
         TextView commentOnPost;
@@ -250,10 +285,8 @@ public class MainActivity extends AppCompatActivity {
             postTime = itemView.findViewById(R.id.post_time);
             postDate = itemView.findViewById(R.id.post_date);
             postDescription = itemView.findViewById(R.id.post_query);
-            postImg = itemView.findViewById(R.id.post_image);
 
             commentOnPost = itemView.findViewById(R.id.text_view_comment);
-
         }
 
     }
@@ -280,33 +313,40 @@ public class MainActivity extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
                 SendUserToMainActivity();
-                // toolbar.setTitle("Home");
                 break;
             case R.id.nav_stories:
-                //  toolbar.setTitle("Stories");
+                Snackbar snackBar2 = Snackbar.make(findViewById(android.R.id.content), "STORIES FROM PARENTS", Snackbar.LENGTH_SHORT);
+                snackBar2.show();
                 break;
             case R.id.nav_chats:
-                // toolbar.setTitle("Chats");
+                Snackbar snackBar3 = Snackbar.make(findViewById(android.R.id.content), "COMING SOON YOUR CHATS", Snackbar.LENGTH_SHORT);
+                snackBar3.show();
                 break;
             case R.id.nav_profile:
                 SendUserToProfileActivity();
-                //toolbar.setTitle("Profile");
                 break;
             case R.id.nav_growthAnalysis:
-                // toolbar.setTitle("Monitor");
+                Snackbar snackBar4 = Snackbar.make(findViewById(android.R.id.content), "Monitor baby growth", Snackbar.LENGTH_SHORT);
+                snackBar4.show();
                 break;
             case R.id.nav_reminders:
-                toolbar.setTitle("Reminders");
-                Toast.makeText(getApplicationContext(), "Reminders", Toast.LENGTH_SHORT).show();
+                Snackbar snackBar5 = Snackbar.make(findViewById(android.R.id.content), "Reminders", Snackbar.LENGTH_SHORT);
+                snackBar5.show();
+
                 break;
             case R.id.nav_baby_products:
-                toolbar.setTitle("Rate");
+                Snackbar snackBar6 = Snackbar.make(findViewById(android.R.id.content), "Rate baby products", Snackbar.LENGTH_SHORT);
+                snackBar6.show();
+
                 break;
             case R.id.nav_share:
-                toolbar.setTitle("Share");
+                Snackbar snackBar7 = Snackbar.make(findViewById(android.R.id.content), "SHARE THE SMART PARENT", Snackbar.LENGTH_SHORT);
+                snackBar7.show();
+
                 break;
             case R.id.nav_feedback:
-                toolbar.setTitle("Feedback");
+                Snackbar snackBar8 = Snackbar.make(findViewById(android.R.id.content), "SEND FEEDBACK", Snackbar.LENGTH_SHORT);
+                snackBar8.show();
                 break;
             case R.id.nav_logout:
                 mAuth.signOut();
@@ -361,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //check if user has not completed filling up profile
                 if (!dataSnapshot.hasChild(current_user_id)) {
-                    SendUserToProfileActivity();
+                    SendUserToEditProfileActivity();
                 }
             }
 
@@ -380,7 +420,15 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    //opens profile activity
+    //opens edit profile activity
+    private void SendUserToEditProfileActivity() {
+        Intent profileIntent = new Intent(MainActivity.this, EditProfileActivity.class);
+        profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(profileIntent);
+        finish();
+    }
+
+    //opens edit profile activity
     private void SendUserToProfileActivity() {
         Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
         profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -401,16 +449,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(mainActivityIntent);
     }
 
-
-    //convert string to bitmap
-    public Bitmap StringToBitMap(String encodedString) {
-        try {
-            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
 }

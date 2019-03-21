@@ -1,8 +1,5 @@
 package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
@@ -23,7 +17,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,6 +26,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -64,12 +60,12 @@ public class LoginActivity extends AppCompatActivity {
             // OpenViewProfileFragment();
         }
 
-        editTextEmail = (EditText) findViewById(R.id.login_email);
-        editTextPassword = (EditText) findViewById(R.id.login_password);
-        buttonSignIn = (Button) findViewById(R.id.button_sign_in);
-        textViewRegister = (TextView) findViewById(R.id.text_view_register);
-        textViewResetPassword = (TextView) findViewById(R.id.text_view_forgot_password);
-        googleSignInButton = (TextView) findViewById(R.id.google_sign_in_button);
+        editTextEmail = findViewById(R.id.login_email);
+        editTextPassword = findViewById(R.id.login_password);
+        buttonSignIn = findViewById(R.id.button_sign_in);
+        textViewRegister = findViewById(R.id.text_view_register);
+        textViewResetPassword = findViewById(R.id.text_view_forgot_password);
+        googleSignInButton = findViewById(R.id.google_sign_in_button);
 
         progressDialog = new ProgressDialog(this);
 
@@ -105,7 +101,8 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-                        Toast.makeText(LoginActivity.this, "Google SignIn Failed...,Please Try Again", Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Google SignIn Failed...,Please Try Again", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
 
                     }
                 }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
@@ -148,9 +145,11 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = result.getSignInAccount();
                 fireBaseAuthWithGoogle(account);
 
-                Toast.makeText(this, "Please wait while we are getting your results...", Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please wait while we are getting your results...", Snackbar.LENGTH_LONG);
+                snackbar.show();
             } else {
-                Toast.makeText(this, "Sorry! Cannot get your Account results", Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Sorry! Cannot get your Account results", Snackbar.LENGTH_LONG);
+                snackbar.show();
                 progressDialog.dismiss();
             }
 
@@ -176,7 +175,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             String message = task.getException().toString();
                             SendUserToLoginActivity();
-                            Toast.makeText(LoginActivity.this, "An error Occurred: " + message, Toast.LENGTH_SHORT).show();
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error Occurred: " + message, Snackbar.LENGTH_SHORT);
+                            snackbar.show();
                             progressDialog.dismiss();
                         }
                     }
@@ -203,10 +203,12 @@ public class LoginActivity extends AppCompatActivity {
         //checking if email and password is empty
         if (TextUtils.isEmpty(email)) {
             //email is empty
-            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter email", Snackbar.LENGTH_SHORT);
+            snackbar.show();
         } else if (TextUtils.isEmpty(password)) {
             //password is empty
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter password", Snackbar.LENGTH_SHORT);
+            snackbar.show();
         } else {
 
             //validations okay we show a progress bar
@@ -224,10 +226,12 @@ public class LoginActivity extends AppCompatActivity {
                                 //  OpenViewProfileFragment();
                                 //start the profile activity
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT);
+                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Login Successful", Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                             } else {
                                 String message = task.getException().getMessage();
-                                Toast.makeText(LoginActivity.this, "An Error Occurred: " + message, Toast.LENGTH_LONG).show();
+                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                                 progressDialog.dismiss();
                             }
                         }

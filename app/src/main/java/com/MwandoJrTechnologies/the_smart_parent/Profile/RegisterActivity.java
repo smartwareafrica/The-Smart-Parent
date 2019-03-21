@@ -1,8 +1,5 @@
 package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,15 +8,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -43,19 +43,19 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (mAuth.getCurrentUser() != null) {
             //start profile activity here
-            startActivity(new Intent(this, ProfileActivity.class));
+            startActivity(new Intent(this, EditProfileActivity.class));
         }
 
         progressDialog = new ProgressDialog(this);
 
-        editTextEmail = (EditText) findViewById(R.id.edit_text_email);
-        editTextConfirmEmail = (EditText) findViewById(R.id.edit_text_confirm_email);
-        editTextPassword = (EditText) findViewById(R.id.edit_text_password);
-        editTextConfirmPassword = (EditText) findViewById(R.id.edit_text_confirm_password);
+        editTextEmail = findViewById(R.id.edit_text_email);
+        editTextConfirmEmail = findViewById(R.id.edit_text_confirm_email);
+        editTextPassword = findViewById(R.id.edit_text_password);
+        editTextConfirmPassword = findViewById(R.id.edit_text_confirm_password);
 
-        buttonRegister = (Button) findViewById(R.id.button_register);
+        buttonRegister = findViewById(R.id.button_register);
 
-        textViewSignIn = (TextView) findViewById(R.id.text_view_sign_in);
+        textViewSignIn = findViewById(R.id.text_view_sign_in);
 
         //when clicked both button and textView
         buttonRegister.setOnClickListener(new View.OnClickListener() {
@@ -95,23 +95,29 @@ public class RegisterActivity extends AppCompatActivity {
         //checking if email and password is empty and match
         if (TextUtils.isEmpty(email)) {
             //email is empty
-            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter email", Snackbar.LENGTH_SHORT);
+            snackbar.show();
         } else if (TextUtils.isEmpty(confirmEmail)) {
             //ConfirmEmail is empty
-            Toast.makeText(this, "Please Confirm your email", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please Confirm your email", Snackbar.LENGTH_SHORT);
+            snackbar.show();
         } else if (TextUtils.isEmpty(password)) {
             //Password is empty
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter password", Snackbar.LENGTH_SHORT);
+            snackbar.show();
         } else if (TextUtils.isEmpty(confirmPassword)) {
             //ConfirmPassword is empty
-            Toast.makeText(this, "Please confirm your password", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please confirm your password", Snackbar.LENGTH_SHORT);
+            snackbar.show();
 
             //emails and confirm email match
         } else if (!email.equals(confirmEmail)) {
-            Toast.makeText(this, "Make sure emails match", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Make sure emails match", Snackbar.LENGTH_SHORT);
+            snackbar.show();
             //password and confirm password match
         } else if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, "Make sure Passwords match", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Make sure Passwords match", Snackbar.LENGTH_SHORT);
+            snackbar.show();
 
         } else {
 
@@ -129,11 +135,13 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 SendUserToProfileActivity();
                                 //check if successful
-                                Toast.makeText(RegisterActivity.this, "Successfully registered", Toast.LENGTH_SHORT).show();
+                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Successfully registered", Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                                 progressDialog.dismiss();
                             } else {
                                 String message = task.getException().getMessage();
-                                Toast.makeText(RegisterActivity.this, "An Error Occurred: " + message, Toast.LENGTH_SHORT).show();
+                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                                 progressDialog.dismiss();
                             }
                         }
@@ -150,7 +158,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void SendUserToProfileActivity() {
-        Intent editProfileIntent = new Intent(RegisterActivity.this, ProfileActivity.class);
+        Intent editProfileIntent = new Intent(RegisterActivity.this, EditProfileActivity.class);
         editProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(editProfileIntent);
         finish();

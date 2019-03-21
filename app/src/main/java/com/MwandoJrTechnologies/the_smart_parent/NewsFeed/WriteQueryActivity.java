@@ -2,40 +2,31 @@ package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.Toolbar;
-
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
+import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class WriteQueryActivity extends AppCompatActivity {
 
@@ -50,8 +41,6 @@ public class WriteQueryActivity extends AppCompatActivity {
     private Button buttonPost;
 
     final static int galleryPick = 1;
-
-    private Uri imageUri;
 
     //all strings
     private String post;
@@ -73,11 +62,11 @@ public class WriteQueryActivity extends AppCompatActivity {
         postsReference = FirebaseDatabase.getInstance().getReference().child("Posts");
 
         //cast to views
-        editTextWriteQuery = (EditText) findViewById(R.id.edit_text_write_query);
-        buttonPost = (Button) findViewById(R.id.button_post);
+        editTextWriteQuery = findViewById(R.id.edit_text_write_query);
+        buttonPost = findViewById(R.id.button_post);
         progressDialog = new ProgressDialog(this);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
@@ -106,21 +95,13 @@ public class WriteQueryActivity extends AppCompatActivity {
 
     }
 
-    //opens gallery for upload
-    private void OpenGallery() {
-        //opening gallery to choose image
-        Intent galleryIntent = new Intent();
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent, galleryPick);
-    }
-
 
     //check that a query must be written
     private void ValidatePostInformation() {
         post = editTextWriteQuery.getText().toString();
         if (TextUtils.isEmpty(post)) {
-            Toast.makeText(this, "Please ask a question", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please ask a question", Snackbar.LENGTH_SHORT);
+            snackbar.show();
         } else {
 
             //show progress dialog
@@ -174,10 +155,12 @@ public class WriteQueryActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task task) {
                                     if (task.isSuccessful()) {
                                         SendUserToMainActivity();
-                                        Toast.makeText(WriteQueryActivity.this, "New Question Updated Successfully.", Toast.LENGTH_SHORT).show();
+                                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "New Question Updated Successfully.", Snackbar.LENGTH_SHORT);
+                                        snackbar.show();
                                         progressDialog.dismiss();
                                     } else {
-                                        Toast.makeText(WriteQueryActivity.this, "Please try again. An error occurred", Toast.LENGTH_SHORT).show();
+                                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please try again. An error occurred", Snackbar.LENGTH_SHORT);
+                                        snackbar.show();
                                         progressDialog.dismiss();
                                     }
                                 }

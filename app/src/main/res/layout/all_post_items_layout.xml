@@ -140,13 +140,20 @@
 
             <TextView
                 android:id="@+id/text_view_comment"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:drawableStart="@drawable/outline_comment_white_48dp"
                 android:drawablePadding="2dp"
-                android:text="@string/comment"
+                android:text="@string/respond"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tex_view_number_of_responses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/_0_responses" />
         </LinearLayout>
     </LinearLayout>
 

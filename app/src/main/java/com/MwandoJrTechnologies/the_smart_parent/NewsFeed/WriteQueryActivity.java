@@ -40,14 +40,15 @@ public class WriteQueryActivity extends AppCompatActivity {
     private EditText editTextWriteQuery;
     private Button buttonPost;
 
-    final static int galleryPick = 1;
-
     //all strings
     private String post;
     private String saveCurrentDate;
     private String saveCurrentTime;
     private String postRandomName;
     private String currentUserID;
+
+    //variable that counts the number of posts in the database
+    private long countPosts = 0;
 
 
     @Override
@@ -110,12 +111,12 @@ public class WriteQueryActivity extends AppCompatActivity {
             progressDialog.show();
             progressDialog.setCanceledOnTouchOutside(true);
 
-            StoreImageToFireBaseStorage();
+            SaveDateAndTimeToFireBaseStorage();
             SavingPostInformationToDatabase();
         }
     }
 
-    private void StoreImageToFireBaseStorage() {
+    private void SaveDateAndTimeToFireBaseStorage() {
         //setting current date and time to generate random keys for the users images posted
         //setting current date
         Calendar callForDate = Calendar.getInstance();
@@ -133,13 +134,32 @@ public class WriteQueryActivity extends AppCompatActivity {
 
     //saves details of image to fireBase storage
     private void SavingPostInformationToDatabase() {
+
+        //counting posts in database then store in variable countPosts and display newest at the top
+        postsReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    countPosts = dataSnapshot.getChildrenCount();
+                } else {
+                    countPosts = 0;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
         usersReference.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //validation if child exists then we execute
                 if (dataSnapshot.exists()) {
-                    String userFullName = dataSnapshot.child("fullName").getValue().toString();
-                    String userProfileImage = dataSnapshot.child("profileImage").getValue().toString();
+                  final String userFullName = dataSnapshot.child("fullName").getValue().toString();
+                  final String userProfileImage = dataSnapshot.child("profileImage").getValue().toString();
 
                     HashMap postsMap = new HashMap();
                     postsMap.put("uid", currentUserID);
@@ -148,6 +168,7 @@ public class WriteQueryActivity extends AppCompatActivity {
                     postsMap.put("description", post);
                     postsMap.put("profileImage", userProfileImage);
                     postsMap.put("fullName", userFullName);
+                    postsMap.put("counter", countPosts); //saves counted value in database
                     //now save inside fireBase database
                     postsReference.child(currentUserID + postRandomName).updateChildren(postsMap)
                             .addOnCompleteListener(new OnCompleteListener() {

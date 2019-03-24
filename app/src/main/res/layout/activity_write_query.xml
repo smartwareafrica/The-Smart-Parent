@@ -9,36 +9,48 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_input_write_query"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="20dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <EditText
-            android:id="@+id/edit_text_write_query"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:autofillHints="@string/please_write_your_question_here"
-            android:hint="@string/please_write_your_question_here"
-            android:inputType="textMultiLine"
-            android:padding="20dp"
-            tools:targetApi="o" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_input_input_write_query"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:backgroundTint="#0F6A9C"
-        android:text="@string/save_details" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_input_write_query"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="80dp"
+                android:layout_marginEnd="20dp">
+
+                <EditText
+                    android:id="@+id/edit_text_write_query"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:autofillHints="@string/please_write_your_question_here"
+                    android:hint="@string/please_write_your_question_here"
+                    android:inputType="textMultiLine"
+                    android:padding="20dp"
+                    tools:targetApi="o" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="#0F6A9C"
+                android:text="@string/save_details" />
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,9 +12,11 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.MwandoJrTechnologies.the_smart_parent.Chats.ChatActivity;
 import com.MwandoJrTechnologies.the_smart_parent.ConnectionChecker;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.EditProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity;
+import com.MwandoJrTechnologies.the_smart_parent.Profile.OtherParentsProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -27,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -114,22 +118,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        //checking internet state
-        if (ConnectionChecker.isConnectedToNetwork(this)) {
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Internet Connection", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-
-        } else {
-            newsFeedProgressBar.setVisibility(View.GONE);
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "NETWORK ERROR! Please check your Internet connection", Snackbar.LENGTH_LONG);
-            snackbar.show();
-        }
-
+        checkConnectionStatus();
         //refresh on swipe
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkConnectionStatus();
+                    }
+                }, 500);
+
+                DisplayAllUsersQueries();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -194,12 +197,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         DisplayAllUsersQueries();
-        newsFeedProgressBar.setVisibility(View.INVISIBLE);
 
+        newsFeedProgressBar.setVisibility(View.INVISIBLE);
+    }
+
+
+    //checking internet state
+    private void checkConnectionStatus() {
+
+        if (ConnectionChecker.isConnectedToNetwork(this)) {
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Internet Connection", Snackbar.LENGTH_SHORT);
+            snackbar.show();
+        } else {
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "NETWORK ERROR! Please check your Internet connection", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
     }
 
 
     private void DisplayAllUsersQueries() {
+
+        Query sortPostsInDescendingOrder = postsReference.orderByChild("counter");
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         //new posts at top and old to bottom
@@ -209,22 +227,46 @@ public class MainActivity extends AppCompatActivity {
 
         final FirebaseRecyclerOptions<Posts> options =
                 new FirebaseRecyclerOptions.Builder<Posts>()
-                        .setQuery(postsReference, Posts.class)
+                        .setQuery(sortPostsInDescendingOrder, Posts.class)
                         .build();
 
         FirebaseRecyclerAdapter<Posts, PostsViewHolder> fireBaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Posts, PostsViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull PostsViewHolder viewHolder, int i, @NonNull Posts posts) {
+                    protected void onBindViewHolder(@NonNull PostsViewHolder viewHolder, final int position, @NonNull Posts posts) {
 
-                        posts = getItem(i);
-                        final String PostKey = getRef(i).getKey();
+                        posts = getItem(position);
+                        final String PostKey = getRef(position).getKey();
+
+                        final String userID = posts.getUid();
 
                         Picasso.get().load(posts.getProfileImage()).placeholder(R.drawable.profile_image_placeholder).into(viewHolder.profileImg);
                         viewHolder.usersName.setText(posts.getFullName());
                         viewHolder.postTime.setText(posts.getTime());
                         viewHolder.postDate.setText(posts.getDate());
                         viewHolder.postDescription.setText(posts.getDescription());
+
+
+                        //view the specific users profile
+                        viewHolder.profileImg.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Intent profileIntent = new Intent(MainActivity.this, OtherParentsProfileActivity.class);
+                                profileIntent.putExtra("visit_user_id",userID);
+                                startActivity(profileIntent);
+                            }
+                        });
+
+                        //view the specific users profile
+                        viewHolder.usersName.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent profileIntent = new Intent(MainActivity.this, OtherParentsProfileActivity.class);
+                                profileIntent.putExtra("visit_user_id",userID);
+                                startActivity(profileIntent);
+                            }
+                        });
 
                         //send post key to click post activity
                         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -238,6 +280,14 @@ public class MainActivity extends AppCompatActivity {
 
                         //open comments activity
                         viewHolder.commentOnPost.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
+                                commentsIntent.putExtra("PostKey", PostKey);
+                                startActivity(commentsIntent);
+                            }
+                        });
+                        viewHolder.postResponses.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
@@ -262,7 +312,6 @@ public class MainActivity extends AppCompatActivity {
         postList.setAdapter(fireBaseRecyclerAdapter);
         fireBaseRecyclerAdapter.startListening();
 
-
     }
 
     //creating a static class for displaying  queries from all users
@@ -275,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
 
         //for comments
         TextView commentOnPost;
+        TextView postResponses;
 
 
         public PostsViewHolder(@NonNull View itemView) {
@@ -287,6 +337,7 @@ public class MainActivity extends AppCompatActivity {
             postDescription = itemView.findViewById(R.id.post_query);
 
             commentOnPost = itemView.findViewById(R.id.text_view_comment);
+            postResponses = itemView.findViewById(R.id.tex_view_number_of_responses);
         }
 
     }
@@ -319,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
                 snackBar2.show();
                 break;
             case R.id.nav_chats:
+                SendUserToChatActivity();
                 Snackbar snackBar3 = Snackbar.make(findViewById(android.R.id.content), "COMING SOON YOUR CHATS", Snackbar.LENGTH_SHORT);
                 snackBar3.show();
                 break;
@@ -363,10 +415,10 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
     }
 
+    // Pass any configuration change to the drawer toggles
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
@@ -447,6 +499,12 @@ public class MainActivity extends AppCompatActivity {
         Intent mainActivityIntent = new Intent(MainActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
+    }
+    //opens the chats activity
+    private void SendUserToChatActivity() {
+        Intent chatActivityIntent = new Intent(MainActivity.this, ChatActivity.class);
+        finish();
+        startActivity(chatActivityIntent);
     }
 
 }

@@ -22,7 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileActivity extends AppCompatActivity {
+public class OtherParentsProfileActivity extends AppCompatActivity {
 
     private CircleImageView userProfilePicture;
     private TextView userStatus;
@@ -33,37 +33,33 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView userGender;
     private TextView numberOfChildren;
 
-    private DatabaseReference profileUserReference;
+    private DatabaseReference otherParentProfileUserReference;
     private FirebaseAuth mAuth;
 
-    private String currentUserID;
-
+    private String otherParentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-
-        mAuth = FirebaseAuth.getInstance();
-        currentUserID = mAuth.getCurrentUser().getUid();
-        profileUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
+        setContentView(R.layout.activity_other_parents_profile);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
-        getSupportActionBar().setTitle("User Profile");
+        getSupportActionBar().setTitle("View Profile");
 
-        userProfilePicture = findViewById(R.id.image_view_profile_picture);
-        userStatus = findViewById(R.id.text_view_status);
-        userName = findViewById(R.id.text_view_username);
-        fullName = findViewById(R.id.text_view_full_name);
-        phoneNumber = findViewById(R.id.text_view_phone_number);
-        dateOfBirth = findViewById(R.id.text_view_DOB);
-        userGender = findViewById(R.id.text_view_gender);
-        numberOfChildren = findViewById(R.id.text_view_number_of_children);
+        mAuth = FirebaseAuth.getInstance();
 
-        profileUserReference.addValueEventListener(new ValueEventListener() {
+        //get the users id passed from main activity
+        otherParentUserID = getIntent().getExtras().get("visit_user_id").toString();
+
+        //get now a reference to the users node
+        otherParentProfileUserReference = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        InitializeFields();
+
+        otherParentProfileUserReference.child(otherParentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -95,6 +91,20 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    //initialize the variables
+    private void InitializeFields() {
+
+        userProfilePicture = findViewById(R.id.other_parent_profile_picture);
+        userStatus = findViewById(R.id.text_view_other_parent_status);
+        userName = findViewById(R.id.text_view_other_parent_username);
+        fullName = findViewById(R.id.text_view_other_parent_full_name);
+        phoneNumber = findViewById(R.id.text_view_other_parent_phone_number);
+        dateOfBirth = findViewById(R.id.text_view_other_parent_DOB);
+        userGender = findViewById(R.id.text_view_other_parent_gender);
+        numberOfChildren = findViewById(R.id.text_view_other_parent_no_of_children);
+
+    }
+
     //activate back button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -109,7 +119,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(ProfileActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new Intent(OtherParentsProfileActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
     }

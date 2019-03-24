@@ -16,7 +16,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,7 +42,7 @@ public class EditProfileActivity extends AppCompatActivity {
     final static int galleryPick = 1;
     String currentUserID;
     private EditText editTextName;
-    private EditText editTextContact;
+    private EditText editTextPhoneNumber;
     private EditText editTextUsername;
     private EditText editTextDOB;
     private CircleImageView profileImage;
@@ -80,14 +79,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         editTextUsername = findViewById(R.id.edit_text_username);
         editTextName = findViewById(R.id.edit_text_name);
-        editTextContact = findViewById(R.id.edit_text_phone_number);
+        editTextPhoneNumber = findViewById(R.id.edit_text_phone_number);
         editTextDOB = findViewById(R.id.edit_text_dob);
 
         buttonSave = findViewById(R.id.buttonSave);
 
         progressDialog = new ProgressDialog(this);
-
-        FirebaseUser user = mAuth.getCurrentUser();
 
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
@@ -236,11 +233,11 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    //Validation where both Name and Contact must be filled and saved to fireBase database
+    //Validation where both details must be filled and saved to fireBase database
     private void saveUserInformation() {
         final String username = editTextUsername.getText().toString().trim();
         String fullName = editTextName.getText().toString().trim();
-        String contact = editTextContact.getText().toString().trim();
+        String phoneNumber = editTextPhoneNumber.getText().toString().trim();
         String dob = editTextDOB.getText().toString().trim();
 
         //creating a username and checking if any other exists
@@ -252,9 +249,9 @@ public class EditProfileActivity extends AppCompatActivity {
             editTextName.setError("Name is required");
             editTextName.requestFocus();
         }
-        if (contact.isEmpty()) {
-            editTextContact.setError("Contact is required");
-            editTextContact.requestFocus();
+        if (phoneNumber.isEmpty()) {
+            editTextPhoneNumber.setError("Phone Number is required");
+            editTextPhoneNumber.requestFocus();
         }
         if (dob.isEmpty()) {
             editTextDOB.setError("Date of birth is required");
@@ -268,9 +265,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
             final HashMap userMap = new HashMap();
+            userMap.put("status", "Hey I am using this informative SMART PARENT App");
             userMap.put("userName", username);
             userMap.put("fullName", fullName);
-            userMap.put("contact", contact);
+            userMap.put("phoneNumber", phoneNumber);
             userMap.put("dob", dob);
             userMap.put("gender", "none");
             userMap.put("numberOfChildren", "none");

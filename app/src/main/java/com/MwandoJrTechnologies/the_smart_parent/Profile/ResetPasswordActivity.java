@@ -59,13 +59,13 @@ public class ResetPasswordActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Email sent. Please check your mail inbox to reset your password", Snackbar.LENGTH_SHORT);
+                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Email sent. Please check your mail inbox to reset your password", Snackbar.LENGTH_LONG);
                                 snackbar.show();
                                 startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
 
                             } else {
                                 String message = task.getException().getMessage();
-                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred" + message, Snackbar.LENGTH_SHORT);
+                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred" + message, Snackbar.LENGTH_LONG);
                                 snackbar.show();
                             }
                         }

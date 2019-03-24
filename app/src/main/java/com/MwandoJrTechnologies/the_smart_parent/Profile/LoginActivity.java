@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Google SignIn Failed...,Please Try Again", Snackbar.LENGTH_SHORT);
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Google SignIn Failed...,Please Try Again", Snackbar.LENGTH_LONG);
                         snackbar.show();
 
                     }
@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             String message = task.getException().toString();
                             SendUserToLoginActivity();
-                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error Occurred: " + message, Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error Occurred: " + message, Snackbar.LENGTH_LONG);
                             snackbar.show();
                             progressDialog.dismiss();
                         }
@@ -230,7 +230,7 @@ public class LoginActivity extends AppCompatActivity {
                                 snackbar.show();
                             } else {
                                 String message = task.getException().getMessage();
-                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_SHORT);
+                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
                                 snackbar.show();
                                 progressDialog.dismiss();
                             }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.MwandoJrTechnologies.the_smart_parent.Chats.ChatActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/messages_list_of_users"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/my_linear_layout"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:id="@+id/my_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/background_light"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/send_image_file_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".20"
+                android:contentDescription="@string/attach_an_image"
+                android:src="@drawable/baseline_insert_photo_white_24dp" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_enter_email"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".80">
+
+                <EditText
+                    android:id="@+id/input_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/write_your_message_here"
+                    android:inputType="textMultiLine"
+                    android:padding="17dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/send_message_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".20"
+                android:contentDescription="@string/attach_an_image"
+                android:src="@drawable/baseline_send_white_24dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

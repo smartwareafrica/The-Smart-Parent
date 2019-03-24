@@ -53,12 +53,20 @@
     <string name="time_with_colon">Time:</string>
     <string name="at">at</string>
     <string name="forgot_password_please_reset_it_here">Forgot password? Please reset it here</string>
-    <string name="or_login_with">Or Login With...</string>
+    <string name="or_login_with">Or Login With…</string>
     <string name="welcome_to_the_smart_parent">WELCOME TO THE SMART PARENT</string>
     <string name="send_email">Send Email</string>
     <string name="a_link_to_reset_your_password_will_be_sent_to_your_email">A link to reset your password will be sent to your Email.</string>
     <string name="click_on_the_link_to_reset_your_password">Click on the link to reset your Password.</string>
     <string name="_0_responses">0 Responses</string>
     <string name="add_query">Add query</string>
+    <string name="hey_i_am_using_this_informative_smart_parent_app">Hey I am using this informative SMART PARENT App</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="gender">Gender</string>
+    <string name="number_of_children">Number of Children</string>
+    <string name="hrs">hrs</string>
+    <string name="date_with_colon">Date:</string>
+    <string name="write_your_message_here">Write your message here...</string>
 
 </resources>

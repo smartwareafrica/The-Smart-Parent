@@ -140,7 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 progressDialog.dismiss();
                             } else {
                                 String message = task.getException().getMessage();
-                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_SHORT);
+                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
                                 snackbar.show();
                                 progressDialog.dismiss();
                             }

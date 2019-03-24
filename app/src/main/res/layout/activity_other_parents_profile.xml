@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Profile.ProfileActivity">
+    tools:context="com.MwandoJrTechnologies.the_smart_parent.Profile.OtherParentsProfileActivity">
 
     <include
         android:id="@+id/toolbar"
@@ -27,7 +27,7 @@
                 android:padding="10dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_profile_picture"
+                    android:id="@+id/other_parent_profile_picture"
                     android:layout_width="250dp"
                     android:layout_height="250dp"
                     android:layout_centerHorizontal="true"
@@ -38,7 +38,7 @@
                     app:civ_border_width="1dp" />
 
                 <ProgressBar
-                    android:id="@+id/news_feed_progress_bar"
+                    android:id="@+id/other_parent_progress_bar"
                     style="@android:style/Widget.ProgressBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/text_view_status"
+                android:id="@+id/text_view_other_parent_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20sp"
@@ -62,7 +62,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_view_username"
+                android:id="@+id/text_view_other_parent_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/username"
@@ -70,7 +70,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
             <TextView
-                android:id="@+id/text_view_full_name"
+                android:id="@+id/text_view_other_parent_full_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/full_name"
@@ -78,7 +78,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
             <TextView
-                android:id="@+id/text_view_phone_number"
+                android:id="@+id/text_view_other_parent_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/phone_number"
@@ -86,7 +86,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
             <TextView
-                android:id="@+id/text_view_DOB"
+                android:id="@+id/text_view_other_parent_DOB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/date_of_birth"
@@ -94,7 +94,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
             <TextView
-                android:id="@+id/text_view_gender"
+                android:id="@+id/text_view_other_parent_gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/gender"
@@ -102,7 +102,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
             <TextView
-                android:id="@+id/text_view_number_of_children"
+                android:id="@+id/text_view_other_parent_no_of_children"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/number_of_children"

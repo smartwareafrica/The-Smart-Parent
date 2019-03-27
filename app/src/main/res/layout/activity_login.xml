@@ -21,13 +21,13 @@
         android:paddingBottom="16dp"
         tools:context=".Profile.LoginFragment">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:text="@string/welcome_to_the_smart_parent"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_margin="20dp"
+            android:contentDescription="@string/the_smart_parent_logo"
+            android:src="@drawable/project_logo" />
 
         <TextView
             android:id="@+id/text_view"
@@ -78,24 +78,26 @@
             android:id="@+id/button_sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#FCFCFF"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#0F6A9C"
             android:text="@string/login" />
 
         <TextView
-            android:textColor="@android:color/black"
             android:id="@+id/text_view_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:text="@string/don_t_have_an_account_please_register_here"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textColor="@android:color/black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/or_login_with"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -107,14 +109,14 @@
 
 
             <TextView
-                android:drawablePadding="2dp"
-                android:layout_margin="5dp"
                 android:id="@+id/google_sign_in_button"
                 android:layout_width="70dp"
                 android:layout_height="58dp"
                 android:layout_gravity="center"
+                android:layout_margin="5dp"
                 android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
                 android:drawableTop="@drawable/googleg_standard_color_18"
+                android:drawablePadding="2dp"
                 android:text="@string/google"
                 android:textAlignment="center"
                 android:textSize="12sp"

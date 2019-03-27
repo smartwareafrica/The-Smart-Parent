@@ -12,13 +12,14 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.MwandoJrTechnologies.the_smart_parent.Chats.ChatActivity;
 import com.MwandoJrTechnologies.the_smart_parent.ConnectionChecker;
+import com.MwandoJrTechnologies.the_smart_parent.FeedbackActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.EditProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.OtherParentsProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.MwandoJrTechnologies.the_smart_parent.Reminders.RemindersActivity;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
     private DatabaseReference postsReference;
+ //   private DatabaseReference commentsReference;
     String currentUserID;
 
 
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         postsReference = FirebaseDatabase.getInstance().getReference().child("Posts");
+       // commentsReference = FirebaseDatabase.getInstance().getReference().child("Posts");
 
         //inflate
         toolbar = findViewById(R.id.toolbar);
@@ -111,30 +114,17 @@ public class MainActivity extends AppCompatActivity {
         navProfileName = navView.findViewById(R.id.nav_user_full_name);
         navUsername = navView.findViewById(R.id.nav_username);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SendUserToWriteQueryActivity();
-            }
-        });
+        fab.setOnClickListener(v -> SendUserToWriteQueryActivity());
 
         checkConnectionStatus();
         //refresh on swipe
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(() -> {
 
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkConnectionStatus();
-                    }
-                }, 500);
+            final Handler handler = new Handler();
+            handler.postDelayed(() -> checkConnectionStatus(), 500);
 
-                DisplayAllUsersQueries();
-                swipeRefreshLayout.setRefreshing(false);
-            }
+            DisplayAllUsersQueries();
+            swipeRefreshLayout.setRefreshing(false);
         });
 
         //for navigation drawer
@@ -180,25 +170,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
 
-                UserMenuSelector(menuItem);
-                return false;
-            }
+            UserMenuSelector(menuItem);
+            return false;
         });
 
-        addNewQueryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SendUserToWriteQueryActivity();
-            }
-        });
+        addNewQueryButton.setOnClickListener(v -> SendUserToWriteQueryActivity());
 
         DisplayAllUsersQueries();
 
         newsFeedProgressBar.setVisibility(View.INVISIBLE);
+
+
     }
 
 
@@ -248,53 +232,41 @@ public class MainActivity extends AppCompatActivity {
 
 
                         //view the specific users profile
-                        viewHolder.profileImg.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                        viewHolder.profileImg.setOnClickListener(v -> {
 
-                                Intent profileIntent = new Intent(MainActivity.this, OtherParentsProfileActivity.class);
-                                profileIntent.putExtra("visit_user_id",userID);
-                                startActivity(profileIntent);
-                            }
+                            Intent profileIntent = new Intent(MainActivity.this, OtherParentsProfileActivity.class);
+                            profileIntent.putExtra("visit_user_id", userID);
+                            startActivity(profileIntent);
                         });
 
                         //view the specific users profile
-                        viewHolder.usersName.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent profileIntent = new Intent(MainActivity.this, OtherParentsProfileActivity.class);
-                                profileIntent.putExtra("visit_user_id",userID);
-                                startActivity(profileIntent);
-                            }
+                        viewHolder.usersName.setOnClickListener(v -> {
+                            Intent profileIntent = new Intent(MainActivity.this, OtherParentsProfileActivity.class);
+                            profileIntent.putExtra("visit_user_id", userID);
+                            startActivity(profileIntent);
                         });
 
                         //send post key to click post activity
-                        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent clickPostIntent = new Intent(MainActivity.this, ClickPostActivity.class);
-                                clickPostIntent.putExtra("PostKey", PostKey);
-                                startActivity(clickPostIntent);
-                            }
+                        viewHolder.itemView.setOnClickListener(v -> {
+                            Intent clickPostIntent = new Intent(MainActivity.this, ClickPostActivity.class);
+                            clickPostIntent.putExtra("PostKey", PostKey);
+                            startActivity(clickPostIntent);
                         });
 
                         //open comments activity
-                        viewHolder.commentOnPost.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
-                                commentsIntent.putExtra("PostKey", PostKey);
-                                startActivity(commentsIntent);
-                            }
+                        viewHolder.commentOnPost.setOnClickListener(v -> {
+                            Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
+                            commentsIntent.putExtra("PostKey", PostKey);
+                            startActivity(commentsIntent);
                         });
-                        viewHolder.postResponses.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
-                                commentsIntent.putExtra("PostKey", PostKey);
-                                startActivity(commentsIntent);
-                            }
+                        viewHolder.postResponses.setOnClickListener(v -> {
+                            Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
+                            commentsIntent.putExtra("PostKey", PostKey);
+                            startActivity(commentsIntent);
                         });
+
+                        //for counting number of comments
+                        viewHolder.setCommentsCounterStatus(PostKey);
                     }
 
                     @NonNull
@@ -326,6 +298,10 @@ public class MainActivity extends AppCompatActivity {
         TextView commentOnPost;
         TextView postResponses;
 
+        //variable for number of comments
+        int countComments;
+        DatabaseReference commentsRef;
+
 
         public PostsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -338,6 +314,32 @@ public class MainActivity extends AppCompatActivity {
 
             commentOnPost = itemView.findViewById(R.id.text_view_comment);
             postResponses = itemView.findViewById(R.id.tex_view_number_of_responses);
+
+            commentsRef = FirebaseDatabase.getInstance().getReference().child("Posts");
+        }
+
+
+        //counting number of comments
+        public void setCommentsCounterStatus(final String PostKey){
+            commentsRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(PostKey).hasChild("Comments")){
+                        countComments = (int) dataSnapshot.child(PostKey).child("Comments").getChildrenCount();
+                        postResponses.setText(Integer.toString(countComments) + " Responses");
+                    }else {
+                      //  countComments = (int) dataSnapshot.child(PostKey).getChildrenCount();
+                      //  postResponses.setText(Integer.toString(countComments));
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
 
     }
@@ -370,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
                 snackBar2.show();
                 break;
             case R.id.nav_chats:
-                SendUserToChatActivity();
+                // SendUserToChatActivity();
                 Snackbar snackBar3 = Snackbar.make(findViewById(android.R.id.content), "COMING SOON YOUR CHATS", Snackbar.LENGTH_SHORT);
                 snackBar3.show();
                 break;
@@ -382,23 +384,15 @@ public class MainActivity extends AppCompatActivity {
                 snackBar4.show();
                 break;
             case R.id.nav_reminders:
-                Snackbar snackBar5 = Snackbar.make(findViewById(android.R.id.content), "Reminders", Snackbar.LENGTH_SHORT);
-                snackBar5.show();
+                SendUserToAlarmRemindersActivity();
 
                 break;
             case R.id.nav_baby_products:
                 Snackbar snackBar6 = Snackbar.make(findViewById(android.R.id.content), "Rate baby products", Snackbar.LENGTH_SHORT);
                 snackBar6.show();
-
-                break;
-            case R.id.nav_share:
-                Snackbar snackBar7 = Snackbar.make(findViewById(android.R.id.content), "SHARE THE SMART PARENT", Snackbar.LENGTH_SHORT);
-                snackBar7.show();
-
                 break;
             case R.id.nav_feedback:
-                Snackbar snackBar8 = Snackbar.make(findViewById(android.R.id.content), "SEND FEEDBACK", Snackbar.LENGTH_SHORT);
-                snackBar8.show();
+                SendUserToFeedbackActivity();
                 break;
             case R.id.nav_logout:
                 mAuth.signOut();
@@ -406,6 +400,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
 
     // There are 2 signatures and only `onPostCreate(Bundle state) shows the hamburger icon.
     @Override
@@ -500,11 +495,20 @@ public class MainActivity extends AppCompatActivity {
         finish();
         startActivity(mainActivityIntent);
     }
-    //opens the chats activity
-    private void SendUserToChatActivity() {
-        Intent chatActivityIntent = new Intent(MainActivity.this, ChatActivity.class);
+    //opens the Feedback activity
+
+    private void SendUserToFeedbackActivity() {
+        Intent feedbackActivityIntent = new Intent(MainActivity.this, FeedbackActivity.class);
         finish();
-        startActivity(chatActivityIntent);
+        startActivity(feedbackActivityIntent);
+    }
+
+
+    private void SendUserToAlarmRemindersActivity() {
+
+        Intent remindersActivityIntent = new Intent(MainActivity.this, RemindersActivity.class);
+        finish();
+        startActivity(remindersActivityIntent);
     }
 
 }

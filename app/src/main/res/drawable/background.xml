@@ -4,7 +4,7 @@
     <item android:drawable="@color/common_google_signin_btn_text_dark_default" />
 
     <item>
-        <bitmap android:src="@drawable/logo"
+        <bitmap android:src="@drawable/project_logo"
             android:gravity="center" />
 
     </item>

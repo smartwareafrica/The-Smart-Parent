@@ -3,8 +3,11 @@ package com.MwandoJrTechnologies.the_smart_parent.Profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.MwandoJrTechnologies.the_smart_parent.Chats.ChatActivity;
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +35,8 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
     private TextView dateOfBirth;
     private TextView userGender;
     private TextView numberOfChildren;
+
+    private Button openChatButton;
 
     private DatabaseReference otherParentProfileUserReference;
     private FirebaseAuth mAuth;
@@ -63,7 +68,7 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     String myProfileImage = dataSnapshot.child("profileImage").getValue().toString();
                     String myStatus = dataSnapshot.child("status").getValue().toString();
                     String myUserName = dataSnapshot.child("userName").getValue().toString();
@@ -71,12 +76,12 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
                     String myPhoneNumber = dataSnapshot.child("phoneNumber").getValue().toString();
                     String myDateOfBirth = dataSnapshot.child("dob").getValue().toString();
                     String myGender = dataSnapshot.child("gender").getValue().toString();
-                    String  myNumberOfChildren = dataSnapshot.child("numberOfChildren").getValue().toString();
+                    String myNumberOfChildren = dataSnapshot.child("numberOfChildren").getValue().toString();
 
                     Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(userProfilePicture);
                     userStatus.setText(myStatus);
                     userName.setText("@" + myUserName);
-                    fullName.setText("NAME: "+ myFullName);
+                    fullName.setText("NAME: " + myFullName);
                     phoneNumber.setText("Phone Number: " + myPhoneNumber);
                     dateOfBirth.setText("DOB: " + myDateOfBirth);
                     userGender.setText("Gender: " + myGender);
@@ -87,6 +92,15 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        openChatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent chatIntent = new Intent(OtherParentsProfileActivity.this, ChatActivity.class);
+                chatIntent.putExtra("visit_user_id", otherParentUserID);
+                startActivity(chatIntent);
             }
         });
     }
@@ -102,6 +116,7 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
         dateOfBirth = findViewById(R.id.text_view_other_parent_DOB);
         userGender = findViewById(R.id.text_view_other_parent_gender);
         numberOfChildren = findViewById(R.id.text_view_other_parent_no_of_children);
+        openChatButton = findViewById(R.id.button_send_message);
 
     }
 
@@ -123,4 +138,5 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
         finish();
         startActivity(mainActivityIntent);
     }
+
 }

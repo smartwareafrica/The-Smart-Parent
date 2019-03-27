@@ -4,21 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -58,18 +53,8 @@ public class RegisterActivity extends AppCompatActivity {
         textViewSignIn = findViewById(R.id.text_view_sign_in);
 
         //when clicked both button and textView
-        buttonRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateNewAccount();
-            }
-        });
-        textViewSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SendUserToLoginActivity();
-            }
-        });
+        buttonRegister.setOnClickListener(v -> CreateNewAccount());
+        textViewSignIn.setOnClickListener(v -> SendUserToLoginActivity());
     }
 
     @Override
@@ -129,21 +114,18 @@ public class RegisterActivity extends AppCompatActivity {
 
             //create account to fireBase now
             mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                SendUserToProfileActivity();
-                                //check if successful
-                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Successfully registered", Snackbar.LENGTH_SHORT);
-                                snackbar.show();
-                                progressDialog.dismiss();
-                            } else {
-                                String message = task.getException().getMessage();
-                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
-                                snackbar.show();
-                                progressDialog.dismiss();
-                            }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            SendUserToProfileActivity();
+                            //check if successful
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Successfully registered", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                            progressDialog.dismiss();
+                        } else {
+                            String message = task.getException().getMessage();
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            progressDialog.dismiss();
                         }
                     });
         }

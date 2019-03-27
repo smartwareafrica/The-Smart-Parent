@@ -35,10 +35,6 @@
         android:id="@+id/group_menu"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_share"
-            android:icon="@drawable/ic_share_white_24dp"
-            android:title="Share" />
-        <item
             android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_feedback_white_24dp"
             android:title="Feedback" />

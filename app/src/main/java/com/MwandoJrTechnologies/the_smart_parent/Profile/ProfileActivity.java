@@ -3,6 +3,7 @@ package com.MwandoJrTechnologies.the_smart_parent.Profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
@@ -32,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView dateOfBirth;
     private TextView userGender;
     private TextView numberOfChildren;
+    private TextView editProfile;
 
     private DatabaseReference profileUserReference;
     private FirebaseAuth mAuth;
@@ -62,12 +64,20 @@ public class ProfileActivity extends AppCompatActivity {
         dateOfBirth = findViewById(R.id.text_view_DOB);
         userGender = findViewById(R.id.text_view_gender);
         numberOfChildren = findViewById(R.id.text_view_number_of_children);
+        editProfile = findViewById(R.id.edit_profile_button);
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendUserToEditProfileActivity();
+            }
+        });
 
         profileUserReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     String myProfileImage = dataSnapshot.child("profileImage").getValue().toString();
                     String myStatus = dataSnapshot.child("status").getValue().toString();
                     String myUserName = dataSnapshot.child("userName").getValue().toString();
@@ -75,12 +85,12 @@ public class ProfileActivity extends AppCompatActivity {
                     String myPhoneNumber = dataSnapshot.child("phoneNumber").getValue().toString();
                     String myDateOfBirth = dataSnapshot.child("dob").getValue().toString();
                     String myGender = dataSnapshot.child("gender").getValue().toString();
-                    String  myNumberOfChildren = dataSnapshot.child("numberOfChildren").getValue().toString();
+                    String myNumberOfChildren = dataSnapshot.child("numberOfChildren").getValue().toString();
 
                     Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(userProfilePicture);
                     userStatus.setText(myStatus);
                     userName.setText("@" + myUserName);
-                    fullName.setText("NAME: "+ myFullName);
+                    fullName.setText("NAME: " + myFullName);
                     phoneNumber.setText("Phone Number: " + myPhoneNumber);
                     dateOfBirth.setText("DOB: " + myDateOfBirth);
                     userGender.setText("Gender: " + myGender);
@@ -112,5 +122,12 @@ public class ProfileActivity extends AppCompatActivity {
         Intent mainActivityIntent = new Intent(ProfileActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
+    }
+
+    //opens activity to edit profile
+    private void SendUserToEditProfileActivity() {
+        Intent editProfileIntent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+        finish();
+        startActivity(editProfileIntent);
     }
 }

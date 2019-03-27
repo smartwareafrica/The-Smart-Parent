@@ -33,7 +33,7 @@
             <ImageButton
                 android:id="@+id/send_image_file_button"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="60dp"
                 android:layout_weight=".20"
                 android:contentDescription="@string/attach_an_image"
                 android:src="@drawable/baseline_insert_photo_white_24dp" />
@@ -44,7 +44,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".80">
+                android:layout_weight=".60">
 
                 <EditText
                     android:id="@+id/input_message"
@@ -58,7 +58,7 @@
             <ImageButton
                 android:id="@+id/send_message_button"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="60dp"
                 android:layout_weight=".20"
                 android:contentDescription="@string/attach_an_image"
                 android:src="@drawable/baseline_send_white_24dp" />

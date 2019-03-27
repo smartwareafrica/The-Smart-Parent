@@ -53,7 +53,7 @@
                 android:id="@+id/text_view_other_parent_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20sp"
+                android:layout_margin="10sp"
                 android:padding="20sp"
                 android:text="@string/hey_i_am_using_this_informative_smart_parent_app"
                 android:textAlignment="center"
@@ -61,7 +61,19 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_send_message"
+                android:layout_width="wrap_content"
+                android:drawableStart="@drawable/outline_comment_white_48dp"
+                android:drawablePadding="10dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@string/send_message"
+                android:textAlignment="center" />
+
             <TextView
+                android:visibility="gone"
                 android:id="@+id/text_view_other_parent_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,6 +120,7 @@
                 android:text="@string/number_of_children"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
         </LinearLayout>
     </ScrollView>
 

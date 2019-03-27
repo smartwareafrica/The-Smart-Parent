@@ -12,4 +12,7 @@
         <item name="android:windowBackground">@drawable/background</item>
     </style>
 
+    <style name="MyProgressDialog" parent="Theme.AppCompat.Dialog">
+    </style>
+
 </resources>

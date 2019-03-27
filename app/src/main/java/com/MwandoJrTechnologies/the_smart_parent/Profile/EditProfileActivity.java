@@ -4,15 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -87,25 +84,19 @@ public class EditProfileActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
 
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkIfUserNameExists();
-                saveUserInformation();
-                //start main activity
-                finish();
-                SendUserToMainActivity();
-            }
+        buttonSave.setOnClickListener(v -> {
+            checkIfUserNameExists();
+            saveUserInformation();
+            //start main activity
+            finish();
+            SendUserToMainActivity();
         });
-        profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //opening gallery to choose image
-                Intent galleryIntent = new Intent();
-                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-                galleryIntent.setType("image/*");
-                startActivityForResult(galleryIntent, galleryPick);
-            }
+        profileImage.setOnClickListener(v -> {
+            //opening gallery to choose image
+            Intent galleryIntent = new Intent();
+            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+            galleryIntent.setType("image/*");
+            startActivityForResult(galleryIntent, galleryPick);
         });
         usersReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -169,37 +160,28 @@ public class EditProfileActivity extends AppCompatActivity {
                 //now store in fireBase storage
                 final UploadTask uploadTask = filePath.putFile(resultUri);
 
-                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                uploadTask.addOnSuccessListener(taskSnapshot -> {
 
-                        Task<Uri> UriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                            @Override
-                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                if (!task.isSuccessful()) {
-                                    throw task.getException();
-                                }
+                    Task<Uri> UriTask = uploadTask.continueWithTask(task -> {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
 
-                                //get the url...INITIALISE downloadImageUrl at the most to ie....String downloadImageUrl
-                                downloadImageUrl = filePath.getDownloadUrl().toString();
-                                return filePath.getDownloadUrl();
+                        //get the url...INITIALISE downloadImageUrl at the most to ie....String downloadImageUrl
+                        downloadImageUrl = filePath.getDownloadUrl().toString();
+                        return filePath.getDownloadUrl();
 
 
-                            }
-                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
+                    }).addOnCompleteListener(task -> {
 
-                                if (task.isSuccessful()) {
-                                    //get the link
-                                    downloadImageUrl = task.getResult().toString();
-                                    addLinkToFireBaseDatabase();
-                                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Good", Snackbar.LENGTH_SHORT);
-                                    snackbar.show();
-                                }
-                            }
-                        });
-                    }
+                        if (task.isSuccessful()) {
+                            //get the link
+                            downloadImageUrl = task.getResult().toString();
+                            addLinkToFireBaseDatabase();
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Good", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                        }
+                    });
                 });
             }
         }
@@ -272,21 +254,18 @@ public class EditProfileActivity extends AppCompatActivity {
             userMap.put("dob", dob);
             userMap.put("gender", "none");
             userMap.put("numberOfChildren", "none");
-            usersReference.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener() {
-                @Override
-                public void onComplete(@NonNull Task task) {
-                    if (task.isSuccessful()) {
-                        SendUserToMainActivity();
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Your details saved successfully", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                        progressDialog.dismiss();
+            usersReference.updateChildren(userMap).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    SendUserToMainActivity();
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Your details saved successfully", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                    progressDialog.dismiss();
 
-                    } else {
-                        String message = task.getException().getMessage();
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred,please try again " + message, Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                        progressDialog.dismiss();
-                    }
+                } else {
+                    String message = task.getException().getMessage();
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred,please try again " + message, Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                    progressDialog.dismiss();
                 }
             });
         }

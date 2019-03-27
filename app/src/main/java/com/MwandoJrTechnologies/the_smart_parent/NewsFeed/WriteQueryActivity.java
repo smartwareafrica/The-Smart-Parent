@@ -4,14 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.MwandoJrTechnologies.the_smart_parent.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +27,6 @@ import androidx.appcompat.widget.Toolbar;
 
 public class WriteQueryActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
     private ProgressDialog progressDialog;
 
     private FirebaseAuth mAuth;
@@ -56,6 +52,12 @@ public class WriteQueryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_query);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
+        getSupportActionBar().setTitle("Write your Query");
+
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getUid();
 
@@ -67,32 +69,7 @@ public class WriteQueryActivity extends AppCompatActivity {
         buttonPost = findViewById(R.id.button_post);
         progressDialog = new ProgressDialog(this);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
-        getSupportActionBar().setTitle("Write query");
-
-        buttonPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ValidatePostInformation();
-            }
-        });
-
-    }
-
-    //activate back button
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            SendUserToMainActivity();
-        }
-
-        return super.onOptionsItemSelected(item);
+        buttonPost.setOnClickListener(v -> ValidatePostInformation());
 
     }
 
@@ -125,7 +102,7 @@ public class WriteQueryActivity extends AppCompatActivity {
 
         //setting current date
         Calendar callForTime = Calendar.getInstance();
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
         saveCurrentTime = currentTime.format(callForTime.getTime());
 
         postRandomName = saveCurrentDate + saveCurrentTime;
@@ -158,8 +135,8 @@ public class WriteQueryActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //validation if child exists then we execute
                 if (dataSnapshot.exists()) {
-                  final String userFullName = dataSnapshot.child("fullName").getValue().toString();
-                  final String userProfileImage = dataSnapshot.child("profileImage").getValue().toString();
+                    final String userFullName = dataSnapshot.child("fullName").getValue().toString();
+                    final String userProfileImage = dataSnapshot.child("profileImage").getValue().toString();
 
                     HashMap postsMap = new HashMap();
                     postsMap.put("uid", currentUserID);
@@ -171,19 +148,16 @@ public class WriteQueryActivity extends AppCompatActivity {
                     postsMap.put("counter", countPosts); //saves counted value in database
                     //now save inside fireBase database
                     postsReference.child(currentUserID + postRandomName).updateChildren(postsMap)
-                            .addOnCompleteListener(new OnCompleteListener() {
-                                @Override
-                                public void onComplete(@NonNull Task task) {
-                                    if (task.isSuccessful()) {
-                                        SendUserToMainActivity();
-                                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "New Question Updated Successfully.", Snackbar.LENGTH_SHORT);
-                                        snackbar.show();
-                                        progressDialog.dismiss();
-                                    } else {
-                                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please try again. An error occurred", Snackbar.LENGTH_SHORT);
-                                        snackbar.show();
-                                        progressDialog.dismiss();
-                                    }
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                     SendUserToMainActivity();
+                                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "New Question Updated Successfully.", Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
+                                    progressDialog.dismiss();
+                                } else {
+                                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please try again. An error occurred", Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
+                                    progressDialog.dismiss();
                                 }
                             });
                 }
@@ -196,11 +170,17 @@ public class WriteQueryActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+
+    }
+
     //open main activity
     private void SendUserToMainActivity() {
         Intent mainActivityIntent = new Intent(WriteQueryActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
     }
-
 }

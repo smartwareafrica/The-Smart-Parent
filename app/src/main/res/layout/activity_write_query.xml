@@ -10,30 +10,37 @@
         layout="@layout/toolbar" />
 
     <ScrollView
+        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
         <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_margin="20dp"
+                android:contentDescription="@string/the_smart_parent_logo"
+                android:src="@drawable/project_logo" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_input_write_query"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="80dp"
-                android:layout_marginEnd="20dp">
+                android:layout_margin="10dp">
 
                 <EditText
                     android:id="@+id/edit_text_write_query"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    android:lines="10"
                     android:autofillHints="@string/please_write_your_question_here"
                     android:hint="@string/please_write_your_question_here"
                     android:inputType="textMultiLine"
@@ -47,10 +54,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="#0F6A9C"
-                android:text="@string/save_details" />
+                android:text="@string/submit" />
 
         </LinearLayout>
     </ScrollView>
-
 
 </RelativeLayout>

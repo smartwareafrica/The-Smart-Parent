@@ -142,6 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:textColor="@android:color/white"
                 android:backgroundTint="#0F6A9C"
                 android:text="@string/save_details" />
 

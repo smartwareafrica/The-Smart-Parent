@@ -16,6 +16,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 dependencies {
@@ -40,17 +46,22 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-database:16.0.5'
     implementation 'com.google.firebase:firebase-storage:16.0.5'
-
     //fireBase UI adapter
     implementation 'com.firebaseui:firebase-ui-database:4.3.1'
     // Glide image library
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-
     implementation 'com.google.android.material:material:1.0.0-beta01'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    //for alarm reminders
+    implementation 'com.bignerdranch.android:recyclerview-multiselect:0.2'
+    implementation 'com.wrapp.floatlabelededittext:library:0.0.6'
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation 'com.wdullaer:materialdatetimepicker:4.1.2'
+    implementation 'com.github.jasonwangdev:datetimepicker-dialogfragment-library:1.0.1'
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 
     apply plugin: 'com.google.gms.google-services'
 }

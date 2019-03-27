@@ -14,8 +14,6 @@ import android.widget.TextView;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -78,30 +76,23 @@ public class CommentsActivity extends AppCompatActivity {
         commentsInputText = findViewById(R.id.comment_input);
         postCommentButton = findViewById(R.id.post_comment_button);
 
-        postCommentButton.setOnClickListener(new View.OnClickListener() {
+        postCommentButton.setOnClickListener(v -> usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String userName = dataSnapshot.child("userName").getValue().toString();
 
-                usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            String userName = dataSnapshot.child("userName").getValue().toString();
+                    ValidateComment(userName);
 
-                            ValidateComment(userName);
+                    commentsInputText.setText("");
+                }
+            }
 
-                            commentsInputText.setText("");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        }));
 
     }
 
@@ -184,7 +175,7 @@ public class CommentsActivity extends AppCompatActivity {
 
             //setting current date
             Calendar callForTime = Calendar.getInstance();
-            SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
             final String saveCurrentTime = currentTime.format(callForTime.getTime());
 
             final String randomKey = currentUserID + saveCurrentDate + saveCurrentTime;
@@ -197,18 +188,15 @@ public class CommentsActivity extends AppCompatActivity {
             commentsMap.put("username", userName);
 
             postsReference.child(randomKey).updateChildren(commentsMap)
-                    .addOnCompleteListener(new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if (task.isSuccessful()) {
-                                Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Response Added", Snackbar.LENGTH_SHORT);
-                                snackBar.show();
-                            }else {
-                                Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Could not comment, Please try again", Snackbar.LENGTH_SHORT);
-                                snackBar.show();
-                            }
-
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Response Added", Snackbar.LENGTH_SHORT);
+                            snackBar.show();
+                        }else {
+                            Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Could not comment, Please try again", Snackbar.LENGTH_SHORT);
+                            snackBar.show();
                         }
+
                     });
 
         }

@@ -3,11 +3,11 @@ package com.MwandoJrTechnologies.the_smart_parent.Profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -66,19 +66,14 @@ public class ProfileActivity extends AppCompatActivity {
         numberOfChildren = findViewById(R.id.text_view_number_of_children);
         editProfile = findViewById(R.id.edit_profile_button);
 
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SendUserToEditProfileActivity();
-            }
-        });
+        editProfile.setOnClickListener(v -> SendUserToProfileSettingsActivity());
 
         profileUserReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.exists()) {
-                    String myProfileImage = dataSnapshot.child("profileImage").getValue().toString();
+                if (dataSnapshot.exists()) try {
+                    String myProfileImage = Objects.requireNonNull(dataSnapshot.child("profileImage").getValue()).toString();
                     String myStatus = dataSnapshot.child("status").getValue().toString();
                     String myUserName = dataSnapshot.child("userName").getValue().toString();
                     String myFullName = dataSnapshot.child("fullName").getValue().toString();
@@ -95,6 +90,10 @@ public class ProfileActivity extends AppCompatActivity {
                     dateOfBirth.setText("DOB: " + myDateOfBirth);
                     userGender.setText("Gender: " + myGender);
                     numberOfChildren.setText("Number of children: " + myNumberOfChildren);
+                }catch (RuntimeException e){
+                    Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Please update your profile", Snackbar.LENGTH_INDEFINITE);
+                    snackBar.show();
+                    SendUserToProfileSettingsActivity();
                 }
             }
 
@@ -125,8 +124,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     //opens activity to edit profile
-    private void SendUserToEditProfileActivity() {
-        Intent editProfileIntent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+    private void SendUserToProfileSettingsActivity() {
+        Intent editProfileIntent = new Intent(ProfileActivity.this, ProfileSettingsActivity.class);
         finish();
         startActivity(editProfileIntent);
     }

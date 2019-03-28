@@ -9,7 +9,6 @@ import android.widget.EditText;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,9 +38,7 @@ public class EditProfileActivity extends AppCompatActivity {
     final static int galleryPick = 1;
     String currentUserID;
     private EditText editTextName;
-    private EditText editTextPhoneNumber;
     private EditText editTextUsername;
-    private EditText editTextDOB;
     private CircleImageView profileImage;
     private Button buttonSave;
     private Toolbar toolbar;
@@ -76,8 +73,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         editTextUsername = findViewById(R.id.edit_text_username);
         editTextName = findViewById(R.id.edit_text_name);
-        editTextPhoneNumber = findViewById(R.id.edit_text_phone_number);
-        editTextDOB = findViewById(R.id.edit_text_dob);
 
         buttonSave = findViewById(R.id.buttonSave);
 
@@ -85,7 +80,16 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
         buttonSave.setOnClickListener(v -> {
+
+            //show progress dialog
+            progressDialog.setTitle("Profile Details");
+            progressDialog.setMessage("Updating profile details, Please wait...");
+            progressDialog.setCanceledOnTouchOutside(true);
+            progressDialog.show();
+
+
             checkIfUserNameExists();
+
             saveUserInformation();
             //start main activity
             finish();
@@ -149,8 +153,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 //show progress dialog
                 progressDialog.setTitle("Profile Image");
                 progressDialog.setMessage("Updating profile image, Please wait...");
-                progressDialog.show();
                 progressDialog.setCanceledOnTouchOutside(true);
+                progressDialog.show();
 
                 Uri resultUri = result.getUri();
 
@@ -180,6 +184,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             addLinkToFireBaseDatabase();
                             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Good", Snackbar.LENGTH_SHORT);
                             snackbar.show();
+                            progressDialog.dismiss();
                         }
                     });
                 });
@@ -188,22 +193,17 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void addLinkToFireBaseDatabase() {
-        usersReference.child("profileImage").setValue(downloadImageUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    progressDialog.dismiss();
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "profile image uploaded successfully uploaded...", Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                } else {
-                    progressDialog.dismiss();
-                    String message = task.getException().getMessage();
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error occurred  " + message, Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                }
+        usersReference.child("profileImage").setValue(downloadImageUrl).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                progressDialog.dismiss();
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "profile image uploaded successfully uploaded...", Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            } else {
+                progressDialog.dismiss();
+                String message = task.getException().getMessage();
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error occurred  " + message, Snackbar.LENGTH_SHORT);
+                snackbar.show();
             }
-
-
         });
     }
 
@@ -219,8 +219,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private void saveUserInformation() {
         final String username = editTextUsername.getText().toString().trim();
         String fullName = editTextName.getText().toString().trim();
-        String phoneNumber = editTextPhoneNumber.getText().toString().trim();
-        String dob = editTextDOB.getText().toString().trim();
 
         //creating a username and checking if any other exists
         if (username.isEmpty()) {
@@ -230,14 +228,6 @@ public class EditProfileActivity extends AppCompatActivity {
         if (fullName.isEmpty()) {
             editTextName.setError("Name is required");
             editTextName.requestFocus();
-        }
-        if (phoneNumber.isEmpty()) {
-            editTextPhoneNumber.setError("Phone Number is required");
-            editTextPhoneNumber.requestFocus();
-        }
-        if (dob.isEmpty()) {
-            editTextDOB.setError("Date of birth is required");
-            editTextDOB.requestFocus();
         } else {
 
             progressDialog.setTitle("Uploading Details...");
@@ -247,11 +237,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
             final HashMap userMap = new HashMap();
-            userMap.put("status", "Hey I am using this informative SMART PARENT App");
+            userMap.put("status", "Hey there, I am using this informative SMART PARENT App!!!");
             userMap.put("userName", username);
             userMap.put("fullName", fullName);
-            userMap.put("phoneNumber", phoneNumber);
-            userMap.put("dob", dob);
+            userMap.put("phoneNumber", "none");
+            userMap.put("dob", "none");
             userMap.put("gender", "none");
             userMap.put("numberOfChildren", "none");
             usersReference.updateChildren(userMap).addOnCompleteListener(task -> {

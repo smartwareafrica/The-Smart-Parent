@@ -174,7 +174,6 @@ public class WriteQueryActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-
     }
 
     //open main activity

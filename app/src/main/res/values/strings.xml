@@ -64,11 +64,10 @@
     <string name="hey_i_am_using_this_informative_smart_parent_app">Hey I am using this informative SMART PARENT App</string>
     <string name="phone_number">Phone Number</string>
     <string name="date_of_birth">Date of Birth</string>
-    <string name="gender">Gender</string>
     <string name="number_of_children">Number of Children</string>
     <string name="hrs">hrs</string>
     <string name="date_with_colon">Date:</string>
-    <string name="write_your_message_here">Write your message here...</string>
+    <string name="write_your_message_here">Write your message here…</string>
     <string name="send_message">Send Message</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="display_user_name">Display user name</string>
@@ -105,5 +104,9 @@
     <string name="name_your_reminder_here">Name your reminder here</string>
     <string name="view_sent_details">View sent details</string>
     <string name="send">Send</string>
+    <string name="profile_status">Profile status</string>
+    <string name="gender">Gender</string>
+    <string name="save">Save</string>
+    <string name="update_account_settings">Update account settings</string>
 
 </resources>

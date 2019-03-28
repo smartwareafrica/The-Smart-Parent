@@ -90,6 +90,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/text_view_other_parent_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,6 +99,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/text_view_other_parent_DOB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

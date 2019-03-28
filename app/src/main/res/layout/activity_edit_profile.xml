@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:background="#CED9E6"
             android:elevation="20dp"
+            android:gravity="center"
             android:orientation="vertical"
             android:paddingLeft="16dp"
             android:paddingTop="16dp"
@@ -34,8 +35,8 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image_view"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
@@ -98,41 +99,6 @@
                     android:autofillHints="@string/enter_your_full_name"
                     android:hint="@string/enter_your_full_name"
                     android:inputType="text"
-                    tools:targetApi="o" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_phone_number"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <EditText
-                    android:id="@+id/edit_text_phone_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="@string/enter_your_phone_number"
-                    android:hint="@string/enter_your_phone_number"
-                    android:inputType="phone"
-                    tools:targetApi="o" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_date_of_birth"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <EditText
-                    android:id="@+id/edit_text_dob"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="Please select your date of birth"
-                    android:hint="@string/please_select_your_date_of_birth"
-                    android:inputType="date"
                     tools:targetApi="o" />
             </com.google.android.material.textfield.TextInputLayout>
 

@@ -20,7 +20,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private Button buttonRegister;
     private EditText editTextEmail;
-    private EditText editTextConfirmEmail;
     private EditText editTextPassword;
     private EditText editTextConfirmPassword;
     private TextView textViewSignIn;
@@ -44,7 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
         editTextEmail = findViewById(R.id.edit_text_email);
-        editTextConfirmEmail = findViewById(R.id.edit_text_confirm_email);
         editTextPassword = findViewById(R.id.edit_text_password);
         editTextConfirmPassword = findViewById(R.id.edit_text_confirm_password);
 
@@ -73,7 +71,6 @@ public class RegisterActivity extends AppCompatActivity {
     private void CreateNewAccount() {
 
         String email = editTextEmail.getText().toString().trim();
-        String confirmEmail = editTextConfirmEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
@@ -81,10 +78,6 @@ public class RegisterActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(email)) {
             //email is empty
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter email", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-        } else if (TextUtils.isEmpty(confirmEmail)) {
-            //ConfirmEmail is empty
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please Confirm your email", Snackbar.LENGTH_SHORT);
             snackbar.show();
         } else if (TextUtils.isEmpty(password)) {
             //Password is empty
@@ -94,13 +87,8 @@ public class RegisterActivity extends AppCompatActivity {
             //ConfirmPassword is empty
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please confirm your password", Snackbar.LENGTH_SHORT);
             snackbar.show();
-
-            //emails and confirm email match
-        } else if (!email.equals(confirmEmail)) {
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Make sure emails match", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-            //password and confirm password match
-        } else if (!password.equals(confirmPassword)) {
+        }    //password and confirm password match
+        else if (!password.equals(confirmPassword)) {
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Make sure Passwords match", Snackbar.LENGTH_SHORT);
             snackbar.show();
 
@@ -116,11 +104,10 @@ public class RegisterActivity extends AppCompatActivity {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            SendUserToProfileActivity();
-                            //check if successful
-                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Successfully registered", Snackbar.LENGTH_SHORT);
-                            snackbar.show();
+
+                            sendEmailVerificationMessage();
                             progressDialog.dismiss();
+
                         } else {
                             String message = task.getException().getMessage();
                             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
@@ -132,6 +119,31 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+
+    private void sendEmailVerificationMessage() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            user.sendEmailVerification().addOnCompleteListener(task -> {
+
+                if (task.isSuccessful()) {
+
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Registration is successful, please check your EMAIL and verify your account...", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+
+                    SendUserToLoginActivity();
+                    mAuth.signOut();
+
+                } else {
+                    String message = task.getException().getMessage();
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error: " + message, Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    mAuth.signOut();
+                }
+
+            });
+        }
+    }
+
     //opens login activity
     private void SendUserToLoginActivity() {
         Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -139,12 +151,6 @@ public class RegisterActivity extends AppCompatActivity {
         startActivity(loginIntent);
     }
 
-    private void SendUserToProfileActivity() {
-        Intent editProfileIntent = new Intent(RegisterActivity.this, EditProfileActivity.class);
-        editProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(editProfileIntent);
-        finish();
-    }
 
     //open main activity
     private void SendUserToMainActivity() {

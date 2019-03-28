@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,7 +15,6 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,10 +40,13 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
 
+    private boolean emailAddressChecker;
+
     //for sign in with google
     private static final int RC_SIGN_IN = 1;
     private GoogleApiClient mGoogleSignInClient;
     private static final String TAG = "LoginActivity";
+
 
 
     @Override
@@ -69,24 +70,9 @@ public class LoginActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
 
-        buttonSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AllowUserToLogin();
-            }
-        });
-        textViewRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SendUserToRegisterActivity();
-            }
-        });
-        textViewResetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SendUserToResetPasswordActivity();
-            }
-        });
+        buttonSignIn.setOnClickListener(v -> AllowUserToLogin());
+        textViewRegister.setOnClickListener(v -> SendUserToRegisterActivity());
+        textViewResetPassword.setOnClickListener(v -> SendUserToResetPasswordActivity());
 
 
         // Configure Google Sign In
@@ -97,26 +83,20 @@ public class LoginActivity extends AppCompatActivity {
 
         //set google api
         mGoogleSignInClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                .enableAutoManage(this, connectionResult -> {
 
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Google SignIn Failed...,Please Try Again", Snackbar.LENGTH_LONG);
-                        snackbar.show();
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Google SignIn Failed...,Please Try Again", Snackbar.LENGTH_LONG);
+                    snackbar.show();
 
-                    }
                 }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
 
-        googleSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //show a progress bar
-                progressDialog.setTitle("Opening Google SignIn");
-                progressDialog.setMessage("Please wait as we open google SignIn...");
-                progressDialog.setCanceledOnTouchOutside(true);
-                progressDialog.show();
-                signIn();
-            }
+        googleSignInButton.setOnClickListener(v -> {
+            //show a progress bar
+            progressDialog.setTitle("Opening Google SignIn");
+            progressDialog.setMessage("Please wait as we open google SignIn...");
+            progressDialog.setCanceledOnTouchOutside(true);
+            progressDialog.show();
+            signIn();
         });
     }
 
@@ -218,25 +198,39 @@ public class LoginActivity extends AppCompatActivity {
             progressDialog.show();
 
             mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+                    .addOnCompleteListener(this, task -> {
+                        progressDialog.dismiss();
+                        if (task.isSuccessful()) {
+
+                            VerifyEmailAddress();
                             progressDialog.dismiss();
-                            if (task.isSuccessful()) {
-                                //  OpenViewProfileFragment();
-                                //start the profile activity
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Login Successful", Snackbar.LENGTH_SHORT);
-                                snackbar.show();
-                            } else {
-                                String message = task.getException().getMessage();
-                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
-                                snackbar.show();
-                                progressDialog.dismiss();
-                            }
+                        } else {
+                            String message = task.getException().getMessage();
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            progressDialog.dismiss();
                         }
                     });
         }
+    }
+
+
+    //email verification checker
+    private void VerifyEmailAddress(){
+
+        FirebaseUser user =  mAuth.getCurrentUser();
+        emailAddressChecker = user.isEmailVerified();
+
+        if (emailAddressChecker){
+
+            SendUserToMainActivity();
+
+        }else {
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please verify your email address first", Snackbar.LENGTH_LONG);
+            snackbar.show();
+            mAuth.signOut();
+        }
+
     }
 
     //open login activity
@@ -248,9 +242,10 @@ public class LoginActivity extends AppCompatActivity {
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent registerIntent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
+        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         finish();
-        startActivity(registerIntent);
+        startActivity(mainActivityIntent);
     }
 
     //opens login activity

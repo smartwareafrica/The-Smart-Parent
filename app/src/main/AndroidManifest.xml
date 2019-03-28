@@ -14,7 +14,8 @@
         android:roundIcon="@drawable/launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FeedbackActivity"/>
+        <activity android:name=".Profile.ProfileSettingsActivity" />
+        <activity android:name=".FeedbackActivity" />
         <activity
             android:name=".Reminders.AddRemindersActivity"
             android:parentActivityName=".Reminders.RemindersActivity" />
@@ -38,14 +39,13 @@
         </activity>
         <activity android:name=".Profile.RegisterActivity" />
         <activity android:name=".NewsFeed.MainActivity" />
-        <activity android:name=".NewsFeed.WriteQueryActivity"
-            android:parentActivityName=".NewsFeed.MainActivity"/>
+        <activity
+            android:name=".NewsFeed.WriteQueryActivity"
+            android:parentActivityName=".NewsFeed.MainActivity" />
         <activity android:name=".Profile.EditProfileActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat" />
-
-        <!-- /for reminders -->
+            android:theme="@style/Base.Theme.AppCompat" /> <!-- /for reminders -->
         <provider
             android:name=".Reminders.data.AlarmReminderProvider"
             android:authorities="com.delaroystudios.alarmreminder"
@@ -54,8 +54,6 @@
         <service
             android:name=".Reminders.reminder.ReminderAlarmService"
             android:exported="false" />
-
-
     </application>
 
 </manifest>

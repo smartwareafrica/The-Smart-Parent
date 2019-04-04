@@ -32,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -105,6 +106,9 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
 
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Registration is successful, please check your EMAIL and verify your account...", Snackbar.LENGTH_LONG);
+                            snackbar.show();
+
                             sendEmailVerificationMessage();
                             progressDialog.dismiss();
 
@@ -116,7 +120,6 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
         }
-
     }
 
 
@@ -126,9 +129,6 @@ public class RegisterActivity extends AppCompatActivity {
             user.sendEmailVerification().addOnCompleteListener(task -> {
 
                 if (task.isSuccessful()) {
-
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Registration is successful, please check your EMAIL and verify your account...", Snackbar.LENGTH_LONG);
-                    snackbar.show();
 
                     SendUserToLoginActivity();
                     mAuth.signOut();

@@ -63,6 +63,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_settings);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();

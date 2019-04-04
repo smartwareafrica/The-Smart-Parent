@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F5F5"
+    android:fillViewport="true"
     tools:context="com.MwandoJrTechnologies.the_smart_parent.Profile.RegisterActivity">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
             android:paddingLeft="16dp"
@@ -29,7 +26,7 @@
                 android:layout_height="250dp"
                 android:layout_margin="20dp"
                 android:contentDescription="@string/the_smart_parent_logo"
-                android:src="@drawable/project_logo" />
+                android:src="@drawable/splash_image" />
 
             <TextView
                 android:id="@+id/textView"
@@ -103,20 +100,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:backgroundTint="#FCFCFF"
+                android:backgroundTint="#0F6A9C"
                 android:text="@string/register_user" />
 
             <TextView
                 android:id="@+id/text_view_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="@string/registered_please_sign_in_here"
+                android:textSize="16sp"
+                android:text="@string/registered_please_login_in_here"
                 android:textAlignment="center"
                 android:textStyle="bold" />
 
         </LinearLayout>
 
     </ScrollView>
-</RelativeLayout>

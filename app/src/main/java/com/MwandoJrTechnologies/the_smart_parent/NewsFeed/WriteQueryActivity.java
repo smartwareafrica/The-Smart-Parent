@@ -51,6 +51,7 @@ public class WriteQueryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_query);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -180,6 +181,7 @@ public class WriteQueryActivity extends AppCompatActivity {
     private void SendUserToMainActivity() {
         Intent mainActivityIntent = new Intent(WriteQueryActivity.this, MainActivity.class);
         finish();
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         startActivity(mainActivityIntent);
     }
 }

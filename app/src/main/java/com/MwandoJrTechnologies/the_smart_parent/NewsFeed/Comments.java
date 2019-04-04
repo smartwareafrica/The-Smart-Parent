@@ -3,7 +3,7 @@ package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 //module class
 
 public class Comments {
-    public String comment, date, time, username;
+    public String comment, date, time, fullName;
 
     //default constructor
     public Comments() {
@@ -11,11 +11,11 @@ public class Comments {
     }
 
     //generate constructors
-    public Comments(String comment, String date, String time, String username) {
+    public Comments(String comment, String date, String time, String fullName) {
         this.comment = comment;
         this.date = date;
         this.time = time;
-        this.username = username;
+        this.fullName = fullName;
     }
 
     public String getComment() {
@@ -42,11 +42,11 @@ public class Comments {
         this.time = time;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

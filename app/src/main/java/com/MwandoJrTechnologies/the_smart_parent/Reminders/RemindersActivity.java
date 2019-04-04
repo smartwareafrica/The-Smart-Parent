@@ -40,7 +40,7 @@ public class RemindersActivity extends AppCompatActivity implements LoaderManage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
-
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

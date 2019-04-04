@@ -4,7 +4,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="please_input_your_email">Please input your email</string>
-    <string name="registered_please_sign_in_here">Registered? Please Sign in here</string>
+    <string name="registered_please_login_in_here">Registered? Please Login here</string>
     <string name="register_user">Register User</string>
     <string name="please_input_your_password">Please input your password</string>
     <string name="create_an_account">Create an account</string>
@@ -108,5 +108,17 @@
     <string name="gender">Gender</string>
     <string name="save">Save</string>
     <string name="update_account_settings">Update account settings</string>
+    <string name="welcome">WELCOME</string>
+    <string name="to">TO</string>
+    <string name="home">Home</string>
+    <string name="stories">Stories</string>
+    <string name="chats">Chats</string>
+    <string name="search_by_full_name">Search by parent Full name</string>
+    <string name="growth_analysis">Growth Analysis</string>
+    <string name="baby_products">Baby Products</string>
+    <string name="feedback">Feedback</string>
+    <string name="search_for_parent_by_their_full_name">Search for parent by their Full name</string>
+    <string name="type_here_to_search">Type here to search</string>
+    <string name="edit_your_query">Edit your query...</string>
 
 </resources>

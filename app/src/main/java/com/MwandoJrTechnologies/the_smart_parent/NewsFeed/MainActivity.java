@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.MwandoJrTechnologies.the_smart_parent.Chats.SearchOtherParentsActivity;
 import com.MwandoJrTechnologies.the_smart_parent.ConnectionChecker;
 import com.MwandoJrTechnologies.the_smart_parent.FeedbackActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.EditProfileActivity;
@@ -76,12 +77,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         postsReference = FirebaseDatabase.getInstance().getReference().child("Posts");
-       // commentsReference = FirebaseDatabase.getInstance().getReference().child("Posts");
+       // commentsReference = FireBaseDatabase.getInstance().getReference().child("Posts");
 
         //inflate
         toolbar = findViewById(R.id.toolbar);
@@ -376,11 +378,16 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar snackBar3 = Snackbar.make(findViewById(android.R.id.content), "COMING SOON YOUR CHATS", Snackbar.LENGTH_SHORT);
                 snackBar3.show();
                 break;
+
+            case R.id.nav_search_other_parents_name:
+                SendUserToSearchOtherParentsActivity();
+                break;
+
             case R.id.nav_profile:
                 SendUserToProfileActivity();
                 break;
             case R.id.nav_growthAnalysis:
-                Snackbar snackBar4 = Snackbar.make(findViewById(android.R.id.content), "Monitor baby growth", Snackbar.LENGTH_SHORT);
+                Snackbar snackBar4 = Snackbar.make(findViewById(android.R.id.content), "COMING SOON !!!", Snackbar.LENGTH_SHORT);
                 snackBar4.show();
                 break;
             case R.id.nav_reminders:
@@ -496,13 +503,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(mainActivityIntent);
     }
     //opens the Feedback activity
-
     private void SendUserToFeedbackActivity() {
         Intent feedbackActivityIntent = new Intent(MainActivity.this, FeedbackActivity.class);
         finish();
         startActivity(feedbackActivityIntent);
     }
 
+    //opens search other parents activity
+    private void SendUserToSearchOtherParentsActivity() {
+
+        Intent searchOtherParentsActivityIntent = new Intent(MainActivity.this, SearchOtherParentsActivity.class);
+        finish();
+        startActivity(searchOtherParentsActivityIntent);
+    }
 
     private void SendUserToAlarmRemindersActivity() {
 

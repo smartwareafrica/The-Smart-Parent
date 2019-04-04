@@ -4,44 +4,48 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home_white_24dp"
-            android:title="Home" />
+            android:icon="@drawable/baseline_home_white_24"
+            android:title="@string/home" />
         <item
             android:id="@+id/nav_stories"
-            android:icon="@drawable/ic_story_white_24dp"
-            android:title="Stories" />
+            android:icon="@drawable/baseline_receipt_white_24"
+            android:title="@string/stories" />
         <item
             android:id="@+id/nav_chats"
             android:icon="@drawable/ic_chat_white_24dp"
-            android:title="Chats" />
+            android:title="@string/chats" />
+        <item
+            android:id="@+id/nav_search_other_parents_name"
+            android:icon="@drawable/outline_search_white_24"
+            android:title="@string/search_by_full_name" />
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_profile_white_24dp"
-            android:title="Profile" />
+            android:icon="@drawable/baseline_person_outline_white_24"
+            android:title="@string/profile" />
         <item
             android:id="@+id/nav_growthAnalysis"
-            android:icon="@drawable/ic_growth_analysis_white_24dp"
-            android:title="Growth Analysis" />
+            android:icon="@drawable/baseline_timeline_white_24"
+            android:title="@string/growth_analysis" />
         <item
             android:id="@+id/nav_reminders"
-            android:icon="@drawable/ic_reminders_white_24dp"
-            android:title="Reminders" />
+            android:icon="@drawable/baseline_notifications_active_white_24"
+            android:title="@string/reminders" />
         <item
             android:id="@+id/nav_baby_products"
-            android:icon="@drawable/ic_rate_white_24dp"
-            android:title="Baby Products" />
+            android:icon="@drawable/baseline_star_half_white_24"
+            android:title="@string/baby_products" />
     </group>
     <group
         android:id="@+id/group_menu"
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_feedback"
-            android:icon="@drawable/ic_feedback_white_24dp"
-            android:title="Feedback" />
+            android:icon="@drawable/baseline_feedback_white_24"
+            android:title="@string/feedback" />
     </group>
     <item
         android:id="@+id/nav_logout"
-        android:icon="@drawable/user_profile_24"
-        android:title="Logout"/>
+        android:icon="@drawable/baseline_phonelink_lock_white_24"
+        android:title="@string/logout"/>
 
 </menu>

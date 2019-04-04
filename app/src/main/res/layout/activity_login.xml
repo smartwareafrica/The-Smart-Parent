@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:background="#F8F5F5"
     tools:context="com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity">
 
 
@@ -27,7 +28,7 @@
             android:layout_height="200dp"
             android:layout_margin="20dp"
             android:contentDescription="@string/the_smart_parent_logo"
-            android:src="@drawable/project_logo" />
+            android:src="@drawable/splash_image" />
 
         <TextView
             android:id="@+id/text_view"
@@ -91,6 +92,7 @@
             android:text="@string/don_t_have_an_account_please_register_here"
             android:textAlignment="center"
             android:textSize="16sp"
+            android:textStyle="bold"
             android:textColor="@android:color/black" />
 
         <TextView

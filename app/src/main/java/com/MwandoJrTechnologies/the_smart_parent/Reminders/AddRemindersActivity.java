@@ -13,7 +13,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -81,12 +80,9 @@ public class AddRemindersActivity extends AppCompatActivity implements
     private static final long milWeek = 604800000L;
     private static final long milMonth = 2592000000L;
 
-    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            mVehicleHasChanged = true;
-            return false;
-        }
+    private View.OnTouchListener mTouchListener = (view, motionEvent) -> {
+        mVehicleHasChanged = true;
+        return false;
     };
 
     @SuppressLint("RestrictedApi")
@@ -94,6 +90,7 @@ public class AddRemindersActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_reminders);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         Intent intent = getIntent();
         mCurrentReminderUri = intent.getData();

@@ -14,6 +14,8 @@
         android:roundIcon="@drawable/launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Chats.SearchOtherParentsActivity"
+            android:parentActivityName=".NewsFeed.MainActivity"/>
         <activity android:name=".Profile.ProfileSettingsActivity" />
         <activity android:name=".FeedbackActivity" />
         <activity
@@ -28,7 +30,7 @@
         <activity android:name=".Profile.ResetPasswordActivity" />
         <activity android:name=".NewsFeed.CommentsActivity" />
         <activity android:name=".NewsFeed.ClickPostActivity" />
-        <activity android:name=".Profile.LoginActivity">
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,6 +39,7 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+        <activity android:name=".Profile.LoginActivity"/>
         <activity android:name=".Profile.RegisterActivity" />
         <activity android:name=".NewsFeed.MainActivity" />
         <activity

@@ -33,6 +33,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         mAuth = FirebaseAuth.getInstance();
 

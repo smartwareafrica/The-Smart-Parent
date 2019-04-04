@@ -54,6 +54,7 @@ public class CommentsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,9 +81,9 @@ public class CommentsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String userName = dataSnapshot.child("userName").getValue().toString();
+                    String fullName = dataSnapshot.child("fullName").getValue().toString();
 
-                    ValidateComment(userName);
+                    ValidateComment(fullName);
 
                     commentsInputText.setText("");
                 }
@@ -116,7 +117,7 @@ public class CommentsActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull CommentsViewHolder commentsViewHolder, int i, @NonNull Comments comments) {
                 comments = getItem(i);
 
-                commentsViewHolder.myUserName.setText(comments.getUsername());
+                commentsViewHolder.myFullName.setText(comments.getFullName());
                 commentsViewHolder.myComment.setText(comments.getComment());
                 commentsViewHolder.myDate.setText(comments.getDate());
                 commentsViewHolder.myTime.setText(comments.getTime());
@@ -143,7 +144,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     public static class CommentsViewHolder extends RecyclerView.ViewHolder{
 
-        TextView myUserName;
+        TextView myFullName;
         TextView myComment;
         TextView myDate;
         TextView myTime;
@@ -151,7 +152,7 @@ public class CommentsActivity extends AppCompatActivity {
         public CommentsViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            myUserName = itemView.findViewById(R.id.comment_user_name);
+            myFullName = itemView.findViewById(R.id.comment_user_full_name);
             myComment = itemView.findViewById(R.id.comment_text);
             myDate = itemView.findViewById(R.id.comment_date);
             myTime = itemView.findViewById(R.id.comment_time);
@@ -159,7 +160,7 @@ public class CommentsActivity extends AppCompatActivity {
         }
     }
 
-    private void ValidateComment(String userName) {
+    private void ValidateComment(String fullName) {
 
         String commentText = commentsInputText.getText().toString();
 
@@ -185,7 +186,7 @@ public class CommentsActivity extends AppCompatActivity {
             commentsMap.put("comment", commentText);
             commentsMap.put("date", saveCurrentDate);
             commentsMap.put("time", saveCurrentTime);
-            commentsMap.put("username", userName);
+            commentsMap.put("fullName", fullName);
 
             postsReference.child(randomKey).updateChildren(commentsMap)
                     .addOnCompleteListener(task -> {

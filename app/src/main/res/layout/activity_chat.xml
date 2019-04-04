@@ -30,27 +30,22 @@
             android:background="@android:color/background_light"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/send_image_file_button"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight=".20"
-                android:contentDescription="@string/attach_an_image"
-                android:src="@drawable/baseline_insert_photo_white_24dp" />
 
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_enter_email"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="0dp"
+                android:layout_marginStart="2dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".60">
+                android:layout_weight=".80">
 
                 <EditText
                     android:id="@+id/input_message"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/write_your_message_here"
+                    android:autofillHints="@string/write_your_message_here"
                     android:inputType="textMultiLine"
                     android:padding="17dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -60,8 +55,9 @@
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_weight=".20"
+                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
                 android:contentDescription="@string/attach_an_image"
-                android:src="@drawable/baseline_send_white_24dp" />
+                android:src="@drawable/baseline_send_black_36" />
 
         </LinearLayout>
     </RelativeLayout>

@@ -52,6 +52,8 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Edit profile");
@@ -237,6 +239,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
             final HashMap userMap = new HashMap();
+            userMap.put("uid", currentUserID);
             userMap.put("status", "Hey there, I am using this informative SMART PARENT App!!!");
             userMap.put("userName", username);
             userMap.put("fullName", fullName);

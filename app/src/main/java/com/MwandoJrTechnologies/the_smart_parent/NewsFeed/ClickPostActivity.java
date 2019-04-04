@@ -1,9 +1,9 @@
 package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +46,7 @@ public class ClickPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_click_post);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,12 +88,7 @@ public class ClickPostActivity extends AppCompatActivity {
                         deletePostButton.setVisibility(View.VISIBLE);
                     }
 
-                    editPostButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            EditCurrentPost(description);
-                        }
-                    });
+                    editPostButton.setOnClickListener(v -> EditCurrentPost(description));
 
                 }
             }
@@ -102,43 +98,33 @@ public class ClickPostActivity extends AppCompatActivity {
             }
         });
 
-        deletePostButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DeleteCurrentPost();
-            }
-        });
+        deletePostButton.setOnClickListener(v -> DeleteCurrentPost());
     }
 
     private void EditCurrentPost(String description) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(ClickPostActivity.this);
-        builder.setTitle("Edit Query");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View view=inflater.inflate(R.layout.alert_dialog_edit_post_title, null);
+        builder.setCustomTitle(view);
 
         final EditText inputField = new EditText(ClickPostActivity.this);
         inputField.setText(description);
+
         builder.setView(inputField);
+        builder.setCancelable(false);
 
         //create two buttons to update and cancel
-        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setPositiveButton("Update", (dialog, which) -> {
 
-                clickPostRef.child("description").setValue(inputField.getText().toString());
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Post Updated Successfully.", Snackbar.LENGTH_SHORT);
-                snackbar.show();
+            clickPostRef.child("description").setValue(inputField.getText().toString());
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Post Updated Successfully.", Snackbar.LENGTH_SHORT);
+            snackbar.show();
 
-            }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                dialog.cancel();
-
-            }
-        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
         Dialog dialog = builder.create();
         dialog.show();

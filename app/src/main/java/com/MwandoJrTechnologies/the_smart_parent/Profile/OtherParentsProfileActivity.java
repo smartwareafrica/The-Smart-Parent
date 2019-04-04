@@ -47,6 +47,7 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_parents_profile);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

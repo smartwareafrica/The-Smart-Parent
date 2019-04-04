@@ -67,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         mAuth = FirebaseAuth.getInstance();
         messageSenderID = mAuth.getCurrentUser().getUid();
@@ -242,7 +243,7 @@ public class ChatActivity extends AppCompatActivity {
         receiverProfileImage = findViewById(R.id.custom_profile_image);
 
         sendMessageButton = findViewById(R.id.send_message_button);
-        sendImageFileButton = findViewById(R.id.send_image_file_button);
+       // sendImageFileButton = findViewById(R.id.send_image_file_button);
         userMessageInput = findViewById(R.id.input_message);
 
         messageAdapter = new MessagesAdapter(messageList);

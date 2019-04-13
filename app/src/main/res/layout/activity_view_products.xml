@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ViewProductsActivity">
+
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messages_list_of_users"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#D7D8DF"
+        android:backgroundTint="@color/colorWhiteTransparent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+</LinearLayout>

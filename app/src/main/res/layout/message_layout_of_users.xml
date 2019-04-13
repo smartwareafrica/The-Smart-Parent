@@ -19,7 +19,7 @@
         android:layout_toEndOf="@+id/receiver_message_profile_image"
         android:background="@drawable/receiver_text_message_background"
         android:padding="10dp"
-        android:text="Receiver message"
+        android:text="@string/receivers_message"
         android:textColor="@android:color/background_light"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -33,7 +33,7 @@
         android:layout_alignParentTop="@+id/receiver_message_text_view"
         android:background="@drawable/sender_text_message_background"
         android:padding="10dp"
-        android:text="Sender message"
+        android:text="@string/senders_message"
         android:textColor="@android:color/background_light"
         android:textSize="14sp"
         android:textStyle="bold" />

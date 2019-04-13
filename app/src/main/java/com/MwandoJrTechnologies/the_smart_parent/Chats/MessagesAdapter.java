@@ -38,7 +38,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         public TextView receiverMessageText;
         public CircleImageView receiverProfileImage;
 
-        public MessageViewHolder(@NonNull View itemView) {
+        public MessageViewHolder(View itemView) {
             super(itemView);
 
             senderMessageText = itemView.findViewById(R.id.sender_message_text_view);
@@ -50,16 +50,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     @NonNull
     @Override
     public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View V = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                  .inflate(R.layout.message_layout_of_users, parent, false);
 
         mAuth = FirebaseAuth.getInstance();
 
-        return new MessageViewHolder(V);
+        return new MessageViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MessageViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
 
         //get senders ID
         String messageSenderID = mAuth.getCurrentUser().getUid();
@@ -67,7 +67,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
         //get ID of the receiver
         String fromUserID = messages.getFrom();
-        //noe get type of message whether text or image
+        //now get type of message whether text or image
         String fromMessageType = messages.getType();
 
 
@@ -76,9 +76,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         usersDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String image = dataSnapshot.child("profileImage").getValue().toString();
-                    Picasso.get().load(image).placeholder(R.drawable.profile_image_placeholder)
+
+                if (dataSnapshot.hasChild("profileImage")){
+
+                    String receiverImage = dataSnapshot.child("profileImage").getValue().toString();
+                    Picasso.get().load(receiverImage).placeholder(R.drawable.profile_image_placeholder)
                             .into(holder.receiverProfileImage);
                 }
             }
@@ -90,7 +92,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         });
 
         if (fromMessageType.equals("text")){
-            holder.receiverMessageText.setVisibility(View.INVISIBLE);
+            holder.receiverMessageText.setVisibility(View.VISIBLE);
             holder.receiverProfileImage.setVisibility(View.INVISIBLE);
 
                     //display the message to the sender and to the receiver
@@ -98,7 +100,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             if (fromUserID.equals(messageSenderID)) {
                 holder.senderMessageText.setBackgroundResource(R.drawable.sender_text_message_background);
                 holder.senderMessageText.setTextColor(Color.WHITE);
-                holder.senderMessageText.setGravity(Gravity.START);
+                holder.senderMessageText.setGravity(Gravity.LEFT);
                 holder.senderMessageText.setText(messages.getMessage());
 
                 //for receiver
@@ -110,7 +112,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
                 holder.receiverMessageText.setBackgroundResource(R.drawable.receiver_text_message_background);
                 holder.receiverMessageText.setTextColor(Color.WHITE);
-                holder.receiverMessageText.setGravity(Gravity.START);
+                holder.receiverMessageText.setGravity(Gravity.LEFT);
                 holder.receiverMessageText.setText(messages.getMessage());
             }
         }

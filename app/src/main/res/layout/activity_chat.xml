@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,57 +10,55 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <RelativeLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messages_list_of_users"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/my_linear_layout"
+        android:layout_below="@+id/toolbar"
+        android:background="#D7D8DF"
+        android:backgroundTint="@color/colorWhiteTransparent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/messages_list_of_users"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/my_linear_layout"
-            android:background="@android:color/darker_gray" />
+    </androidx.recyclerview.widget.RecyclerView>
 
-        <LinearLayout
-            android:id="@+id/my_linear_layout"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/my_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/background_light"
+        android:orientation="horizontal">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_enter_email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:background="@android:color/background_light"
-            android:orientation="horizontal">
+            android:layout_marginStart="2dp"
+            android:layout_weight=".80">
+
+            <EditText
+                android:id="@+id/input_message"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/write_your_message_here"
+                android:inputType="textMultiLine"
+                android:padding="17dp"
+                tools:ignore="Autofill" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/send_message_button"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight=".20"
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+            android:contentDescription="@string/attach_an_image"
+            android:src="@drawable/baseline_send_black_36" />
+
+    </LinearLayout>
 
 
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_enter_email"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="0dp"
-                android:layout_marginStart="2dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".80">
-
-                <EditText
-                    android:id="@+id/input_message"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/write_your_message_here"
-                    android:autofillHints="@string/write_your_message_here"
-                    android:inputType="textMultiLine"
-                    android:padding="17dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageButton
-                android:id="@+id/send_message_button"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight=".20"
-                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-                android:contentDescription="@string/attach_an_image"
-                android:src="@drawable/baseline_send_black_36" />
-
-        </LinearLayout>
-    </RelativeLayout>
-
-
-</LinearLayout>
+</RelativeLayout>

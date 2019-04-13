@@ -4,7 +4,7 @@ package com.MwandoJrTechnologies.the_smart_parent.Chats;
 //modal class to retrieve messages
 public class Messages {
 
-    public String data, time, type, message, from;
+    public String date, time, type, message, from;
 
     public Messages(){
         //empty default constructor
@@ -12,21 +12,23 @@ public class Messages {
 
     //generate constructor with parameters
 
-
-    public Messages(String data, String time, String type, String message, String from) {
-        this.data = data;
+    public Messages(String date, String time, String type, String message, String from) {
+        this.date = date;
         this.time = time;
         this.type = type;
         this.message = message;
         this.from = from;
     }
 
-    public String getData() {
-        return data;
+    //generate getter and setter
+
+
+    public String getDate() {
+        return date;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getTime() {

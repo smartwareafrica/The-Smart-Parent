@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F5F5"
     tools:context=".NewsFeed.WriteQueryActivity">
 
     <include
@@ -26,7 +27,7 @@
                 android:layout_height="200dp"
                 android:layout_margin="20dp"
                 android:contentDescription="@string/the_smart_parent_logo"
-                android:src="@drawable/project_logo" />
+                android:src="@drawable/splash_image" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_input_write_query"

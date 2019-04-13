@@ -14,8 +14,18 @@
         android:roundIcon="@drawable/launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Chats.SearchOtherParentsActivity"
-            android:parentActivityName=".NewsFeed.MainActivity"/>
+        <activity android:name=".BabyProducts.AddProductsActivity"></activity>
+        <activity android:name=".BabyProducts.RateBabyProductsActivity" />
+        <activity android:name=".BabyProducts.ViewProductsActivity" />
+        <activity
+            android:name=".GrowthAnalysis.GrowthAnalysisActivity"
+            android:parentActivityName=".NewsFeed.MainActivity" />
+        <activity
+            android:name=".Chats.AllChatMessagesActivity"
+            android:parentActivityName=".NewsFeed.MainActivity" />
+        <activity
+            android:name=".Chats.SearchOtherParentsActivity"
+            android:parentActivityName=".NewsFeed.MainActivity" />
         <activity android:name=".Profile.ProfileSettingsActivity" />
         <activity android:name=".FeedbackActivity" />
         <activity
@@ -39,7 +49,7 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".Profile.LoginActivity"/>
+        <activity android:name=".Profile.LoginActivity" />
         <activity android:name=".Profile.RegisterActivity" />
         <activity android:name=".NewsFeed.MainActivity" />
         <activity

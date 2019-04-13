@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -23,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.Nullable;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -31,6 +30,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -43,7 +43,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChatActivity extends AppCompatActivity {
 
     private ImageButton sendMessageButton;
-    private ImageButton sendImageFileButton;
     private EditText userMessageInput;
     private RecyclerView userMessagesList;
     private final List<Messages> messageList = new ArrayList<>();
@@ -76,6 +75,7 @@ public class ChatActivity extends AppCompatActivity {
 
         //receive user id and name from other parents profile
         messageReceiverID = getIntent().getExtras().get("visit_user_id").toString();
+        //messageReceiverName = getIntent().getExtras().get("userName").toString();
 
         InitializeFields();
 
@@ -98,6 +98,7 @@ public class ChatActivity extends AppCompatActivity {
                     if (dataSnapshot.exists()){
                         Messages messages = dataSnapshot.getValue(Messages.class);
                         messageList.add(messages);
+
                         messageAdapter.notifyDataSetChanged(); //whenever new message is added it will be displayed
                     }
                 }
@@ -175,25 +176,22 @@ public class ChatActivity extends AppCompatActivity {
             messageBodyDetails.put(message_sender_reference + "/" + message_push_id, messageTextBody);
             messageBodyDetails.put(message_receiver_reference + "/" + message_push_id, messageTextBody);
 
-            rootReference.updateChildren(messageBodyDetails).addOnCompleteListener(new OnCompleteListener() {
-                @Override
-                public void onComplete(@NonNull Task task) {
-                    if (task.isSuccessful()){
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Message sent successfully", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
+            rootReference.updateChildren(messageBodyDetails).addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Message sent successfully", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
 
-                        userMessageInput.setText("");
+                    userMessageInput.setText("");
 
-                    }else {
-                        String message = task.getException().toString();
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error: " + message, Snackbar.LENGTH_SHORT);
-                        snackbar.show();
+                }else {
+                    String message = task.getException().toString();
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error: " + message, Snackbar.LENGTH_SHORT);
+                    snackbar.show();
 
-                        userMessageInput.setText("");
-
-                    }
+                    userMessageInput.setText("");
 
                 }
+
             });
         }
 
@@ -223,6 +221,8 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     //initialize the above variables
@@ -233,7 +233,7 @@ public class ChatActivity extends AppCompatActivity {
 
         //connect chat custom bar to chat activity
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowCustomEnabled(true);
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View action_bar_view = layoutInflater.inflate(R.layout.chat_custom_toolbar, null);
@@ -243,8 +243,8 @@ public class ChatActivity extends AppCompatActivity {
         receiverProfileImage = findViewById(R.id.custom_profile_image);
 
         sendMessageButton = findViewById(R.id.send_message_button);
-       // sendImageFileButton = findViewById(R.id.send_image_file_button);
         userMessageInput = findViewById(R.id.input_message);
+
 
         messageAdapter = new MessagesAdapter(messageList);
         userMessagesList = findViewById(R.id.messages_list_of_users);
@@ -252,7 +252,54 @@ public class ChatActivity extends AppCompatActivity {
         userMessagesList.setHasFixedSize(true);
         userMessagesList.setLayoutManager(linearLayoutManager);
         userMessagesList.setAdapter(messageAdapter);
+
     }
+
+
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        rootReference.child("Messages").child(messageSenderID).child(messageReceiverID)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        Messages messages = dataSnapshot.getValue(Messages.class);
+
+                        messageList.add(messages);
+
+
+                        messageAdapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+    }
+
 
 
     //activate back button

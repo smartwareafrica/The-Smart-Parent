@@ -120,5 +120,13 @@
     <string name="search_for_parent_by_their_full_name">Search for parent by their Full name</string>
     <string name="type_here_to_search">Type here to search</string>
     <string name="edit_your_query">Edit your query...</string>
+    <string name="receivers_message">Receiver\'s message</string>
+    <string name="senders_message">Sender\'s message</string>
+    <string name="current_date">Current Date</string>
+    <string name="age">Age</string>
+    <string name="this_module_is_still_under_development">This module is still under development and testing. Suggestions highly appreciated through feedback</string>
+    <string name="age2">Age :</string>
+    <string name="please_select">Please select </string>
+    <string name="date_of_birth_2">Date of Birth: </string>
 
 </resources>

@@ -12,9 +12,12 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ViewProductsActivity;
+import com.MwandoJrTechnologies.the_smart_parent.Chats.AllChatMessagesActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Chats.SearchOtherParentsActivity;
 import com.MwandoJrTechnologies.the_smart_parent.ConnectionChecker;
 import com.MwandoJrTechnologies.the_smart_parent.FeedbackActivity;
+import com.MwandoJrTechnologies.the_smart_parent.GrowthAnalysis.GrowthAnalysisActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.EditProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.OtherParentsProfileActivity;
@@ -47,10 +50,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
 public class MainActivity extends AppCompatActivity {
 
-    //initializing
+    //initializing fields
     private DrawerLayout mDrawer;
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
@@ -72,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
  //   private DatabaseReference commentsReference;
     String currentUserID;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         postsReference = FirebaseDatabase.getInstance().getReference().child("Posts");
-       // commentsReference = FireBaseDatabase.getInstance().getReference().child("Posts");
 
         //inflate
         toolbar = findViewById(R.id.toolbar);
@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
         postList = findViewById(R.id.all_users_query_list);
         //give it a fixed size
         postList.setHasFixedSize(true);
-
 
         fab = findViewById(R.id.fab);
         newsFeedProgressBar = findViewById(R.id.news_feed_progress_bar);
@@ -160,8 +159,6 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "You need to update your profile", Snackbar.LENGTH_LONG);
                         snackBar.show();
-
-
                     }
                 }
             }
@@ -184,9 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
         newsFeedProgressBar.setVisibility(View.INVISIBLE);
 
-
     }
-
 
     //checking internet state
     private void checkConnectionStatus() {
@@ -199,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
             snackbar.show();
         }
     }
-
 
     private void DisplayAllUsersQueries() {
 
@@ -231,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
                         viewHolder.postTime.setText(posts.getTime());
                         viewHolder.postDate.setText(posts.getDate());
                         viewHolder.postDescription.setText(posts.getDescription());
-
 
                         //view the specific users profile
                         viewHolder.profileImg.setOnClickListener(v -> {
@@ -295,15 +288,12 @@ public class MainActivity extends AppCompatActivity {
         TextView postTime;
         TextView postDate;
         TextView postDescription;
-
         //for comments
         TextView commentOnPost;
         TextView postResponses;
-
         //variable for number of comments
         int countComments;
         DatabaseReference commentsRef;
-
 
         public PostsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -319,7 +309,6 @@ public class MainActivity extends AppCompatActivity {
 
             commentsRef = FirebaseDatabase.getInstance().getReference().child("Posts");
         }
-
 
         //counting number of comments
         public void setCommentsCounterStatus(final String PostKey){
@@ -343,7 +332,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
 
     //check user authentication
@@ -359,7 +347,6 @@ public class MainActivity extends AppCompatActivity {
             // if user has edited and provided profile details
             CheckUserExistence();
         }
-
     }
 
     // when user selects navigation drawer items
@@ -374,9 +361,7 @@ public class MainActivity extends AppCompatActivity {
                 snackBar2.show();
                 break;
             case R.id.nav_chats:
-                // SendUserToChatActivity();
-                Snackbar snackBar3 = Snackbar.make(findViewById(android.R.id.content), "COMING SOON YOUR CHATS", Snackbar.LENGTH_SHORT);
-                snackBar3.show();
+                 SendUserToAllChatMessagesActivity();
                 break;
 
             case R.id.nav_search_other_parents_name:
@@ -387,16 +372,14 @@ public class MainActivity extends AppCompatActivity {
                 SendUserToProfileActivity();
                 break;
             case R.id.nav_growthAnalysis:
-                Snackbar snackBar4 = Snackbar.make(findViewById(android.R.id.content), "COMING SOON !!!", Snackbar.LENGTH_SHORT);
-                snackBar4.show();
+               SendUserToGrowthAnalysisActivity();
                 break;
             case R.id.nav_reminders:
                 SendUserToAlarmRemindersActivity();
 
                 break;
             case R.id.nav_baby_products:
-                Snackbar snackBar6 = Snackbar.make(findViewById(android.R.id.content), "Rate baby products", Snackbar.LENGTH_SHORT);
-                snackBar6.show();
+                SendUserToViewProductsActivity();
                 break;
             case R.id.nav_feedback:
                 SendUserToFeedbackActivity();
@@ -509,12 +492,28 @@ public class MainActivity extends AppCompatActivity {
         startActivity(feedbackActivityIntent);
     }
 
+    //opens all chat messages layout
+    private void SendUserToAllChatMessagesActivity() {
+
+        Intent allChatMessagesActivityIntent = new Intent(MainActivity.this, AllChatMessagesActivity.class);
+        finish();
+        startActivity(allChatMessagesActivityIntent);
+    }
+
     //opens search other parents activity
     private void SendUserToSearchOtherParentsActivity() {
 
         Intent searchOtherParentsActivityIntent = new Intent(MainActivity.this, SearchOtherParentsActivity.class);
         finish();
         startActivity(searchOtherParentsActivityIntent);
+    }
+
+    private void SendUserToGrowthAnalysisActivity() {
+
+        Intent growthAnalysisActivityIntent = new Intent(MainActivity.this, GrowthAnalysisActivity.class);
+        finish();
+        startActivity(growthAnalysisActivityIntent);
+
     }
 
     private void SendUserToAlarmRemindersActivity() {
@@ -524,4 +523,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(remindersActivityIntent);
     }
 
+    //open view products activity
+    private void SendUserToViewProductsActivity() {
+        Intent viewProductsActivityIntent = new Intent(MainActivity.this, ViewProductsActivity.class);
+        finish();
+        startActivity(viewProductsActivityIntent);
+    }
 }

@@ -13,7 +13,6 @@ import androidx.appcompat.widget.Toolbar;
 
 public class RateBabyProductsActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -14,7 +14,8 @@
         android:roundIcon="@drawable/launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BabyProducts.AddProductsActivity"></activity>
+        <activity android:name=".BabyProducts.AddProductsActivity"
+            android:parentActivityName=".BabyProducts.ViewProductsActivity"/>
         <activity android:name=".BabyProducts.RateBabyProductsActivity" />
         <activity android:name=".BabyProducts.ViewProductsActivity" />
         <activity

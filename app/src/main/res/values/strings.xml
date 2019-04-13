@@ -128,5 +128,6 @@
     <string name="age2">Age :</string>
     <string name="please_select">Please select </string>
     <string name="date_of_birth_2">Date of Birth: </string>
+    <string name="rate">Rate products</string>
 
 </resources>

@@ -13,20 +13,18 @@ import androidx.appcompat.widget.Toolbar;
 
 public class AddProductsActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_products);
-
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
-        getSupportActionBar().setTitle("Rate the products");
+        getSupportActionBar().setTitle("Add Product");
     }
 
 

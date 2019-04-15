@@ -10,10 +10,11 @@
         layout="@layout/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@+id/toolbar"
-        android:id="@+id/messages_list_of_users"
+        android:id="@+id/rate_products_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/button_go_to_rate_products"
+        android:layout_below="@+id/toolbar"
         android:background="#D7D8DF"
         android:backgroundTint="@color/colorWhiteTransparent">
 

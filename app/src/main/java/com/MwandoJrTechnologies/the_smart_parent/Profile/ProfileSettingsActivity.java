@@ -1,11 +1,13 @@
 package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -27,7 +29,10 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -59,6 +64,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     private String downloadImageUrl;
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,11 +95,44 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
 
+
+        //initialize calendar
+        Calendar myCalendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
+
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, month);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+
+            String myFormat = "dd/MM/yyyy"; //In which you need put here
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
+
+            profileSettingsDateOfBirth.setText(sdf.format(myCalendar.getTime()));
+
+        };
+
+        profileSettingsDateOfBirth.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                new DatePickerDialog(ProfileSettingsActivity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+
+
+            return true;
+        });
+
         profileSettingsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    String myProfileImage = Objects.requireNonNull(dataSnapshot.child("profileImage").getValue()).toString();
+                if (dataSnapshot.exists()) {
+
+                    if (dataSnapshot.hasChild("profileImage")) {
+                        String myProfileImage = Objects.requireNonNull(dataSnapshot.child("profileImage").getValue()).toString();
+                        Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(profileSettingImage);
+                    }
+
                     String myStatus = Objects.requireNonNull(dataSnapshot.child("status").getValue()).toString();
                     String myUserName = Objects.requireNonNull(dataSnapshot.child("userName").getValue()).toString();
                     String myFullName = Objects.requireNonNull(dataSnapshot.child("fullName").getValue()).toString();
@@ -102,7 +141,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                     String myGender = Objects.requireNonNull(dataSnapshot.child("gender").getValue()).toString();
                     String myNumberOfChildren = Objects.requireNonNull(dataSnapshot.child("numberOfChildren").getValue()).toString();
 
-                    Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(profileSettingImage);
+
                     profileSettingsStatus.setText(myStatus);
                     profileSettingsUserName.setText(myUserName);
                     profileSettingsFullName.setText(myFullName);
@@ -124,8 +163,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         profileSettingImage.setOnClickListener(v -> {
 //opening gallery to choose image
             Intent galleryIntent = new Intent();
-            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
             galleryIntent.setType("image/*");
+            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(galleryIntent, galleryPick);
         });
     }
@@ -211,40 +250,56 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     }
 
 
-
     private void ValidateAccountsInformation() {
 
-        String username = profileSettingsUserName.getText().toString();
-        String status =  profileSettingsStatus.getText().toString();
-        String fullName =  profileSettingsFullName.getText().toString();
+        final String username = profileSettingsUserName.getText().toString();
+        String status = profileSettingsStatus.getText().toString();
+        String fullName = profileSettingsFullName.getText().toString();
         String phoneNumber = profileSettingsPhoneNumber.getText().toString();
         String dob = profileSettingsDateOfBirth.getText().toString();
         String gender = profileSettingsGender.getText().toString();
         String numberOfChildren = profileSettingsNumberOfChildren.getText().toString();
 
-        if (TextUtils.isEmpty(username)){
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please write your Username", Snackbar.LENGTH_LONG);
-            snackbar.show();
+        if (username.isEmpty()) {
+            profileSettingsUserName.setError("Please write your Username");
+            profileSettingsUserName.requestFocus();
+            progressDialog.dismiss();
         }
-        else if (TextUtils.isEmpty(status)){
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please update your status", Snackbar.LENGTH_LONG);
-            snackbar.show();
-        } else if (TextUtils.isEmpty(fullName)){
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please twrite your full name", Snackbar.LENGTH_LONG);
-            snackbar.show();
-        } else if (TextUtils.isEmpty(phoneNumber)){
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please type your phone number", Snackbar.LENGTH_LONG);
-            snackbar.show();
-        } else if (TextUtils.isEmpty(dob)){
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter your date of birth DDMMYYYY", Snackbar.LENGTH_LONG);
-            snackbar.show();
-        } else if (TextUtils.isEmpty(gender)){
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter your gender (MALE/FEMALE)", Snackbar.LENGTH_LONG);
-            snackbar.show();
-        } else if (TextUtils.isEmpty(numberOfChildren)){
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please Enter number of children you have if none enter 0", Snackbar.LENGTH_LONG);
-            snackbar.show();
-        }else {
+        if (status.isEmpty()) {
+            profileSettingsStatus.setError("Please update your status");
+            profileSettingsStatus.requestFocus();
+            progressDialog.dismiss();
+        }
+
+        if (fullName.isEmpty()) {
+            profileSettingsFullName.setError("Please write your full name");
+            profileSettingsFullName.requestFocus();
+            progressDialog.dismiss();
+        }
+        if (phoneNumber.isEmpty()) {
+            profileSettingsPhoneNumber.setError("Please enter your phone number");
+            progressDialog.dismiss();
+        }
+
+        if (phoneNumber.length() < 10 || phoneNumber.length() > 13) {
+
+            profileSettingsPhoneNumber.setError("Enter a valid phone number");
+            progressDialog.dismiss();
+        }
+        if (dob.isEmpty()) {
+            profileSettingsDateOfBirth.setError("Please enter your date of birth DDMMYYYY");
+            progressDialog.dismiss();
+        }
+        if (gender.isEmpty()) {
+            profileSettingsGender.setError("Please enter your gender (MALE/FEMALE)");
+            profileSettingsGender.requestFocus();
+            progressDialog.dismiss();
+        }
+        if (fullName.isEmpty()) {
+            profileSettingsNumberOfChildren.setError("Please Enter number of children you have if none enter 0");
+            profileSettingsNumberOfChildren.requestFocus();
+            progressDialog.dismiss();
+        } else {
 
             //show progress dialog
             progressDialog.setTitle("Profile Details");
@@ -252,40 +307,37 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             progressDialog.setCanceledOnTouchOutside(true);
             progressDialog.show();
 
-            UpdateAccountInformation(username, status, fullName, phoneNumber, dob, gender, numberOfChildren);
+            HashMap userMap = new HashMap();
+            userMap.put("status", status);
+            userMap.put("userName", username);
+            userMap.put("fullName", fullName);
+            userMap.put("phoneNumber", phoneNumber);
+            userMap.put("dob", dob);
+            userMap.put("gender", gender);
+            userMap.put("numberOfChildren", numberOfChildren);
+            profileSettingsReference.updateChildren(userMap).addOnCompleteListener(task -> {
+
+                if (task.isSuccessful()) {
+
+                    SendUserToMainActivity();
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Account Updated Successfully", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    progressDialog.dismiss();
+
+                } else {
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred,Please try again", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    progressDialog.dismiss();
+
+                }
+
+            });
+
+
         }
 
     }
 
-    private void UpdateAccountInformation(String username, String status, String fullName, String phoneNumber, String dob, String gender, String numberOfChildren) {
-
-        HashMap userMap = new HashMap();
-        userMap.put("status", status);
-        userMap.put("userName", username);
-        userMap.put("fullName", fullName);
-        userMap.put("phoneNumber", phoneNumber);
-        userMap.put("dob", dob);
-        userMap.put("gender", gender);
-        userMap.put("numberOfChildren", numberOfChildren);
-        profileSettingsReference.updateChildren(userMap).addOnCompleteListener(task -> {
-
-            if (task.isSuccessful()){
-
-                SendUserToMainActivity();
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Account Updated Successfully", Snackbar.LENGTH_LONG);
-                snackbar.show();
-                progressDialog.dismiss();
-
-            }else {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred,Please try again", Snackbar.LENGTH_LONG);
-                snackbar.show();
-                progressDialog.dismiss();
-
-            }
-
-        });
-
-    }
 
 
     //activate back button
@@ -303,7 +355,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     //open main activity
     private void SendUserToMainActivity() {
         Intent mainActivityIntent = new Intent(ProfileSettingsActivity.this, MainActivity.class);
-        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainActivityIntent);
         finish();
     }

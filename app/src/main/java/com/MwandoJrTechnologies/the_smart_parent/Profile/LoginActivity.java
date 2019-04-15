@@ -3,7 +3,6 @@ package com.MwandoJrTechnologies.the_smart_parent.Profile;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,16 +15,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -46,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
     private GoogleApiClient mGoogleSignInClient;
     private static final String TAG = "LoginActivity";
-
 
 
     @Override
@@ -142,24 +136,21 @@ public class LoginActivity extends AppCompatActivity {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
 
-                            Log.d(TAG, "signInWithCredential:success");
-                            SendUserToMainActivity();
-                            progressDialog.dismiss();
+                        Log.d(TAG, "signInWithCredential:success");
+                        SendUserToMainActivity();
+                        progressDialog.dismiss();
 
-                        } else {
+                    } else {
 
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            String message = task.getException().toString();
-                            SendUserToLoginActivity();
-                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error Occurred: " + message, Snackbar.LENGTH_LONG);
-                            snackbar.show();
-                            progressDialog.dismiss();
-                        }
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        String message = task.getException().toString();
+                        SendUserToLoginActivity();
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error Occurred: " + message, Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        progressDialog.dismiss();
                     }
                 });
     }
@@ -181,17 +172,33 @@ public class LoginActivity extends AppCompatActivity {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
-        //checking if email and password is empty
-        if (TextUtils.isEmpty(email)) {
-            //email is empty
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter email", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-        } else if (TextUtils.isEmpty(password)) {
-            //password is empty
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter password", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-        } else {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
+        //checking if email and password is empty
+        if (email.isEmpty()) {
+
+            editTextEmail.setError("Please enter your email");
+            return;
+        }
+        if (!email.matches((emailPattern))) {
+
+            editTextEmail.setError("Please input a valid Email");
+            return;
+        }
+        if (password.isEmpty()) {
+            editTextPassword.setError("Please enter your password");
+            return;
+        }
+        if (password.length() < 8) {
+
+            editTextPassword.setError("Minimum password length is 8 characters");
+            return;
+        }
+        if (password.length() > 16) {
+
+            editTextPassword.setError("Maximum password length is 16 characters");
+
+        } else {
             //validations okay we show a progress bar
             progressDialog.setTitle("Logging in User...");
             progressDialog.setMessage("Logging in, Please wait...");
@@ -217,16 +224,16 @@ public class LoginActivity extends AppCompatActivity {
 
 
     //email verification checker
-    private void VerifyEmailAddress(){
+    private void VerifyEmailAddress() {
 
-        FirebaseUser user =  mAuth.getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
         emailAddressChecker = user.isEmailVerified();
 
-        if (emailAddressChecker){
+        if (emailAddressChecker) {
 
             SendUserToMainActivity();
 
-        }else {
+        } else {
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please verify your email address first", Snackbar.LENGTH_LONG);
             snackbar.show();
             mAuth.signOut();
@@ -256,6 +263,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(loginIntent);
 
     }
+
     private void SendUserToResetPasswordActivity() {
         Intent resetPasswordIntent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
         resetPasswordIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

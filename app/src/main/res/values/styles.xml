@@ -12,8 +12,7 @@
         <item name="android:windowBackground">@drawable/background</item>
     </style>
 
-    <style name="MyProgressDialog" parent="Theme.AppCompat.Dialog">
-    </style>
+    <style name="MyProgressDialog" parent="Theme.AppCompat.Dialog"></style>
 
     <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
         <item name="android:textColor">#000000</item>
@@ -22,8 +21,15 @@
         <item name="android:windowBackground">@drawable/bg_white_rounded</item>
         <item name="android:typeface">normal</item>
         <item name="android:textSize">20sp</item>
-
-
     </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

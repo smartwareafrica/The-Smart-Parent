@@ -73,8 +73,12 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.exists()) try {
-                    String myProfileImage = Objects.requireNonNull(dataSnapshot.child("profileImage").getValue()).toString();
+                if (dataSnapshot.exists()) {
+                    if (dataSnapshot.hasChild("profileImage")) {
+                        String myProfileImage = Objects.requireNonNull(dataSnapshot.child("profileImage").getValue()).toString();
+                        Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(userProfilePicture);
+                    }
+
                     String myStatus = dataSnapshot.child("status").getValue().toString();
                     String myUserName = dataSnapshot.child("userName").getValue().toString();
                     String myFullName = dataSnapshot.child("fullName").getValue().toString();
@@ -83,7 +87,6 @@ public class ProfileActivity extends AppCompatActivity {
                     String myGender = dataSnapshot.child("gender").getValue().toString();
                     String myNumberOfChildren = dataSnapshot.child("numberOfChildren").getValue().toString();
 
-                    Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(userProfilePicture);
                     userStatus.setText(myStatus);
                     userName.setText("@" + myUserName);
                     fullName.setText("NAME: " + myFullName);
@@ -91,7 +94,7 @@ public class ProfileActivity extends AppCompatActivity {
                     dateOfBirth.setText("DOB: " + myDateOfBirth);
                     userGender.setText("Gender: " + myGender);
                     numberOfChildren.setText("Number of children: " + myNumberOfChildren);
-                }catch (RuntimeException e){
+                } else {
                     Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Please update your profile", Snackbar.LENGTH_INDEFINITE);
                     snackBar.show();
                     SendUserToProfileSettingsActivity();

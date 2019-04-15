@@ -11,11 +11,15 @@
         android:allowBackup="true"
         android:icon="@drawable/project_launcher_logo"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/launcher_icon"
+        android:roundIcon="@drawable/project_launcher_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BabyProducts.AddProductsActivity"
-            android:parentActivityName=".BabyProducts.ViewProductsActivity"/>
+        <activity android:name=".Stories.SingleStoryActivity"></activity>
+        <activity android:name=".Stories.CreateStoryActivity" />
+        <activity android:name=".Stories.StoriesActivity" />
+        <activity
+            android:name=".BabyProducts.AddProductsActivity"
+            android:parentActivityName=".BabyProducts.ViewProductsActivity" />
         <activity android:name=".BabyProducts.RateBabyProductsActivity" />
         <activity android:name=".BabyProducts.ViewProductsActivity" />
         <activity

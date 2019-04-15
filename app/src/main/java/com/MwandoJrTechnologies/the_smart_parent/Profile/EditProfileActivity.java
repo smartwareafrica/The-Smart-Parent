@@ -1,9 +1,12 @@
 package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -25,7 +28,10 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +45,8 @@ public class EditProfileActivity extends AppCompatActivity {
     String currentUserID;
     private EditText editTextName;
     private EditText editTextUsername;
+    private EditText editTextDOB;
+    private EditText editTextPhoneNumber;
     private CircleImageView profileImage;
     private Button buttonSave;
     private Toolbar toolbar;
@@ -48,6 +56,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private String downloadImageUrl;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,14 +81,38 @@ public class EditProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }
         profileImage = findViewById(R.id.profile_image_view);
-
         editTextUsername = findViewById(R.id.edit_text_username);
         editTextName = findViewById(R.id.edit_text_name);
-
+        editTextDOB = findViewById(R.id.edit_text_DOB);
+        editTextPhoneNumber = findViewById(R.id.edit_text_phone_number);
         buttonSave = findViewById(R.id.buttonSave);
 
         progressDialog = new ProgressDialog(this);
 
+            //initialize calendar
+        Calendar myCalendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
+
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, month);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+
+            String myFormat = "dd/MM/yyyy"; //In which you need put here
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
+
+            editTextDOB.setText(sdf.format(myCalendar.getTime()));
+
+        };
+
+        editTextDOB.setOnTouchListener((v, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                new DatePickerDialog(EditProfileActivity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();}
+
+                        return true;
+        });
 
         buttonSave.setOnClickListener(v -> {
 
@@ -89,13 +122,15 @@ public class EditProfileActivity extends AppCompatActivity {
             progressDialog.setCanceledOnTouchOutside(true);
             progressDialog.show();
 
+            if (!checkIfUserNameExists()) {
+                editTextUsername.setError("Username Taken, please choose a different username");
+                editTextUsername.requestFocus();
+                progressDialog.dismiss();
 
-            checkIfUserNameExists();
+            } else {
+                saveUserInformation();
+            }
 
-            saveUserInformation();
-            //start main activity
-            finish();
-            SendUserToMainActivity();
         });
         profileImage.setOnClickListener(v -> {
             //opening gallery to choose image
@@ -131,6 +166,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
     }
+
 
     //adding a profile image to fireBase storage
     //method for picking the chosen image from my gallery
@@ -184,8 +220,6 @@ public class EditProfileActivity extends AppCompatActivity {
                             //get the link
                             downloadImageUrl = task.getResult().toString();
                             addLinkToFireBaseDatabase();
-                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Good", Snackbar.LENGTH_SHORT);
-                            snackbar.show();
                             progressDialog.dismiss();
                         }
                     });
@@ -203,7 +237,7 @@ public class EditProfileActivity extends AppCompatActivity {
             } else {
                 progressDialog.dismiss();
                 String message = task.getException().getMessage();
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error occurred  " + message, Snackbar.LENGTH_SHORT);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error occurred  " + message, Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -221,16 +255,32 @@ public class EditProfileActivity extends AppCompatActivity {
     private void saveUserInformation() {
         final String username = editTextUsername.getText().toString().trim();
         String fullName = editTextName.getText().toString().trim();
+        String dob = editTextDOB.getText().toString();
+        String phoneNumber = editTextPhoneNumber.getText().toString();
 
         //creating a username and checking if any other exists
         if (username.isEmpty()) {
             editTextUsername.setError("You must select a username");
             editTextUsername.requestFocus();
+            progressDialog.dismiss();
+
         }
         if (fullName.isEmpty()) {
             editTextName.setError("Name is required");
             editTextName.requestFocus();
-        } else {
+            progressDialog.dismiss();
+        }
+        if (phoneNumber.isEmpty()){
+            editTextPhoneNumber.setError("Please enter your phone number");
+            progressDialog.dismiss();
+        }
+
+        if (phoneNumber.length() < 10 || phoneNumber.length()> 13) {
+
+            editTextPhoneNumber.setError("Enter a valid phone number");
+            progressDialog.dismiss();
+        }
+        else {
 
             progressDialog.setTitle("Uploading Details...");
             progressDialog.setMessage("Saving your information, Please wait...");
@@ -243,10 +293,10 @@ public class EditProfileActivity extends AppCompatActivity {
             userMap.put("status", "Hey there, I am using this informative SMART PARENT App!!!");
             userMap.put("userName", username);
             userMap.put("fullName", fullName);
-            userMap.put("phoneNumber", "none");
-            userMap.put("dob", "none");
-            userMap.put("gender", "none");
-            userMap.put("numberOfChildren", "none");
+            userMap.put("phoneNumber", phoneNumber);
+            userMap.put("dob", dob );
+            userMap.put("gender", "Input");
+            userMap.put("numberOfChildren", "Insert");
             usersReference.updateChildren(userMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     SendUserToMainActivity();
@@ -261,6 +311,9 @@ public class EditProfileActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
             });
+            //start main activity
+            finish();
+            SendUserToMainActivity();
         }
     }
 
@@ -286,9 +339,9 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.getChildrenCount() > 0) {
+
                     //should stop further execution
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Username Taken. Please choose a different Username", Snackbar.LENGTH_SHORT);
-                    snackbar.show();
+
                 }
             }
 

@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     android:background="#F8F5F5"
+    android:fillViewport="true"
     tools:context="com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity">
-
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -70,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="@string/please_input_your_password"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890._-"
                 android:hint="@string/please_input_your_password"
                 android:inputType="textPassword"
                 tools:targetApi="o" />
@@ -79,9 +79,9 @@
             android:id="@+id/button_sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
             android:backgroundTint="#0F6A9C"
-            android:text="@string/login" />
+            android:text="@string/login"
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/text_view_register"
@@ -91,9 +91,9 @@
             android:layout_marginBottom="10dp"
             android:text="@string/don_t_have_an_account_please_register_here"
             android:textAlignment="center"
+            android:textColor="@android:color/black"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black" />
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"

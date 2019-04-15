@@ -82,10 +82,13 @@ public class ClickPostActivity extends AppCompatActivity {
                     postDescription.setText(description);
 
                     if (currentUserID.equals(databaseUserID)){
-
                         //now make buttons visible
                         editPostButton.setVisibility(View.VISIBLE);
                         deletePostButton.setVisibility(View.VISIBLE);
+                    }else if (currentUserID.equals("K7Ng2Q3dXiQIGo56hjfsvkAvFgB2")){
+                        editPostButton.setVisibility(View.VISIBLE);
+                        deletePostButton.setVisibility(View.VISIBLE);
+
                     }
 
                     editPostButton.setOnClickListener(v -> EditCurrentPost(description));

@@ -58,13 +58,19 @@ public class AllChatMessagesActivity extends AppCompatActivity {
 
 
         allChatsList = findViewById(R.id.all_chats_layout);
-        allChatsList.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AllChatMessagesActivity.this);
+
+        allChatsList.setLayoutManager(linearLayoutManager);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
 
         FirebaseRecyclerOptions<FindParents> options = new FirebaseRecyclerOptions.Builder<FindParents>()
                 .setQuery(chatsReference, FindParents.class)
@@ -120,8 +126,8 @@ public class AllChatMessagesActivity extends AppCompatActivity {
 
                 };
 
+        allChatsList.setLayoutManager(linearLayoutManager);
         allChatsList.setAdapter(adapter);
-        allChatsList.setLayoutManager(new LinearLayoutManager(this));
         adapter.startListening();
     }
 

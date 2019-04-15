@@ -24,6 +24,7 @@ import com.MwandoJrTechnologies.the_smart_parent.Profile.OtherParentsProfileActi
 import com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.MwandoJrTechnologies.the_smart_parent.Reminders.RemindersActivity;
+import com.MwandoJrTechnologies.the_smart_parent.Stories.StoriesActivity;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CircleImageView navProfileImage;
     private TextView navProfileName;
-    private TextView navUsername;
+    private TextView navEmail;
     private ImageButton addNewQueryButton;
     private FloatingActionButton fab;
     private ProgressBar newsFeedProgressBar;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         navProfileImage = navView.findViewById(R.id.nav_profile_image);
         navProfileName = navView.findViewById(R.id.nav_user_full_name);
-        navUsername = navView.findViewById(R.id.nav_username);
+        navEmail = navView.findViewById(R.id.nav_email);
 
         fab.setOnClickListener(v -> SendUserToWriteQueryActivity());
 
@@ -141,12 +142,14 @@ public class MainActivity extends AppCompatActivity {
                         //code to display
                         navProfileName.setText(fullName);
                     }
-                    if (dataSnapshot.hasChild("userName")) {
-                        //only display name if it exists
-                        String userName = dataSnapshot.child("userName").getValue().toString();
-                        //code to display
-                        navUsername.setText(userName);
-                    }
+
+
+                    // set email in username field
+                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    String email = firebaseUser.getEmail();
+                    navEmail.setText(email);
+
+
                     if (dataSnapshot.hasChild("profileImage")) {
                         //display only if there is an image
                         String image = dataSnapshot.child("profileImage").getValue().toString();
@@ -219,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
                         final String PostKey = getRef(position).getKey();
 
                         final String userID = posts.getUid();
+
 
                         Picasso.get().load(posts.getProfileImage()).placeholder(R.drawable.profile_image_placeholder).into(viewHolder.profileImg);
                         viewHolder.usersName.setText(posts.getFullName());
@@ -357,8 +361,7 @@ public class MainActivity extends AppCompatActivity {
                 SendUserToMainActivity();
                 break;
             case R.id.nav_stories:
-                Snackbar snackBar2 = Snackbar.make(findViewById(android.R.id.content), "STORIES FROM PARENTS", Snackbar.LENGTH_SHORT);
-                snackBar2.show();
+               SendUserToStoriesActivity();
                 break;
             case R.id.nav_chats:
                  SendUserToAllChatMessagesActivity();
@@ -390,6 +393,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
 
 
     // There are 2 signatures and only `onPostCreate(Bundle state) shows the hamburger icon.
@@ -485,6 +490,15 @@ public class MainActivity extends AppCompatActivity {
         finish();
         startActivity(mainActivityIntent);
     }
+    //open stories activity
+    private void SendUserToStoriesActivity() {
+
+        Intent storiesActivityIntent = new Intent(MainActivity.this, StoriesActivity.class);
+        finish();
+        startActivity(storiesActivityIntent);
+
+    }
+
     //opens the Feedback activity
     private void SendUserToFeedbackActivity() {
         Intent feedbackActivityIntent = new Intent(MainActivity.this, FeedbackActivity.class);

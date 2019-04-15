@@ -47,23 +47,14 @@
         android:orientation="horizontal">
 
         <TextView
-            style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/at2"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/nav_username"
+            android:id="@+id/nav_email"
             style="@style/Base.TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:text="@string/username"
+            android:text="@string/user_email"
             android:textColor="@android:color/white"
-            android:textSize="15sp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 

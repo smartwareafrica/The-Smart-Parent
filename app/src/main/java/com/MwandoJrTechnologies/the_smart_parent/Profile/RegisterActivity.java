@@ -3,7 +3,6 @@ package com.MwandoJrTechnologies.the_smart_parent.Profile;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -75,26 +74,47 @@ public class RegisterActivity extends AppCompatActivity {
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
-        //checking if email and password is empty and match
-        if (TextUtils.isEmpty(email)) {
-            //email is empty
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter email", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-        } else if (TextUtils.isEmpty(password)) {
-            //Password is empty
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter password", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-        } else if (TextUtils.isEmpty(confirmPassword)) {
-            //ConfirmPassword is empty
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please confirm your password", Snackbar.LENGTH_SHORT);
-            snackbar.show();
-        }    //password and confirm password match
-        else if (!password.equals(confirmPassword)) {
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Make sure Passwords match", Snackbar.LENGTH_SHORT);
-            snackbar.show();
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
-        } else {
+        if (!email.matches((emailPattern))) {
 
+            editTextEmail.setError("Please input a valid Email");
+        }
+
+        //checking if email and password is empty
+        if (email.isEmpty()) {
+
+            editTextEmail.setError("Please enter your email");
+            return;
+        }
+        if (!email.matches((emailPattern))) {
+
+            editTextEmail.setError("Please input a valid Email");
+            return;
+        }
+        if (password.isEmpty()) {
+            editTextPassword.setError("Please enter your password");
+            return;
+        }
+        if (confirmPassword.isEmpty()) {
+            editTextPassword.setError("Please confirm your password");
+            return;
+        }
+        if (!password.equals(confirmPassword)) {
+            editTextPassword.setError("Make sure Passwords match");
+            return;
+        }
+        if (password.length() < 8) {
+
+            editTextPassword.setError("Minimum password length is 8 characters");
+            return;
+        }
+        if (password.length() > 16) {
+
+            editTextPassword.setError("Maximum password length is 16 characters");
+
+        }
+        else {
             //validations okay then we show a progress bar
             progressDialog.setTitle("Registering User...");
             progressDialog.setMessage("Please wait, Creating account...");
@@ -108,6 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Registration is successful, please check your EMAIL and verify your account...", Snackbar.LENGTH_LONG);
                             snackbar.show();
+
 
                             sendEmailVerificationMessage();
                             progressDialog.dismiss();

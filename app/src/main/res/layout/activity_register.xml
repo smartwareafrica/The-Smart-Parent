@@ -69,6 +69,7 @@
                     android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:hint="@string/please_input_your_password"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890._-"
                     android:inputType="textPassword"
                     tools:targetApi="o" />
 
@@ -88,6 +89,7 @@
                     android:id="@+id/edit_text_confirm_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890._-"
                     android:autofillHints=""
                     android:hint="@string/confirm_password"
                     android:inputType="textPassword"

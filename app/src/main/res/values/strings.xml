@@ -129,5 +129,24 @@
     <string name="please_select">Please select </string>
     <string name="date_of_birth_2">Date of Birth: </string>
     <string name="rate">Rate products</string>
+    <string name="add_product_image">Tap image to add product</string>
+    <string name="enter_product_name">Enter product name</string>
+    <string name="describe_product">Describe product</string>
+    <string name="upload_product">upload product</string>
+    <string name="enter_manufacturer_company_name">Enter manufacturer company name</string>
+    <string name="select_category">Select Product Category</string>
+    <string name="please_select_a_category">Please select a category</string>
+    <string name="product_name">Product name</string>
+    <string name="product_description">Product description</string>
+    <string name="product_rating">Product rating</string>
+    <string name="product_manufacturer">Product manufacturer</string>
+    <string name="value">Value</string>
+    <string name="rating">Rating</string>
+    <string name="rate2">Rate :</string>
+    <string name="send_link_to_my_email">send link to my email</string>
+    <string name="user_email">User Email</string>
+    <string name="story_title">Story Title</string>
+    <string name="description">Description</string>
+    <string name="post">Post</string>
 
 </resources>

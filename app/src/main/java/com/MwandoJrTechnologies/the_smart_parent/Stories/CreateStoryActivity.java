@@ -1,13 +1,13 @@
 package com.MwandoJrTechnologies.the_smart_parent.Stories;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,16 +20,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.Objects;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class CreateStoryActivity extends AppCompatActivity {
 
-    // imports
+    private ProgressDialog progressDialog;
     private ImageButton imageBtn;
     private static final int GALLERY_REQUEST_CODE = 2;
     private Uri uri = null;
     private EditText textTitle;
     private EditText textDesc;
+    private EditText storyAuthorName;
     private Button postBtn;
     private StorageReference storage;
     private FirebaseDatabase database;
@@ -42,15 +46,24 @@ public class CreateStoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_story);
-        // initializing objects
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
+        getSupportActionBar().setTitle("Post a story");
+
         postBtn = findViewById(R.id.postBtn);
         textDesc = findViewById(R.id.textDesc);
         textTitle = findViewById(R.id.textTitle);
+        storyAuthorName = findViewById(R.id.text_author_name);
+
         storage = FirebaseStorage.getInstance().getReference();
-        databaseRef = FirebaseDatabase.getInstance().getReference().child("Blogzone");
+        databaseRef = FirebaseDatabase.getInstance().getReference().child("Stories");
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
+
         imageBtn = findViewById(R.id.imageBtn);
         //picking image from gallery
         imageBtn.setOnClickListener(view -> {
@@ -60,12 +73,28 @@ public class CreateStoryActivity extends AppCompatActivity {
         });
         // posting to Firebase
         postBtn.setOnClickListener(view -> {
-            Toast.makeText(CreateStoryActivity.this, "POSTING...", Toast.LENGTH_LONG).show();
+
+            progressDialog = new ProgressDialog(CreateStoryActivity.this);
+            progressDialog.setTitle("Adding Story");
+            progressDialog.setMessage("Uploading, Please wait...");
+            progressDialog.show();
+            progressDialog.setCanceledOnTouchOutside(true);
+
             final String PostTitle = textTitle.getText().toString().trim();
             final String PostDesc = textDesc.getText().toString().trim();
+            final String authorName = storyAuthorName.getText().toString().trim();
             // do a check for empty fields
-            if (!TextUtils.isEmpty(PostDesc) && !TextUtils.isEmpty(PostTitle)) {
-                StorageReference filepath = storage.child("post_images").child(uri.getLastPathSegment());
+            if (PostTitle.isEmpty()) {
+                textTitle.setError("Write title");
+            } else if (PostDesc.isEmpty()) {
+                textDesc.setError("Add a story please");
+            } else if (authorName.isEmpty()) {
+                storyAuthorName.setError("Please name your author");
+            } else {
+
+
+
+                StorageReference filepath = storage.child("StoriesImages").child(uri.getLastPathSegment());
                 filepath.putFile(uri).addOnSuccessListener(taskSnapshot -> {
 
                     //getting the post image download url
@@ -78,18 +107,17 @@ public class CreateStoryActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 newPost.child("title").setValue(PostTitle);
-                                newPost.child("desc").setValue(PostDesc);
+                                newPost.child("contents").setValue(PostDesc);
+                                newPost.child("authorName").setValue(authorName);
                                 newPost.child("imageUrl").setValue(downloadUrl.toString());
-                                newPost.child("uid").setValue(mCurrentUser.getUid());
-                                newPost.child("username").setValue(dataSnapshot.child("name").getValue())
+                                newPost.child("uid").setValue(mCurrentUser.getUid())
                                         .addOnCompleteListener(task -> {
                                             if (task.isSuccessful()) {
-                                                Intent intent = new Intent(CreateStoryActivity.this, StoriesActivity.class);
-                                                startActivity(intent);
+                                                progressDialog.dismiss();
+                                                SendUserToStoriesActivity();
                                             }
                                         });
                             }
-
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
                             }
@@ -100,6 +128,7 @@ public class CreateStoryActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -108,5 +137,24 @@ public class CreateStoryActivity extends AppCompatActivity {
             uri = data.getData();
             imageBtn.setImageURI(uri);
         }
+    }
+
+    //activate back button
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            SendUserToStoriesActivity();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    // Opens the stories activity
+    private void SendUserToStoriesActivity() {
+        Intent intent = new Intent(CreateStoryActivity.this, StoriesActivity.class);
+        startActivity(intent);
     }
 }

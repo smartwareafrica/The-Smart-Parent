@@ -1,5 +1,6 @@
 package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -27,7 +28,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private CircleImageView userProfilePicture;
     private TextView userStatus;
-    private TextView userName;
     private TextView fullName;
     private TextView phoneNumber;
     private TextView dateOfBirth;
@@ -59,7 +59,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         userProfilePicture = findViewById(R.id.image_view_profile_picture);
         userStatus = findViewById(R.id.text_view_status);
-        userName = findViewById(R.id.text_view_username);
         fullName = findViewById(R.id.text_view_full_name);
         phoneNumber = findViewById(R.id.text_view_phone_number);
         dateOfBirth = findViewById(R.id.text_view_DOB);
@@ -70,6 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
         editProfile.setOnClickListener(v -> SendUserToProfileSettingsActivity());
 
         profileUserReference.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -77,23 +77,21 @@ public class ProfileActivity extends AppCompatActivity {
                     if (dataSnapshot.hasChild("profileImage")) {
                         String myProfileImage = Objects.requireNonNull(dataSnapshot.child("profileImage").getValue()).toString();
                         Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(userProfilePicture);
+
+                        String myStatus = dataSnapshot.child("status").getValue().toString();
+                        String myGender = dataSnapshot.child("gender").getValue().toString();
+                        String myFullName = dataSnapshot.child("fullName").getValue().toString();
+                        String myPhoneNumber = dataSnapshot.child("phoneNumber").getValue().toString();
+                        String myDateOfBirth = dataSnapshot.child("dob").getValue().toString();
+                        String myNumberOfChildren = dataSnapshot.child("numberOfChildren").getValue().toString();
+
+                        userStatus.setText(myStatus);
+                        fullName.setText("Name: " + myFullName);
+                        phoneNumber.setText("Phone Number: " + myPhoneNumber);
+                        dateOfBirth.setText("Date of Birth: " + myDateOfBirth);
+                        userGender.setText("Gender: " + myGender);
+                        numberOfChildren.setText("Number of children: " + myNumberOfChildren);
                     }
-
-                    String myStatus = dataSnapshot.child("status").getValue().toString();
-                    String myUserName = dataSnapshot.child("userName").getValue().toString();
-                    String myFullName = dataSnapshot.child("fullName").getValue().toString();
-                    String myPhoneNumber = dataSnapshot.child("phoneNumber").getValue().toString();
-                    String myDateOfBirth = dataSnapshot.child("dob").getValue().toString();
-                    String myGender = dataSnapshot.child("gender").getValue().toString();
-                    String myNumberOfChildren = dataSnapshot.child("numberOfChildren").getValue().toString();
-
-                    userStatus.setText(myStatus);
-                    userName.setText("@" + myUserName);
-                    fullName.setText("NAME: " + myFullName);
-                    phoneNumber.setText("Phone Number: " + myPhoneNumber);
-                    dateOfBirth.setText("DOB: " + myDateOfBirth);
-                    userGender.setText("Gender: " + myGender);
-                    numberOfChildren.setText("Number of children: " + myNumberOfChildren);
                 } else {
                     Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Please update your profile", Snackbar.LENGTH_INDEFINITE);
                     snackBar.show();

@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,10 +12,14 @@
         android:orientation="vertical"
         tools:context="com.MwandoJrTechnologies.the_smart_parent.Stories.CreateStoryActivity">
 
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
         <ImageButton
             android:id="@+id/imageBtn"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@drawable/baseline_add_a_photo_black_36"
@@ -40,22 +45,36 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:background="#ffffff"
             android:hint="@string/description"
             android:padding="10dp"
-            android:textColor="#000000"            />
+            android:textColor="#000000" />
 
-        <Button
+        <EditText
+            android:id="@+id/text_author_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="5dp"
+            android:background="#ffffff"
+            android:hint="@string/author_name"
+            android:padding="10dp"
+            android:textColor="#000000" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/postBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="30dp"
             android:layout_marginRight="5dp"
+            android:layout_marginBottom="20dp"
             android:background="#ffffff"
-            android:text="@string/post"
+            android:text="@string/upload_story"
             android:textColor="#000000"
             android:textStyle="bold" />
     </LinearLayout>
+
 </ScrollView>

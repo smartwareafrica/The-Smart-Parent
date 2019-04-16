@@ -2,14 +2,19 @@ package com.MwandoJrTechnologies.the_smart_parent.Stories;
 
 public class StoriesModalAdapterClass {
     // define four String variables
-    private String title, desc, imageUrl, username;
+    private String title;
+    private String contents;
+    private String imageUrl;
+
+
+    private String authorName;
 
     // generate their respective constructors
-    public StoriesModalAdapterClass(String title, String desc, String imageUrl, String username) {
+    public StoriesModalAdapterClass(String title, String contents, String imageUrl, String authorName) {
         this.title = title;
-        this.desc = desc;
+        this.contents = contents;
         this.imageUrl = imageUrl;
-        this.username = username;
+        this.authorName = authorName;
     }
 
     // create an empty constructor
@@ -20,16 +25,13 @@ public class StoriesModalAdapterClass {
         this.imageUrl = imageUrl;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setcontents(String contents) {
+        this.contents = contents;
     }
 
     public String getImageUrl() {
@@ -40,12 +42,16 @@ public class StoriesModalAdapterClass {
         return title;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getcontents() {
+        return contents;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 }
 

@@ -67,7 +67,7 @@
     <string name="number_of_children">Number of Children</string>
     <string name="hrs">hrs</string>
     <string name="date_with_colon">Date:</string>
-    <string name="write_your_message_here">Write your message here…</string>
+    <string name="write_your_message_here">Please write your message here</string>
     <string name="send_message">Send Message</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="display_user_name">Display user name</string>
@@ -148,5 +148,21 @@
     <string name="story_title">Story Title</string>
     <string name="description">Description</string>
     <string name="post">Post</string>
+    <string name="write_your_feedback_message_here">Write your feedback message here</string>
+    <string name="please_select_your_gender">Please select your gender</string>
+    <string name="delete_button">Delete Button</string>
+    <string name="story_description">Story Description</string>
+    <string name="author_name">Author Name</string>
+    <string name="title_of_story">Title of story</string>
+    <string name="upload_story">Upload story</string>
+    <string name="back">Back</string>
+
+
+    <string-array name="gender_names">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+
 
 </resources>

@@ -22,6 +22,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:background="@color/colorPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp">
@@ -61,67 +62,45 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button_send_message"
-                android:layout_width="wrap_content"
-                android:drawableStart="@drawable/outline_comment_white_48dp"
-                android:drawablePadding="10dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:text="@string/send_message"
-                android:textAlignment="center" />
-
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/text_view_other_parent_username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/username"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
             <TextView
                 android:id="@+id/text_view_other_parent_full_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/full_name"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                style="@style/TextViewStyle"
+                android:text="@string/full_name" />
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/text_view_other_parent_phone_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
                 android:text="@string/phone_number"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                android:visibility="gone" />
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/text_view_other_parent_DOB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
                 android:text="@string/date_of_birth"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/text_view_other_parent_gender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/gender"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                style="@style/TextViewStyle"
+                android:text="@string/gender" />
 
             <TextView
                 android:id="@+id/text_view_other_parent_no_of_children"
+                style="@style/TextViewStyle"
+                android:text="@string/number_of_children" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_send_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/number_of_children"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                android:layout_gravity="center"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="40dp"
+                android:backgroundTint="#0F6A9C"
+                android:drawableStart="@drawable/outline_comment_white_48dp"
+                android:text="@string/send_message"
+                android:textAlignment="center" />
 
         </LinearLayout>
     </ScrollView>

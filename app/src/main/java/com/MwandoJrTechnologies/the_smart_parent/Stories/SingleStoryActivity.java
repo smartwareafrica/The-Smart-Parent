@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,47 +21,61 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SingleStoryActivity extends AppCompatActivity {
 
-    private ImageView singelImage;
-    private TextView singleTitle, singleDesc;
-    String post_key = null;
+    private ImageView singleImage;
+    private TextView singleTitle;
+    private TextView singleDesc;
+    private Button deleteButton;
+    private Button backButton;
+    private Button homeButton;
+
     private DatabaseReference mDatabase;
-    private Button deleteBtn;
     private FirebaseAuth mAuth;
+    String currentUserID;
+    String post_key = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_story);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
-        singelImage = findViewById(R.id.singleImageview);
-        singleTitle = findViewById(R.id.singleTitle);
-        singleDesc = findViewById(R.id.singleDesc);
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Blogzone");
+        singleImage = findViewById(R.id.single_story_image_view);
+        singleTitle = findViewById(R.id.single_story_title);
+        singleDesc = findViewById(R.id.single_story_description);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Stories");
         post_key = getIntent().getExtras().getString("PostID");
-        deleteBtn = findViewById(R.id.deleteBtn);
+        deleteButton = findViewById(R.id.single_story_delete);
+        backButton = findViewById(R.id.single_story_back_button);
+        homeButton = findViewById(R.id.single_story_home_button);
+
+
         mAuth = FirebaseAuth.getInstance();
-        deleteBtn.setVisibility(View.INVISIBLE);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDatabase.child(post_key).removeValue();
-                Intent mainintent = new Intent(SingleStoryActivity.this, StoriesActivity.class);
-                startActivity(mainintent);
-            }
+        currentUserID = mAuth.getCurrentUser().getUid();
+
+     //   homeButton.setOnClickListener(v -> SendUserToMainActivity());
+
+        backButton.setOnClickListener(v -> SendUserToMainActivity());
+
+        deleteButton.setVisibility(View.INVISIBLE);
+        deleteButton.setOnClickListener(view -> {
+            mDatabase.child(post_key).removeValue();
+
+            SendUserToStoriesActivity();
+
         });
         mDatabase.child(post_key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String post_title = (String) dataSnapshot.child("title").getValue();
-                String post_desc = (String) dataSnapshot.child("desc").getValue();
+                String post_contents = (String) dataSnapshot.child("contents").getValue();
                 String post_image = (String) dataSnapshot.child("imageUrl").getValue();
                 String post_uid = (String) dataSnapshot.child("uid").getValue();
                 singleTitle.setText(post_title);
-                singleDesc.setText(post_desc);
-                Picasso.get().load(post_image).into(singelImage);
+                singleDesc.setText(post_contents);
+                Picasso.get().load(post_image).into(singleImage);
 
                 if (mAuth.getCurrentUser().getUid().equals(post_uid)) {
-                    deleteBtn.setVisibility(View.VISIBLE);
+                    deleteButton.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -68,5 +83,19 @@ public class SingleStoryActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    private void SendUserToStoriesActivity() {
+
+        Intent storiesActivityIntent = new Intent(SingleStoryActivity.this, StoriesActivity.class);
+        startActivity(storiesActivityIntent);
+
+    }
+
+    //open main activity
+    private void SendUserToMainActivity() {
+        Intent mainActivityIntent = new Intent(SingleStoryActivity.this, MainActivity.class);
+        finish();
+        startActivity(mainActivityIntent);
     }
 }

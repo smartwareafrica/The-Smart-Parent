@@ -1,16 +1,15 @@
 package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.MwandoJrTechnologies.the_smart_parent.Chats.ChatActivity;
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +28,6 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
 
     private CircleImageView userProfilePicture;
     private TextView userStatus;
-    private TextView userName;
     private TextView fullName;
     private TextView phoneNumber;
     private TextView dateOfBirth;
@@ -39,9 +37,10 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
     private Button openChatButton;
 
     private DatabaseReference otherParentProfileUserReference;
-    private FirebaseAuth mAuth;
+   // private FirebaseAuth mAuth;
 
     private String otherParentUserID;
+  //  private String currentParentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,9 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
         getSupportActionBar().setTitle("View Profile");
 
-        mAuth = FirebaseAuth.getInstance();
+      //  mAuth = FirebaseAuth.getInstance();
+     //   currentParentUserID = mAuth.getCurrentUser().getUid();
+
 
         //get the users id passed from main activity
         otherParentUserID = getIntent().getExtras().get("visit_user_id").toString();
@@ -66,13 +67,13 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
         InitializeFields();
 
         otherParentProfileUserReference.child(otherParentUserID).addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.exists()) {
                     String myProfileImage = dataSnapshot.child("profileImage").getValue().toString();
                     String myStatus = dataSnapshot.child("status").getValue().toString();
-                    String myUserName = dataSnapshot.child("userName").getValue().toString();
                     String myFullName = dataSnapshot.child("fullName").getValue().toString();
                     String myPhoneNumber = dataSnapshot.child("phoneNumber").getValue().toString();
                     String myDateOfBirth = dataSnapshot.child("dob").getValue().toString();
@@ -81,7 +82,6 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
 
                     Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(userProfilePicture);
                     userStatus.setText(myStatus);
-                    userName.setText("@" + myUserName);
                     fullName.setText("NAME: " + myFullName);
                     phoneNumber.setText("Phone Number: " + myPhoneNumber);
                     dateOfBirth.setText("DOB: " + myDateOfBirth);
@@ -96,13 +96,10 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
             }
         });
 
-        openChatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent chatIntent = new Intent(OtherParentsProfileActivity.this, ChatActivity.class);
-                chatIntent.putExtra("visit_user_id", otherParentUserID);
-                startActivity(chatIntent);
-            }
+        openChatButton.setOnClickListener(v -> {
+            Intent chatIntent = new Intent(OtherParentsProfileActivity.this, ChatActivity.class);
+            chatIntent.putExtra("visit_user_id", otherParentUserID);
+            startActivity(chatIntent);
         });
     }
 
@@ -111,7 +108,6 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
 
         userProfilePicture = findViewById(R.id.other_parent_profile_picture);
         userStatus = findViewById(R.id.text_view_other_parent_status);
-        userName = findViewById(R.id.text_view_other_parent_username);
         fullName = findViewById(R.id.text_view_other_parent_full_name);
         phoneNumber = findViewById(R.id.text_view_other_parent_phone_number);
         dateOfBirth = findViewById(R.id.text_view_other_parent_DOB);

@@ -11,26 +11,30 @@ import android.widget.EditText;
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class FeedbackActivity extends AppCompatActivity {
 
-    private EditText textInputFeedbackName;
-    private EditText textInputFeedbackEmail;
     private EditText textInputFeedbackMessage;
     private Button buttonFeedbackSend;
 
     private FirebaseAuth mAuth;
     private DatabaseReference feedbackReference;
+    private DatabaseReference usersReference;
 
     private String currentUserID;
     private String saveCurrentDate;
@@ -50,6 +54,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
         //set path in fireBase database
         feedbackReference = FirebaseDatabase.getInstance().getReference().child("Feedback");
+        usersReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -60,8 +65,6 @@ public class FeedbackActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
 
-        textInputFeedbackName = findViewById(R.id.feedback_edit_text_enter_full_name);
-        textInputFeedbackEmail = findViewById(R.id.feedback_edit_text_enter_email);
         textInputFeedbackMessage = findViewById(R.id.feedback_edit_text_enter_message);
         buttonFeedbackSend = findViewById(R.id.button_send_feedback);
 
@@ -78,48 +81,55 @@ public class FeedbackActivity extends AppCompatActivity {
 
         buttonFeedbackSend.setOnClickListener(v -> {
 
-            String feedbackName = textInputFeedbackName.getText().toString().trim();
-            String feedbackEmail = textInputFeedbackEmail.getText().toString().trim();
-            String feedbackMessage = textInputFeedbackMessage.getText().toString();
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            usersReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()){
+                        String feedbackName = dataSnapshot.child("fullName").getValue().toString();
+                        String feedbackEmail = firebaseUser.getEmail();
+                        String feedbackMessage = textInputFeedbackMessage.getText().toString();
 
-            if (TextUtils.isEmpty(feedbackName)) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please Enter Name", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            } else if (TextUtils.isEmpty(feedbackEmail)) {
+                        if  (TextUtils.isEmpty(feedbackMessage)) {
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please input your feedback", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                        } else {
 
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please enter email", Snackbar.LENGTH_SHORT);
-                snackbar.show();
+                            //validations okay then we show a progress bar
+                            progressDialog.setTitle("Sending Feedback");
+                            progressDialog.setMessage("Please wait,Sending your feedback..." + "\n\n Thank You For your feedback");
+                            progressDialog.show();
+                            progressDialog.setCanceledOnTouchOutside(true);
 
-            } else if (TextUtils.isEmpty(feedbackMessage)) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please input your feedback", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            } else {
-
-                //validations okay then we show a progress bar
-                progressDialog.setTitle("Sending Feedback");
-                progressDialog.setMessage("Please wait,Sending your feedback..." + "\n\n Thank You For your feedback");
-                progressDialog.show();
-                progressDialog.setCanceledOnTouchOutside(true);
-
-                final HashMap feedbackMap = new HashMap();
-                feedbackMap.put("uid", currentUserID);
-                feedbackMap.put("userFullName", feedbackName);
-                feedbackMap.put("userEmail", feedbackEmail);
-                feedbackMap.put("feedbackEmail", feedbackMessage);
-                feedbackMap.put("feedBackDate", saveCurrentDate);
-                feedbackMap.put("feedBackTime", saveCurrentTime);
-                feedbackReference.child(currentUserID + saveCurrentDate + saveCurrentTime).updateChildren(feedbackMap).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        SendUserToMainActivity();
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Thank you for your Feedback!!!", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    } else {
-                        String message = task.getException().getMessage();
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred,please try again " + message, Snackbar.LENGTH_SHORT);
-                        snackbar.show();
+                            final HashMap<String, Object> feedbackMap = new HashMap<String, Object>();
+                            feedbackMap.put("uid", currentUserID);
+                            feedbackMap.put("userFullName", feedbackName);
+                            feedbackMap.put("userEmail", feedbackEmail);
+                            feedbackMap.put("feedbackEmail", feedbackMessage);
+                            feedbackMap.put("feedBackDate", saveCurrentDate);
+                            feedbackMap.put("feedBackTime", saveCurrentTime);
+                            feedbackReference.child(currentUserID + saveCurrentDate + saveCurrentTime).updateChildren(feedbackMap).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Thank you for your Feedback", Snackbar.LENGTH_LONG);
+                                    snackbar.show();
+                                    SendUserToMainActivity();
+                                } else {
+                                    String message = task.getException().getMessage();
+                                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred,please try again " + message, Snackbar.LENGTH_SHORT);
+                                    snackbar.show();
+                                }
+                            });
+                        }
                     }
-                });
-            }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
         });
 
     }

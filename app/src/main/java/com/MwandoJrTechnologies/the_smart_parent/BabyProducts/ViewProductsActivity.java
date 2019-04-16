@@ -46,7 +46,6 @@ public class ViewProductsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_products);
-
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         mAuth = FirebaseAuth.getInstance();
@@ -146,6 +145,7 @@ public class ViewProductsActivity extends AppCompatActivity {
                 };
         allProductsRecyclerView.setLayoutManager(linearLayoutManager);
         allProductsRecyclerView.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.notifyDataSetChanged();
         firebaseRecyclerAdapter.startListening();
     }
 

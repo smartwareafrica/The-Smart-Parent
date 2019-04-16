@@ -32,7 +32,6 @@
                 android:layout_marginTop="10dp"
                 android:src="@drawable/profile_image_placeholder" />
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_field1"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -52,128 +51,99 @@
                     tools:targetApi="o" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_field2"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+           <LinearLayout
+               android:orientation="vertical"
+               android:layout_margin="10dp"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent">
 
-                <EditText
-                    android:id="@+id/settings_user_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="@string/username"
-                    android:hint="@string/username"
-                    android:inputType="textMultiLine"
-                    tools:targetApi="o" />
+               <com.google.android.material.textfield.TextInputLayout
+                   android:id="@+id/text_field3"
+                   style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="10dp">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                   <EditText
+                       android:id="@+id/settings_user_full_name"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:autofillHints="@string/full_name"
+                       android:hint="@string/full_name"
+                       android:inputType="textMultiLine"
+                       tools:targetApi="o" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_field3"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <EditText
-                    android:id="@+id/settings_user_full_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="@string/full_name"
-                    android:hint="@string/full_name"
-                    android:inputType="textMultiLine"
-                    tools:targetApi="o" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+               </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_field4"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+               <com.google.android.material.textfield.TextInputLayout
+                   android:id="@+id/text_field4"
+                   style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="10dp">
 
-                <EditText
-                    android:id="@+id/settings_user_phone_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="@string/phone_number"
-                    android:hint="@string/phone_number"
-                    android:inputType="phone"
-                    tools:targetApi="o" />
+                   <EditText
+                       android:id="@+id/settings_user_phone_number"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:autofillHints="@string/phone_number"
+                       android:hint="@string/phone_number"
+                       android:inputType="phone"
+                       tools:targetApi="o" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+               </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_field5"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+               <com.google.android.material.textfield.TextInputLayout
+                   android:id="@+id/text_field5"
+                   style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="10dp">
 
-                <EditText
-                    android:id="@+id/settings_user_date_of_birth"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="@string/date_of_birth"
-                    android:hint="@string/date_of_birth"
-                    android:inputType="date"
-                    tools:targetApi="o" />
+                   <EditText
+                       android:id="@+id/settings_user_date_of_birth"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:autofillHints="@string/date_of_birth"
+                       android:hint="@string/date_of_birth"
+                       android:inputType="date"
+                       tools:targetApi="o" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+               </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_field6"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+               <com.google.android.material.textfield.TextInputLayout
+                   android:id="@+id/text_field7"
+                   style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
 
-                <EditText
-                    android:id="@+id/settings_user_gender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="@string/gender"
-                    android:hint="@string/gender"
-                    android:inputType="text"
-                    tools:targetApi="o" />
+                   android:layout_marginTop="10dp">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                   <EditText
+                       android:id="@+id/settings_user_number_of_children"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:autofillHints="@string/number_of_children"
+                       android:hint="@string/number_of_children"
+                       android:inputType="number"
+                       tools:targetApi="o" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_field7"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+               </com.google.android.material.textfield.TextInputLayout>
 
-                android:layout_marginTop="10dp">
+               <androidx.appcompat.widget.AppCompatButton
+                   android:id="@+id/button_profile_settings"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:textSize="20sp"
+                   android:textAllCaps="false"
+                   android:padding="20dp"
+                   android:layout_marginTop="10dp"
+                   android:textColor="@android:color/white"
+                   android:backgroundTint="#0F6A9C"
+                   android:text="@string/update_account_settings" />
 
-                <EditText
-                    android:id="@+id/settings_user_number_of_children"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="@string/number_of_children"
-                    android:hint="@string/number_of_children"
-                    android:inputType="number"
-                    tools:targetApi="o" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button_profile_settings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textAllCaps="false"
-                android:padding="20dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#0F6A9C"
-                android:text="@string/update_account_settings" />
-
+           </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

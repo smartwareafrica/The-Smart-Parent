@@ -22,10 +22,14 @@
             android:id="@+id/nav_profile"
             android:icon="@drawable/baseline_person_outline_white_24"
             android:title="@string/profile" />
+
+        <!--
         <item
             android:id="@+id/nav_growthAnalysis"
             android:icon="@drawable/baseline_timeline_white_24"
             android:title="@string/growth_analysis" />
+
+            -->
         <item
             android:id="@+id/nav_reminders"
             android:icon="@drawable/baseline_notifications_active_white_24"

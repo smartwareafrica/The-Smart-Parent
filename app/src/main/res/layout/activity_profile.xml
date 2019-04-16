@@ -22,6 +22,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:background="@color/colorPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp">
@@ -77,52 +78,31 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_view_username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/username"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-            <TextView
                 android:id="@+id/text_view_full_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
                 android:text="@string/full_name"
-                android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
             <TextView
                 android:id="@+id/text_view_phone_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/phone_number"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                style="@style/TextViewStyle" />
 
             <TextView
                 android:id="@+id/text_view_DOB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/date_of_birth"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                style="@style/TextViewStyle" />
 
             <TextView
                 android:id="@+id/text_view_gender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/gender"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                style="@style/TextViewStyle"/>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/text_view_number_of_children"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/number_of_children"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                style="@style/TextViewStyle"
+                android:text="@string/number_of_children"/>
 
         </LinearLayout>
     </ScrollView>

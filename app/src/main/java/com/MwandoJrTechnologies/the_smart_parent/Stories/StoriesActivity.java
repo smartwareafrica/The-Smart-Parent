@@ -44,6 +44,7 @@ public class StoriesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stories);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,12 +53,10 @@ public class StoriesActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Stories");
 
 
-        //initialize recyclerView and FIreBase objects
         recyclerView = findViewById(R.id.stories_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("StoriesModalAdapterClass");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Stories");
         mAuth = FirebaseAuth.getInstance();
         currentUserID =mAuth.getCurrentUser().getUid();
 
@@ -75,14 +74,18 @@ public class StoriesActivity extends AppCompatActivity {
             addStoryFAB.hide();
         }
         addStoryFAB.setOnClickListener(v -> SendUserToCreateStoryActivity());
+
+        DisplayAllStoriesLayouts();
     }
 
+    private void DisplayAllStoriesLayouts() {
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(StoriesActivity.this);
+        //initialize recyclerView and FIreBase objects
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
 
         final FirebaseRecyclerOptions<StoriesModalAdapterClass> options =
                 new FirebaseRecyclerOptions.Builder<StoriesModalAdapterClass>()
@@ -90,7 +93,7 @@ public class StoriesActivity extends AppCompatActivity {
                         .build();
 
 
-        FirebaseRecyclerAdapter<StoriesModalAdapterClass, StoriesModalAdapterClassViewHolder> FBRA = new
+        FirebaseRecyclerAdapter<StoriesModalAdapterClass, StoriesModalAdapterClassViewHolder> firebaseRecyclerAdapter = new
 
                 FirebaseRecyclerAdapter<StoriesModalAdapterClass, StoriesModalAdapterClassViewHolder>(options) {
                     @Override
@@ -98,9 +101,9 @@ public class StoriesActivity extends AppCompatActivity {
 
                         final String post_key = getRef(position).getKey();
                         viewHolder.setTitle(model.getTitle());
-                        viewHolder.setDesc(model.getDesc());
+                        viewHolder.setDesc(model.getcontents());
                         viewHolder.setImageUrl(getApplicationContext(), model.getImageUrl());
-                        viewHolder.setUserName(model.getUsername());
+                        viewHolder.setAuthorName(model.getAuthorName());
                         viewHolder.mView.setOnClickListener(view -> {
                             Intent singleActivity = new Intent(StoriesActivity.this, SingleStoryActivity.class);
                             singleActivity.putExtra("PostID", post_key);
@@ -121,8 +124,12 @@ public class StoriesActivity extends AppCompatActivity {
                     }
                 };
 
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.notifyDataSetChanged();
+        firebaseRecyclerAdapter.startListening();
 
-        recyclerView.setAdapter(FBRA);
     }
 
     public static class StoriesModalAdapterClassViewHolder extends RecyclerView.ViewHolder {
@@ -134,13 +141,18 @@ public class StoriesActivity extends AppCompatActivity {
         }
 
         public void setTitle(String title) {
-            TextView post_title = mView.findViewById(R.id.post_title_txtview);
+            TextView post_title = mView.findViewById(R.id.post_title_text_view);
             post_title.setText(title);
         }
 
         public void setDesc(String desc) {
-            TextView post_desc = mView.findViewById(R.id.post_desc_txtview);
+            TextView post_desc = mView.findViewById(R.id.post_desc_text_view);
             post_desc.setText(desc);
+        }
+
+        public void setAuthorName(String authorName) {
+            TextView post_author_name = mView.findViewById(R.id.post_author_user);
+            post_author_name.setText(authorName);
         }
 
         public void setImageUrl(Context ctx, String imageUrl) {
@@ -148,10 +160,7 @@ public class StoriesActivity extends AppCompatActivity {
             Picasso.get().load(imageUrl).into(post_image);
         }
 
-        public void setUserName(String userName) {
-            TextView postUserName = mView.findViewById(R.id.post_user);
-            postUserName.setText(userName);
-        }
+
     }
 
     //activate back button
@@ -165,6 +174,7 @@ public class StoriesActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     //open main activity
     private void SendUserToMainActivity() {

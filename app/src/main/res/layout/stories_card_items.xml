@@ -1,43 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.cardview.widget.CardView xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_margin="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <LinearLayout
         android:orientation="vertical"
-        android:layout_margin="10dp"
+        android:background="@drawable/custom_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:id="@+id/post_image"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
+
         <TextView
-            android:id="@+id/post_title_txtview"
+            android:id="@+id/post_title_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textColor="#000"
             android:textStyle="bold"
-            android:text="Post Title"/>
+            android:text="@string/title_of_story" />
+
         <TextView
-            android:id="@+id/post_desc_txtview"
+            android:id="@+id/post_desc_text_view"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:text="Post Description"/>
+            android:text="@string/story_description" />
+
         <TextView
-            android:id="@+id/post_user"
+            android:id="@+id/post_author_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="Kenny"
+            android:text="@string/author_name"
+            android:layout_marginEnd="10dp"
             android:textSize="15sp"
             android:fontFamily="serif"
             android:gravity="end"
             android:textStyle="bold"
-            android:textColor="#FF07B618"/>
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -11,17 +11,11 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <ScrollView
-        android:layout_below="@+id/toolbar"
-        android:id="@+id/scroll_view_feedback"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:layout_below="@+id/toolbar"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -31,40 +25,6 @@
                 android:layout_margin="20dp"
                 android:contentDescription="@string/the_smart_parent_logo"
                 android:src="@drawable/splash_image" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/feedback_text_input_enter_full_name"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <EditText
-                    android:id="@+id/feedback_edit_text_enter_full_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="@string/enter_your_full_name"
-                    android:hint="@string/enter_your_full_name"
-                    android:inputType="textEmailAddress"
-                    tools:targetApi="o" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/feedback_text_input_enter_email"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <EditText
-                    android:id="@+id/feedback_edit_text_enter_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="@string/please_input_your_email"
-                    android:hint="@string/please_input_your_email"
-                    android:inputType="textEmailAddress"
-                    tools:targetApi="o" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_enter_message"
@@ -77,24 +37,22 @@
                     android:id="@+id/feedback_edit_text_enter_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/write_your_message_here"
-                    android:lines="5"
-                    android:hint="@string/write_your_message_here"
+                    android:autofillHints="@string/write_your_feedback_message_here"
+                    android:hint="@string/write_your_feedback_message_here"
                     android:inputType="textMultiLine"
+                    android:lines="5"
                     tools:targetApi="o" />
             </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/button_send_feedback"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#0F6A9C"
-                    android:text="@string/send"
-                    android:textColor="@android:color/white" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_send_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="#0F6A9C"
+                android:text="@string/send"
+                android:textColor="@android:color/white" />
 
 
         </LinearLayout>
-    </ScrollView>
-
 </RelativeLayout>

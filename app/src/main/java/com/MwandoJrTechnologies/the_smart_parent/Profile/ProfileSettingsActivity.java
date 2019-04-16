@@ -49,11 +49,9 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
     private CircleImageView profileSettingImage;
     private EditText profileSettingsStatus;
-    private EditText profileSettingsUserName;
     private EditText profileSettingsFullName;
     private EditText profileSettingsPhoneNumber;
     private EditText profileSettingsDateOfBirth;
-    private EditText profileSettingsGender;
     private EditText profileSettingsNumberOfChildren;
     private Button profileSettingsSaveButton;
 
@@ -85,11 +83,9 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         profileSettingImage = findViewById(R.id.settings_profile_image);
         profileSettingsStatus = findViewById(R.id.settings_status);
-        profileSettingsUserName = findViewById(R.id.settings_user_name);
         profileSettingsFullName = findViewById(R.id.settings_user_full_name);
         profileSettingsPhoneNumber = findViewById(R.id.settings_user_phone_number);
         profileSettingsDateOfBirth = findViewById(R.id.settings_user_date_of_birth);
-        profileSettingsGender = findViewById(R.id.settings_user_gender);
         profileSettingsNumberOfChildren = findViewById(R.id.settings_user_number_of_children);
         profileSettingsSaveButton = findViewById(R.id.button_profile_settings);
 
@@ -134,7 +130,6 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                     }
 
                     String myStatus = Objects.requireNonNull(dataSnapshot.child("status").getValue()).toString();
-                    String myUserName = Objects.requireNonNull(dataSnapshot.child("userName").getValue()).toString();
                     String myFullName = Objects.requireNonNull(dataSnapshot.child("fullName").getValue()).toString();
                     String myPhoneNumber = Objects.requireNonNull(dataSnapshot.child("phoneNumber").getValue()).toString();
                     String myDateOfBirth = Objects.requireNonNull(dataSnapshot.child("dob").getValue()).toString();
@@ -143,11 +138,9 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
 
                     profileSettingsStatus.setText(myStatus);
-                    profileSettingsUserName.setText(myUserName);
                     profileSettingsFullName.setText(myFullName);
                     profileSettingsPhoneNumber.setText(myPhoneNumber);
                     profileSettingsDateOfBirth.setText(myDateOfBirth);
-                    profileSettingsGender.setText(myGender);
                     profileSettingsNumberOfChildren.setText(myNumberOfChildren);
                 }
             }
@@ -252,19 +245,12 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
     private void ValidateAccountsInformation() {
 
-        final String username = profileSettingsUserName.getText().toString();
         String status = profileSettingsStatus.getText().toString();
         String fullName = profileSettingsFullName.getText().toString();
         String phoneNumber = profileSettingsPhoneNumber.getText().toString();
         String dob = profileSettingsDateOfBirth.getText().toString();
-        String gender = profileSettingsGender.getText().toString();
         String numberOfChildren = profileSettingsNumberOfChildren.getText().toString();
 
-        if (username.isEmpty()) {
-            profileSettingsUserName.setError("Please write your Username");
-            profileSettingsUserName.requestFocus();
-            progressDialog.dismiss();
-        }
         if (status.isEmpty()) {
             profileSettingsStatus.setError("Please update your status");
             profileSettingsStatus.requestFocus();
@@ -287,12 +273,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             progressDialog.dismiss();
         }
         if (dob.isEmpty()) {
-            profileSettingsDateOfBirth.setError("Please enter your date of birth DDMMYYYY");
-            progressDialog.dismiss();
-        }
-        if (gender.isEmpty()) {
-            profileSettingsGender.setError("Please enter your gender (MALE/FEMALE)");
-            profileSettingsGender.requestFocus();
+            profileSettingsDateOfBirth.setError("Please select your date of birth");
             progressDialog.dismiss();
         }
         if (fullName.isEmpty()) {
@@ -307,13 +288,11 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             progressDialog.setCanceledOnTouchOutside(true);
             progressDialog.show();
 
-            HashMap userMap = new HashMap();
+            HashMap<String, Object> userMap = new HashMap<>();
             userMap.put("status", status);
-            userMap.put("userName", username);
             userMap.put("fullName", fullName);
             userMap.put("phoneNumber", phoneNumber);
             userMap.put("dob", dob);
-            userMap.put("gender", gender);
             userMap.put("numberOfChildren", numberOfChildren);
             profileSettingsReference.updateChildren(userMap).addOnCompleteListener(task -> {
 
@@ -337,7 +316,6 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         }
 
     }
-
 
 
     //activate back button

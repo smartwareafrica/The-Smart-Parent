@@ -102,7 +102,7 @@ public class AllChatMessagesActivity extends AppCompatActivity {
 
                                 //now display the values
                                 allChatsViewHolder.allChatsUserName.setText(retrieveUserFullName);
-                                allChatsViewHolder.allChatsUserStatus.setText("Last Seen: " + "\n " + "Date" + " Time");
+                                allChatsViewHolder.allChatsUserStatus.setText(retrieveUserStatus);
 
                             }
 
@@ -128,7 +128,27 @@ public class AllChatMessagesActivity extends AppCompatActivity {
 
         allChatsList.setLayoutManager(linearLayoutManager);
         allChatsList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         adapter.startListening();
+
+        allChatsList.setAdapter(new RecyclerView.Adapter() {
+            @NonNull
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return null;
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+            }
+
+            @Override
+            public int getItemCount() {
+                return 0;
+            }
+        });
+
     }
 
 

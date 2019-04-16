@@ -21,17 +21,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#CED9E6"
-            android:elevation="20dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingTop="16dp"
-            android:paddingRight="16dp">
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorPrimary">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image_view"
@@ -63,90 +59,116 @@
                     android:layout_marginTop="5dp"
                     android:text="@string/tap_on_image_to_choose_profile_picture"
                     android:textAlignment="center"
-                    android:textColor="#3C70BE"
+                    android:textColor="@color/colorWhite"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_create_username"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+
+            <LinearLayout
+                android:padding="16dp"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/edit_text_username"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_name"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/create_your_username"
-                    android:hint="@string/create_your_username"
-                    android:inputType="text"
-                    tools:targetApi="o" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="10dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_name"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                    <EditText
+                        android:id="@+id/edit_text_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="@string/enter_your_full_name"
+                        android:hint="@string/enter_your_full_name"
+                        android:inputType="text"
+                        tools:targetApi="o" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/edit_text_name"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_DOB"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/enter_your_full_name"
-                    android:hint="@string/enter_your_full_name"
-                    android:inputType="text"
-                    tools:targetApi="o" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="10dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_DOB"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                    <EditText
+                        android:id="@+id/edit_text_DOB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="@string/date_of_birth"
+                        android:hint="@string/date_of_birth"
+                        android:inputType="text"
+                        tools:targetApi="o" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/edit_text_DOB"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/date_of_birth"
-                    android:hint="@string/date_of_birth"
-                    android:inputType="text"
-                    tools:targetApi="o" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
+                    <AutoCompleteTextView
+                        android:id="@+id/edit_profile_gender_selector"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight=".90"
+                        android:clickable="true"
+                        android:cursorVisible="false"
+                        android:dropDownHeight="155dp"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:hint="@string/gender"
+                        android:inputType="none"
+                        android:maxLines="1"
+                        android:theme="@style/Autocomplete"
+                        tools:ignore="KeyboardInaccessibleWidget" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_phone_number"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                    <ImageView
+                        android:id="@+id/delete_selected_gender_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="3dp"
+                        android:layout_weight=".10"
+                        android:alpha=".2"
+                        android:contentDescription="@string/delete_button"
+                        android:src="@drawable/baseline_refresh_black_36" />
 
-                <EditText
-                    android:id="@+id/edit_text_phone_number"
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_phone_number"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/phone_number"
-                    android:hint="@string/phone_number"
-                    android:inputType="phone"
-                    tools:targetApi="o" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/edit_text_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="@string/phone_number"
+                        android:hint="@string/phone_number"
+                        android:inputType="phone"
+                        tools:targetApi="o" />
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buttonSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#0F6A9C"
-                android:text="@string/save_details" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buttonSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="#0F6A9C"
+                    android:text="@string/save_details"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
 
         </LinearLayout>
 

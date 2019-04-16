@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
@@ -19,7 +22,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -44,7 +46,6 @@ public class EditProfileActivity extends AppCompatActivity {
     final static int galleryPick = 1;
     String currentUserID;
     private EditText editTextName;
-    private EditText editTextUsername;
     private EditText editTextDOB;
     private EditText editTextPhoneNumber;
     private CircleImageView profileImage;
@@ -55,6 +56,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private StorageReference userProfileImageRef;
     private ProgressDialog progressDialog;
     private String downloadImageUrl;
+    private AutoCompleteTextView selectYourGenderTextView;
+    private ImageView resetSelectedGender;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -81,15 +84,38 @@ public class EditProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }
         profileImage = findViewById(R.id.profile_image_view);
-        editTextUsername = findViewById(R.id.edit_text_username);
         editTextName = findViewById(R.id.edit_text_name);
         editTextDOB = findViewById(R.id.edit_text_DOB);
         editTextPhoneNumber = findViewById(R.id.edit_text_phone_number);
+        selectYourGenderTextView = findViewById(R.id.edit_profile_gender_selector);
+        resetSelectedGender = findViewById(R.id.delete_selected_gender_button);
         buttonSave = findViewById(R.id.buttonSave);
 
         progressDialog = new ProgressDialog(this);
 
-            //initialize calendar
+        //for gender selection
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_list_item_1, getResources()
+                .getStringArray(R.array.gender_names));
+        final String[] selection = new String[1];
+        selectYourGenderTextView.setAdapter(arrayAdapter);
+        selectYourGenderTextView.setCursorVisible(false);
+        selectYourGenderTextView.setOnItemClickListener((parent, view, position, id) -> {
+
+            selectYourGenderTextView.showDropDown();
+
+            resetSelectedGender.setAlpha(.8f);
+        });
+
+        selectYourGenderTextView.setOnClickListener(arg0 -> selectYourGenderTextView.showDropDown());
+
+        resetSelectedGender.setOnClickListener(view -> {
+            selectYourGenderTextView.setText(null);
+            resetSelectedGender.setAlpha(.2f);
+            selection[0] = null;
+        });
+
+        //initialize calendar
         Calendar myCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
 
@@ -106,12 +132,13 @@ public class EditProfileActivity extends AppCompatActivity {
         };
 
         editTextDOB.setOnTouchListener((v, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 new DatePickerDialog(EditProfileActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();}
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
 
-                        return true;
+            return true;
         });
 
         buttonSave.setOnClickListener(v -> {
@@ -122,14 +149,7 @@ public class EditProfileActivity extends AppCompatActivity {
             progressDialog.setCanceledOnTouchOutside(true);
             progressDialog.show();
 
-            if (!checkIfUserNameExists()) {
-                editTextUsername.setError("Username Taken, please choose a different username");
-                editTextUsername.requestFocus();
-                progressDialog.dismiss();
-
-            } else {
-                saveUserInformation();
-            }
+            saveUserInformation();
 
         });
         profileImage.setOnClickListener(v -> {
@@ -253,34 +273,31 @@ public class EditProfileActivity extends AppCompatActivity {
 
     //Validation where both details must be filled and saved to fireBase database
     private void saveUserInformation() {
-        final String username = editTextUsername.getText().toString().trim();
+        final String gender = selectYourGenderTextView.getText().toString().trim();
         String fullName = editTextName.getText().toString().trim();
         String dob = editTextDOB.getText().toString();
         String phoneNumber = editTextPhoneNumber.getText().toString();
 
         //creating a username and checking if any other exists
-        if (username.isEmpty()) {
-            editTextUsername.setError("You must select a username");
-            editTextUsername.requestFocus();
+        if (gender.isEmpty()) {
+            selectYourGenderTextView.setError("Please select your gender");
+            selectYourGenderTextView.requestFocus();
             progressDialog.dismiss();
-
-        }
-        if (fullName.isEmpty()) {
+        } else if (fullName.isEmpty()) {
             editTextName.setError("Name is required");
             editTextName.requestFocus();
             progressDialog.dismiss();
-        }
-        if (phoneNumber.isEmpty()){
+        } else if (dob.isEmpty()) {
+            editTextDOB.setError("Please select your date of birth");
+            progressDialog.dismiss();
+        } else if (phoneNumber.isEmpty()) {
             editTextPhoneNumber.setError("Please enter your phone number");
             progressDialog.dismiss();
-        }
-
-        if (phoneNumber.length() < 10 || phoneNumber.length()> 13) {
+        } else if (phoneNumber.length() < 10 || phoneNumber.length() > 13) {
 
             editTextPhoneNumber.setError("Enter a valid phone number");
             progressDialog.dismiss();
-        }
-        else {
+        } else {
 
             progressDialog.setTitle("Uploading Details...");
             progressDialog.setMessage("Saving your information, Please wait...");
@@ -288,14 +305,13 @@ public class EditProfileActivity extends AppCompatActivity {
             progressDialog.setCanceledOnTouchOutside(true);
 
 
-            final HashMap userMap = new HashMap();
+            final HashMap<String, Object> userMap = new HashMap<>();
             userMap.put("uid", currentUserID);
             userMap.put("status", "Hey there, I am using this informative SMART PARENT App!!!");
-            userMap.put("userName", username);
             userMap.put("fullName", fullName);
             userMap.put("phoneNumber", phoneNumber);
-            userMap.put("dob", dob );
-            userMap.put("gender", "Input");
+            userMap.put("dob", dob);
+            userMap.put("gender", gender);
             userMap.put("numberOfChildren", "Insert");
             usersReference.updateChildren(userMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -323,34 +339,34 @@ public class EditProfileActivity extends AppCompatActivity {
         finish();
         startActivity(registerIntent);
     }
-
-    //checking of the username exists in the database
-    private boolean checkIfUserNameExists() {
-
-        String username = editTextUsername.getText().toString().trim();
-        Query usernameQuery = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Users")
-                .orderByChild("userName")
-                .equalTo(username);
-        usernameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.getChildrenCount() > 0) {
-
-                    //should stop further execution
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //display error
-            }
-        });
-        return true;
-    }
-
 }
+
+/**
+ * //checking of the username exists in the database
+ * private boolean checkIfUserNameExists() {
+ * <p>
+ * String username = editTextUsername.getText().toString().trim();
+ * Query usernameQuery = FirebaseDatabase.getInstance()
+ * .getReference()
+ * .child("Users")
+ * .orderByChild("userName")
+ * .equalTo(username);
+ * usernameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+ *
+ * @Override public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+ * <p>
+ * if (dataSnapshot.getChildrenCount() > 0) {
+ * <p>
+ * //should stop further execution
+ * <p>
+ * }
+ * }
+ * @Override public void onCancelled(@NonNull DatabaseError databaseError) {
+ * //display error
+ * }
+ * });
+ * return true;
+ * }
+ */
+
+

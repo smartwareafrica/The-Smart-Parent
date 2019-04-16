@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,21 +8,13 @@
     android:orientation="vertical"
     tools:context="com.MwandoJrTechnologies.the_smart_parent.Stories.StoriesActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/toolbar"
         android:id="@+id/stories_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -41,9 +33,9 @@
         android:src="@drawable/outline_add_white_36"
         android:elevation="@dimen/default_gap"/>
 
-    <include layout="@layout/stories_content_main" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>
 
 
 <!--

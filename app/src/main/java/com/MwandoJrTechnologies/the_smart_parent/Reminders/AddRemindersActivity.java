@@ -17,12 +17,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.MwandoJrTechnologies.the_smart_parent.Reminders.data.AlarmReminderContract;
 import com.MwandoJrTechnologies.the_smart_parent.Reminders.reminder.AlarmScheduler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -468,15 +468,15 @@ public class AddRemindersActivity extends AppCompatActivity implements
             // content URI already identifies the reminder that we want.
             int rowsDeleted = getContentResolver().delete(mCurrentReminderUri, null, null);
 
-            // Show a toast message depending on whether or not the delete was successful.
+            // Show a snack bar message depending on whether or not the delete was successful.
             if (rowsDeleted == 0) {
                 // If no rows were deleted, then there was an error with the delete.
-                Toast.makeText(this, getString(R.string.editor_delete_reminder_failed),
-                        Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.editor_delete_reminder_failed), Snackbar.LENGTH_SHORT);
+                snackbar.show();
             } else {
-                // Otherwise, the delete was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_delete_reminder_successful),
-                        Toast.LENGTH_SHORT).show();
+                // Otherwise, the delete was successful and we can display a snackbar.
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.editor_delete_reminder_successful), Snackbar.LENGTH_SHORT);
+                snackbar.show();
             }
         }
 
@@ -528,29 +528,32 @@ public class AddRemindersActivity extends AppCompatActivity implements
                 // This is a NEW reminder, so insert a new reminder into the provider returning the content URI for the new reminder.
                 Uri newUri = getContentResolver().insert(AlarmReminderContract.AlarmReminderEntry.CONTENT_URI, values);
 
-                // Show a toast message depending on whether or not the insertion was successful.
+                // Show a SnackBar message depending on whether or not the insertion was successful.
                 if (newUri == null) {
                     // If the new content URI is null, then there was an error with insertion.
-                    Toast.makeText(this, getString(R.string.editor_insert_reminder_failed),
-                            Toast.LENGTH_SHORT).show();
+
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.editor_insert_reminder_failed), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 } else {
-                    // Otherwise, the insertion was successful and we can display a toast.
-                    Toast.makeText(this, getString(R.string.editor_insert_reminder_successful),
-                            Toast.LENGTH_SHORT).show();
+                    // Otherwise, the insertion was successful and we can display a snackbar.
+
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.editor_insert_reminder_successful), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             } else {
 
                 int rowsAffected = getContentResolver().update(mCurrentReminderUri, values, null, null);
 
-                // Show a toast message depending on whether or not the update was successful.
+                // Show a snackbar message depending on whether or not the update was successful.
                 if (rowsAffected == 0) {
                     // If no rows were affected, then there was an error with the update.
-                    Toast.makeText(this, getString(R.string.editor_update_reminder_failed),
-                            Toast.LENGTH_SHORT).show();
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.editor_update_reminder_failed), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+
                 } else {
-                    // Otherwise, the update was successful and we can display a toast.
-                    Toast.makeText(this, getString(R.string.editor_update_reminder_successful),
-                            Toast.LENGTH_SHORT).show();
+                    // Otherwise, the update was successful and we can display a snackbar.
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.editor_update_reminder_successful), Snackbar.LENGTH_SHORT);
+                    snackbar.show();
                 }
             }
 
@@ -562,13 +565,14 @@ public class AddRemindersActivity extends AppCompatActivity implements
                     new AlarmScheduler().setAlarm(getApplicationContext(), selectedTimestamp, mCurrentReminderUri);
                 }
 
-                Toast.makeText(this, "Alarm time is " + selectedTimestamp,
-                        Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Alarm time is "+ selectedTimestamp, Snackbar.LENGTH_SHORT);
+                snackbar.show();
+
             }
 
-            // Create toast to confirm new reminder
-            Toast.makeText(getApplicationContext(), "Saved",
-                    Toast.LENGTH_SHORT).show();
+            // Create snackbar to confirm new reminder
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Saved", Snackbar.LENGTH_SHORT);
+            snackbar.show();
 
         }
     }
@@ -604,6 +608,7 @@ public class AddRemindersActivity extends AppCompatActivity implements
                 null);                  // Default sort order
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor == null || cursor.getCount() < 1) {

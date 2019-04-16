@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
     private DatabaseReference postsReference;
- //   private DatabaseReference commentsReference;
+    //   private DatabaseReference commentsReference;
     String currentUserID;
 
     @Override
@@ -116,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
         navProfileName = navView.findViewById(R.id.nav_user_full_name);
         navEmail = navView.findViewById(R.id.nav_email);
 
+        hideNavigationDrawerItem();
+
         fab.setOnClickListener(v -> SendUserToWriteQueryActivity());
 
         checkConnectionStatus();
@@ -123,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(() -> {
 
             final Handler handler = new Handler();
-            handler.postDelayed(() -> checkConnectionStatus(), 500);
+            handler.postDelayed(() -> checkConnectionStatus(), 1000);
 
             DisplayAllUsersQueries();
             swipeRefreshLayout.setRefreshing(false);
@@ -185,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         newsFeedProgressBar.setVisibility(View.INVISIBLE);
 
     }
+
 
     //checking internet state
     private void checkConnectionStatus() {
@@ -285,6 +289,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
     //creating a static class for displaying  queries from all users
     public static class PostsViewHolder extends RecyclerView.ViewHolder {
         TextView usersName;
@@ -315,17 +321,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //counting number of comments
-        public void setCommentsCounterStatus(final String PostKey){
+        public void setCommentsCounterStatus(final String PostKey) {
             commentsRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    if (dataSnapshot.child(PostKey).hasChild("Comments")){
+                    if (dataSnapshot.child(PostKey).hasChild("Comments")) {
                         countComments = (int) dataSnapshot.child(PostKey).child("Comments").getChildrenCount();
                         postResponses.setText(Integer.toString(countComments) + " Responses");
-                    }else {
-                      //  countComments = (int) dataSnapshot.child(PostKey).getChildrenCount();
-                      //  postResponses.setText(Integer.toString(countComments));
+                    } else {
+                        //  countComments = (int) dataSnapshot.child(PostKey).getChildrenCount();
+                        //  postResponses.setText(Integer.toString(countComments));
                     }
 
                 }
@@ -353,6 +359,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Hides an item on the navigation drawer
+    private void hideNavigationDrawerItem() {
+
+        Menu menu = navigationView.getMenu();
+        menu.findItem(R.id.nav_chats).setVisible(false);
+    }
+
     // when user selects navigation drawer items
     private void UserMenuSelector(MenuItem menuItem) {
 
@@ -361,10 +374,10 @@ public class MainActivity extends AppCompatActivity {
                 SendUserToMainActivity();
                 break;
             case R.id.nav_stories:
-               SendUserToStoriesActivity();
+                SendUserToStoriesActivity();
                 break;
             case R.id.nav_chats:
-                 SendUserToAllChatMessagesActivity();
+                SendUserToAllChatMessagesActivity();
                 break;
 
             case R.id.nav_search_other_parents_name:
@@ -374,9 +387,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_profile:
                 SendUserToProfileActivity();
                 break;
-            case R.id.nav_growthAnalysis:
-               SendUserToGrowthAnalysisActivity();
-                break;
+            //      case R.id.nav_growthAnalysis:
+            //       SendUserToGrowthAnalysisActivity();
+            //     break;
             case R.id.nav_reminders:
                 SendUserToAlarmRemindersActivity();
 
@@ -393,8 +406,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
-
 
 
     // There are 2 signatures and only `onPostCreate(Bundle state) shows the hamburger icon.
@@ -490,6 +501,7 @@ public class MainActivity extends AppCompatActivity {
         finish();
         startActivity(mainActivityIntent);
     }
+
     //open stories activity
     private void SendUserToStoriesActivity() {
 

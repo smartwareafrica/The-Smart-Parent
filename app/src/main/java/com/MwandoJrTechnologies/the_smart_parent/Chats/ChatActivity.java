@@ -161,7 +161,7 @@ public class ChatActivity extends AppCompatActivity {
             SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
             saveCurrentTime = currentTime.format(callForTime.getTime());
 
-            Map messageTextBody = new HashMap();
+            Map<String, String> messageTextBody = new HashMap<>();
             messageTextBody.put("message", messageText);
             messageTextBody.put("time", saveCurrentTime);
             messageTextBody.put("date", saveCurrentDate);
@@ -170,7 +170,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
             //all message information
-            Map messageBodyDetails = new HashMap();
+            Map<String, Object> messageBodyDetails = new HashMap<String, Object>();
             //now display message for sender and receiver
             messageBodyDetails.put(message_sender_reference + "/" + message_push_id, messageTextBody);
             messageBodyDetails.put(message_receiver_reference + "/" + message_push_id, messageTextBody);

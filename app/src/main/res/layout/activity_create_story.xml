@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/baseline_add_a_photo_black_36"
+            android:src="@drawable/ic_add_a_photo_black_24dp"
             tools:ignore="ContentDescription" />
 
         <EditText

@@ -156,6 +156,9 @@
     <string name="title_of_story">Title of story</string>
     <string name="upload_story">Upload story</string>
     <string name="back">Back</string>
+    <string name="category_name">Category name</string>
+    <string name="product_category_image">Product category image</string>
+    <string name="reviews">Reviews</string>
 
 
     <string-array name="gender_names">

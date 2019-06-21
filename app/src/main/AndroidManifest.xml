@@ -16,6 +16,8 @@
         android:roundIcon="@drawable/smart_parent_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".BabyProducts.IndividualProductActivity"/>
+        <activity android:name=".BabyProducts.ProductCategory" />
         <activity android:name=".Stories.SingleStoryActivity" />
         <activity android:name=".Stories.CreateStoryActivity" />
         <activity android:name=".Stories.StoriesActivity" />

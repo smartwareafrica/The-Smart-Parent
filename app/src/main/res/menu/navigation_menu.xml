@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/baseline_home_white_24"
+            android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/home" />
         <item
             android:id="@+id/nav_stories"
-            android:icon="@drawable/baseline_receipt_white_24"
+            android:icon="@drawable/ic_receipt_black_24dp"
             android:title="@string/stories" />
         <item
             android:id="@+id/nav_chats"
@@ -16,27 +16,27 @@
             android:title="@string/chats" />
         <item
             android:id="@+id/nav_search_other_parents_name"
-            android:icon="@drawable/outline_search_white_24"
+            android:icon="@drawable/ic_search_black_24dp"
             android:title="@string/search_by_full_name" />
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/baseline_person_outline_white_24"
+            android:icon="@drawable/ic_person_outline_white_24dp"
             android:title="@string/profile" />
 
-        <!--
+
         <item
             android:id="@+id/nav_growthAnalysis"
-            android:icon="@drawable/baseline_timeline_white_24"
+            android:icon="@drawable/ic_timeline_white_24dp"
             android:title="@string/growth_analysis" />
 
-            -->
+
         <item
             android:id="@+id/nav_reminders"
-            android:icon="@drawable/baseline_notifications_active_white_24"
+            android:icon="@drawable/ic_notifications_active_black_24dp"
             android:title="@string/reminders" />
         <item
             android:id="@+id/nav_baby_products"
-            android:icon="@drawable/baseline_star_half_white_24"
+            android:icon="@drawable/ic_star_half_white_24dp"
             android:title="@string/baby_products" />
     </group>
     <group
@@ -44,12 +44,12 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_feedback"
-            android:icon="@drawable/baseline_feedback_white_24"
+            android:icon="@drawable/ic_feedback_black_24dp"
             android:title="@string/feedback" />
     </group>
     <item
         android:id="@+id/nav_logout"
-        android:icon="@drawable/baseline_phonelink_lock_white_24"
+        android:icon="@drawable/ic_phonelink_lock_white_24dp"
         android:title="@string/logout"/>
 
 </menu>

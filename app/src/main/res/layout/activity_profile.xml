@@ -34,7 +34,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="5dp"
-                    android:drawableTop="@drawable/outline_settings_black_36"
+                    android:drawableTop="@drawable/ic_settings_black_24dp"
                     android:padding="5dp"
                     android:text="@string/edit_profile"
                     android:textColor="@android:color/black"

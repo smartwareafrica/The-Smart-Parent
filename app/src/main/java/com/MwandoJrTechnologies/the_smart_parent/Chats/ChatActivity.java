@@ -1,5 +1,6 @@
 package com.MwandoJrTechnologies.the_smart_parent.Chats;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -153,12 +154,12 @@ public class ChatActivity extends AppCompatActivity {
             //setting current date and time to generate random keys for the users images posted
             //setting current date
             Calendar callForDate = Calendar.getInstance();
-            SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
             saveCurrentDate = currentDate.format(callForDate.getTime());
 
             //setting current date
             Calendar callForTime = Calendar.getInstance();
-            SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
             saveCurrentTime = currentTime.format(callForTime.getTime());
 
             Map<String, String> messageTextBody = new HashMap<>();

@@ -30,7 +30,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="30dp"
-        android:src="@drawable/outline_add_white_36"
+        android:src="@drawable/ic_add_white_24dp"
         android:elevation="@dimen/default_gap"/>
 
 

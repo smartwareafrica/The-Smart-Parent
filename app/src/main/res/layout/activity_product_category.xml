@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ProductCategory">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <TextView
+        android:text="@string/baby_products"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/all_baby_products_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#D7D8DF"
+        android:backgroundTint="@color/colorWhiteTransparent" />
+
+</LinearLayout>

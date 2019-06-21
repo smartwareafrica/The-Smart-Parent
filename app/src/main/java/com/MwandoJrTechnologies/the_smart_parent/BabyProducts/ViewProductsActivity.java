@@ -122,7 +122,7 @@ public class ViewProductsActivity extends AppCompatActivity {
 
                         Picasso.get()
                                 .load(products.getProductImage())
-                                .placeholder(R.drawable.project_logo)
+                                .placeholder(R.mipmap.project_logo)
                                 .into(productsViewHolder.productRatingViewImage);
 
                         productsViewHolder.productRatingName.setText(products.getProductName());

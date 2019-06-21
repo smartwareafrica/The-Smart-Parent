@@ -86,7 +86,7 @@ public class RateBabyProductsActivity extends AppCompatActivity {
 
                         Picasso.get()
                                 .load(products.getProductImage())
-                                .placeholder(R.drawable.project_logo)
+                                .placeholder(R.mipmap.project_logo)
                                 .into(productsViewHolder.productRatingImage);
 
                         productsViewHolder.productRatingDisplayName.setText(products.getProductName());

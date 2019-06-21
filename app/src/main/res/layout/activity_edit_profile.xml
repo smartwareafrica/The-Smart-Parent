@@ -137,7 +137,7 @@
                         android:layout_weight=".10"
                         android:alpha=".2"
                         android:contentDescription="@string/delete_button"
-                        android:src="@drawable/baseline_refresh_black_36" />
+                        android:src="@drawable/ic_refresh_black_24dp" />
 
                 </LinearLayout>
 
@@ -171,7 +171,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
 
     </ScrollView>
 

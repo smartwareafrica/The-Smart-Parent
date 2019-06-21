@@ -48,7 +48,7 @@
         android:layout_alignParentEnd="true"
         android:contentDescription="@string/comment_on_post"
         android:padding="15dp"
-        android:src="@drawable/baseline_send_black_48" />
+        android:src="@drawable/ic_send_black_24dp" />
 
     </RelativeLayout>
 

@@ -56,7 +56,7 @@
             android:layout_weight=".20"
             android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:contentDescription="@string/attach_an_image"
-            android:src="@drawable/baseline_send_black_36" />
+            android:src="@drawable/ic_send_black_24dp" />
 
     </LinearLayout>
 

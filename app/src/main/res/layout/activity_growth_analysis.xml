@@ -40,7 +40,7 @@
             android:clickable="true"
             android:elevation="@dimen/default_gap"
             android:focusable="true"
-            android:src="@drawable/outline_date_range_white_24"
+            android:src="@drawable/ic_date_range_black_24dp"
             android:text="@string/date_of_birth" />
 
 
@@ -65,7 +65,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@+id/g_analysis_birth_date1"
-            android:drawableEnd="@drawable/baseline_arrow_forward_black_24"
+            android:drawableEnd="@drawable/ic_arrow_forward_black_24dp"
             android:drawablePadding="2dp"
             android:text="@string/please_select"
             android:textColor="@android:color/black"

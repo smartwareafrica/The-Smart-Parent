@@ -50,6 +50,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
@@ -290,7 +291,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     //creating a static class for displaying  queries from all users
     public static class PostsViewHolder extends RecyclerView.ViewHolder {
         TextView usersName;
@@ -387,9 +387,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_profile:
                 SendUserToProfileActivity();
                 break;
-            //      case R.id.nav_growthAnalysis:
-            //       SendUserToGrowthAnalysisActivity();
-            //     break;
+            case R.id.nav_growthAnalysis:
+                SendUserToGrowthAnalysisActivity();
+                break;
             case R.id.nav_reminders:
                 SendUserToAlarmRemindersActivity();
 

@@ -47,7 +47,7 @@
             app:defaultQueryHint="@string/type_here_to_search"
             app:queryBackground="@drawable/bg_white_rounded"
             app:queryHint="@string/type_here_to_search"
-            app:searchHintIcon="@drawable/baseline_search_black_24"
+            app:searchHintIcon="@drawable/ic_search_black_24dp"
             app:submitBackground="@drawable/bg_white_rounded" />
 
         <androidx.appcompat.widget.AppCompatButton

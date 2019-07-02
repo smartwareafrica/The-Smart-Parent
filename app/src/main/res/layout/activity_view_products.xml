@@ -21,23 +21,10 @@
     </androidx.recyclerview.widget.RecyclerView>
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_to_add_products_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="end|bottom"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="70dp"
-        android:src="@drawable/ic_add_white_24dp"
-        android:elevation="@dimen/default_gap"
-        tools:ignore="RelativeOverlap" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_go_to_rate_products"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -45,6 +32,5 @@
         android:backgroundTint="#0F6A9C"
         android:text="@string/rate"
         android:textColor="@android:color/white" />
-
 
 </RelativeLayout>

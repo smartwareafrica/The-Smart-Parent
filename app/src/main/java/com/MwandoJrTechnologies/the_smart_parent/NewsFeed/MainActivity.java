@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ProductCategory;
 import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ViewProductsActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Chats.AllChatMessagesActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Chats.SearchOtherParentsActivity;
@@ -395,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case R.id.nav_baby_products:
-                SendUserToViewProductsActivity();
+                SendUserToProductCategoryActivity();
                 break;
             case R.id.nav_feedback:
                 SendUserToFeedbackActivity();
@@ -550,8 +551,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //open view products activity
-    private void SendUserToViewProductsActivity() {
-        Intent viewProductsActivityIntent = new Intent(MainActivity.this, ViewProductsActivity.class);
+    private void SendUserToProductCategoryActivity() {
+        Intent viewProductsActivityIntent = new Intent(MainActivity.this, ProductCategory.class);
         finish();
         startActivity(viewProductsActivityIntent);
     }

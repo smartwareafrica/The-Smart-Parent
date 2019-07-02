@@ -39,7 +39,7 @@ public class ViewProductsActivity extends AppCompatActivity {
     String currentUserID;
 
     private AppCompatButton goToRateProductsButton;
-    private FloatingActionButton addProductsFAB;
+
     private RecyclerView allProductsRecyclerView;
 
     @Override
@@ -60,15 +60,9 @@ public class ViewProductsActivity extends AppCompatActivity {
         productsReference = FirebaseDatabase.getInstance().getReference().child("Products");
 
         goToRateProductsButton = findViewById(R.id.button_go_to_rate_products);
-        addProductsFAB = findViewById(R.id.fab_to_add_products_activity);
         allProductsRecyclerView = findViewById(R.id.all_baby_products_layout);
 
         goToRateProductsButton.setOnClickListener(v -> SendUserToRateBabyProductsActivity());
-        addProductsFAB.setOnClickListener(v -> SendUserToAddProductsActivity());
-
-        if (!currentUserID.equals("K7Ng2Q3dXiQIGo56hjfsvkAvFgB2") ){
-            addProductsFAB.hide();
-        }
 
         DisplayAllProductsLayouts();
     }
@@ -195,12 +189,4 @@ public class ViewProductsActivity extends AppCompatActivity {
         finish();
         startActivity(rateProductsActivityIntent);
     }
-
-    //open add products activity
-    private void SendUserToAddProductsActivity() {
-        Intent addProductsActivityIntent = new Intent(ViewProductsActivity.this, AddProductsActivity.class);
-        finish();
-        startActivity(addProductsActivityIntent);
-    }
-
 }

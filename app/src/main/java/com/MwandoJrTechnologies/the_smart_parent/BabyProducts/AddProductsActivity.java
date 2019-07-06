@@ -88,39 +88,41 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
 
         buttonUploadProduct.setOnClickListener(v ->
 
-    {
-        //show progress dialog
-        progressDialog.setTitle("Product Upload");
-        progressDialog.setMessage("Uploading product, Please wait...");
-        progressDialog.setCanceledOnTouchOutside(true);
-        progressDialog.show();
+        {
+            //show progress dialog
+            progressDialog.setTitle("Product Upload");
+            progressDialog.setMessage("Uploading product, Please wait...");
+            progressDialog.setCanceledOnTouchOutside(true);
+            progressDialog.show();
 
-        saveProductInformation();
+            saveProductInformation();
 
-    });
+        });
 
         productImage.setOnClickListener(v ->
 
-    {
-        //opening gallery to choose image
-        Intent galleryIntent = new Intent();
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent, galleryPick);
-    });
+        {
+            //opening gallery to choose image
+            Intent galleryIntent = new Intent();
+            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+            galleryIntent.setType("image/*");
+            startActivityForResult(galleryIntent, galleryPick);
+        });
 
         // for category dropdown
         productCategoryDropDown.setOnItemSelectedListener(this);
 
         //dropdown elements
-        List<String> categories = new ArrayList<String>();
-        categories.add("Food");
-        categories.add("Soap");
-        categories.add("Diapers");
-        categories.add("Baby Oil");
+        List<String> categories = new ArrayList<>();
+        categories.add("diapers");
+        categories.add("bathingAndSkinCare");
+        categories.add("food");
+        categories.add("health");
+        categories.add("safety");
+        categories.add("toys");
 
         //create array adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -285,7 +287,7 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
             progressDialog.setCanceledOnTouchOutside(true);
 
 
-            final HashMap productMap = new HashMap();
+            final HashMap<String, Object> productMap = new HashMap<>();
             productMap.put("productName", productName);
             productMap.put("productDescription", productDescription);
             productMap.put("productManufactureCompany", productManufactureCompany);

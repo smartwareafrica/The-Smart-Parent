@@ -42,58 +42,13 @@ public class ProductCategory extends AppCompatActivity {
 
         addProductsFAB = findViewById(R.id.fab_to_add_products_activity);
 
-        addProductsFAB.setOnClickListener(v -> SelectProductCategory());
+        addProductsFAB.setOnClickListener(v -> SendUserToAddProductActivity());
 
         if (!currentUserID.equals("K7Ng2Q3dXiQIGo56hjfsvkAvFgB2")) {
             addProductsFAB.hide();
         }
     }
 
-    private void SelectProductCategory() {
-
-        //create an alert builder box
-        CharSequence options[] = new CharSequence[]{
-
-                "Diapers",
-                "Bathing and Skin",
-                "Toys",
-                "Food",
-                "Safety",
-                "Health"
-
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(ProductCategory.this);
-        builder.setTitle("Please select product category");
-
-        //now make it selectable
-        builder.setItems(options, (dialog, which) -> {
-
-            if (which == 0) {
-
-                SendUserToAddProductActivity();
-
-            }
-            if (which == 1) {
-
-            }
-            if (which == 2) {
-
-            }
-            if (which == 3) {
-
-            }
-            if (which == 4) {
-
-            }
-            if (which == 5) {
-
-            }
-        });
-
-        builder.show();
-
-    }
 
     private void SendUserToAddProductActivity() {
         Intent addProductIntent = new Intent(ProductCategory.this, AddProductsActivity.class);

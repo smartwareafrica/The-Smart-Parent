@@ -161,6 +161,7 @@
     <string name="reviews">Reviews</string>
     <string name="hello">HELLO</string>
     <string name="splash_screen">splash screen</string>
+    <string name="add_products">Add Products</string>
 
 
     <string-array name="gender_names">

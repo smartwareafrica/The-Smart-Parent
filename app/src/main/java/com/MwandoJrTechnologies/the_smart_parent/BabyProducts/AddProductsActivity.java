@@ -286,7 +286,6 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
             progressDialog.show();
             progressDialog.setCanceledOnTouchOutside(true);
 
-
             final HashMap<String, Object> productMap = new HashMap<>();
             productMap.put("productName", productName);
             productMap.put("productDescription", productDescription);

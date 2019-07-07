@@ -43,9 +43,14 @@
         android:id="@+id/group_menu"
         android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_add_products"
+            android:icon="@drawable/ic_add_white_24dp"
+            android:title="@string/add_products" />
+        <item
             android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_feedback_black_24dp"
             android:title="@string/feedback" />
+
     </group>
     <item
         android:id="@+id/nav_logout"

@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.AddProductsActivity;
 import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ProductCategory;
 import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ViewProductsActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Chats.AllChatMessagesActivity;
@@ -401,6 +402,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_feedback:
                 SendUserToFeedbackActivity();
                 break;
+            case R.id.nav_add_products:
+                SendUserToAddProductsActivity();
+                break;
             case R.id.nav_logout:
                 mAuth.signOut();
                 SendUserToLoginActivity();
@@ -517,6 +521,12 @@ public class MainActivity extends AppCompatActivity {
         Intent feedbackActivityIntent = new Intent(MainActivity.this, FeedbackActivity.class);
         finish();
         startActivity(feedbackActivityIntent);
+    }
+
+    private void SendUserToAddProductsActivity() {
+        Intent addProductActivityIntent = new Intent(MainActivity.this, AddProductsActivity.class);
+        finish();
+        startActivity(addProductActivityIntent);
     }
 
     //opens all chat messages layout

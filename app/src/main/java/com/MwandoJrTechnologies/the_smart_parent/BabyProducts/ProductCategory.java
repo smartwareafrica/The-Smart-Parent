@@ -1,15 +1,10 @@
 package com.MwandoJrTechnologies.the_smart_parent.BabyProducts;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.MwandoJrTechnologies.the_smart_parent.Chats.ChatActivity;
-import com.MwandoJrTechnologies.the_smart_parent.Chats.SearchOtherParentsActivity;
-import com.MwandoJrTechnologies.the_smart_parent.Profile.OtherParentsProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,7 +21,7 @@ public class ProductCategory extends AppCompatActivity {
     private FloatingActionButton addProductsFAB;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_category);
 

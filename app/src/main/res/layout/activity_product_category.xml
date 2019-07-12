@@ -13,127 +13,63 @@
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/all_baby_products_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp"
         app:columnCount="2">
-        <LinearLayout
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            app:layout_columnWeight="1"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/project_logo"
+            android:text="Diapers"
+            app:layout_gravity="fill_horizontal" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            app:layout_columnWeight="1"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/project_logo"
+            android:text="Bathing And Skin Care"
+            app:layout_gravity="fill_horizontal" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            app:layout_columnWeight="1"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/project_logo"
+            android:text="Food"
+            app:layout_gravity="fill_horizontal" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            app:layout_columnWeight="1"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/project_logo"
+            android:text="health"
+            app:layout_gravity="fill_horizontal" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            app:layout_columnWeight="1"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/project_logo"
+            android:text="safety"
+            app:layout_gravity="fill_horizontal" />
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:orientation="vertical"
-            app:layout_gravity="fill_horizontal">
-
-            <ImageView
-                android:id="@+id/product_image"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:contentDescription="@string/product_category_image" />
-
-            <TextView
-                android:id="@+id/product_category_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@string/category_name"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/product_category_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@string/description" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            android:orientation="vertical"
-            app:layout_gravity="fill_horizontal">
-
-            <ImageView
-                android:id="@+id/product_image2"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:contentDescription="@string/product_category_image" />
-
-            <TextView
-                android:id="@+id/product_category_name2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@string/category_name"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/product_category_description2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@string/description" />
-        </LinearLayout>
-
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="0dp"
-            android:layout_height="230dp"
-            android:gravity="center"
-            android:src="@mipmap/project_logo"
+            android:drawableTop="@mipmap/project_logo"
+            android:text="Toys"
             app:layout_columnWeight="1"
             app:layout_gravity="fill_horizontal" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="0dp"
-            android:layout_height="230dp"
-            android:gravity="center"
-            android:src="@mipmap/project_logo"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill_horizontal" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="0dp"
-            android:layout_height="230dp"
-            android:gravity="center"
-            android:src="@mipmap/project_logo"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill_horizontal" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="0dp"
-            android:layout_height="230dp"
-            android:gravity="center"
-            android:src="@mipmap/project_logo"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill_horizontal" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="0dp"
-            android:layout_height="230dp"
-            android:gravity="center"
-            android:src="@mipmap/project_logo"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill_horizontal" />
-
 
     </androidx.gridlayout.widget.GridLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_to_add_products_activity"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -145,6 +81,7 @@
         android:layout_marginBottom="70dp"
         android:elevation="@dimen/default_gap"
         android:src="@drawable/ic_add_white_24dp"
+        android:visibility="gone"
         tools:ignore="RelativeOverlap" />
 
 </RelativeLayout>

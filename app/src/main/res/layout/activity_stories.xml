@@ -33,11 +33,7 @@
         android:src="@drawable/ic_add_white_24dp"
         android:elevation="@dimen/default_gap"/>
 
-
-
 </RelativeLayout>
-
-
 <!--
  <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"

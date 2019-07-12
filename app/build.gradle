@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+// Apply the Performance Monitoring plugin to enable instrumentation
+apply plugin: 'com.google.firebase.firebase-perf'
+
+
 android {
     compileSdkVersion 28
     defaultConfig {

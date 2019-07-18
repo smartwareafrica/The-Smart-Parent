@@ -2,6 +2,7 @@ package com.MwandoJrTechnologies.the_smart_parent.BabyProducts;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -37,10 +39,13 @@ public class ViewProductsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference productsReference;
     String currentUserID;
+    private String productCategory;
 
     private AppCompatButton goToRateProductsButton;
 
     private RecyclerView allProductsRecyclerView;
+
+    private TextView viewCategoryTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,33 +62,48 @@ public class ViewProductsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
         getSupportActionBar().setTitle("View Product rating");
 
-        productsReference = FirebaseDatabase.getInstance().getReference().child("Products");
 
         goToRateProductsButton = findViewById(R.id.button_go_to_rate_products);
         allProductsRecyclerView = findViewById(R.id.all_baby_products_layout);
 
+        viewCategoryTv = findViewById(R.id.tv_view_product_cat);
+
         goToRateProductsButton.setOnClickListener(v -> SendUserToRateBabyProductsActivity());
+
+        /**
+         * Receiving data inside onCreate() method of Second Activity
+         *
+         * Get extra method
+         */
+
+        productCategory = getIntent().getExtras().get("product_category").toString();
+        viewCategoryTv.setText(productCategory);
+
+        productsReference = FirebaseDatabase.getInstance().getReference().child("Products");
+        Query categoryQuery = productsReference.orderByChild("category").equalTo(productCategory);
 
         DisplayAllProductsLayouts();
     }
 
     private void DisplayAllProductsLayouts() {
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ViewProductsActivity.this);
+        LinearLayoutManager linearLayoutManager = new
+                LinearLayoutManager(ViewProductsActivity.this);
 
         allProductsRecyclerView.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
 
-
-        final FirebaseRecyclerOptions<Products> options = new FirebaseRecyclerOptions.Builder<Products>()
+        final FirebaseRecyclerOptions<Products> options = new
+                FirebaseRecyclerOptions.Builder<Products>()
                 .setQuery(productsReference, Products.class)
                 .build();
 
         FirebaseRecyclerAdapter<Products, ProductsViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Products, ProductsViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull ProductsViewHolder productsViewHolder, int position, @NonNull Products products) {
+                    protected void onBindViewHolder(@NonNull ProductsViewHolder productsViewHolder,
+                                                    int position, @NonNull Products products) {
 
 
                         productsReference.addValueEventListener(new ValueEventListener() {
@@ -94,15 +114,17 @@ public class ViewProductsActivity extends AppCompatActivity {
                                 float ratingTotal = 0;
                                 float ratingAverage = 0;
 
-                                for (DataSnapshot child : dataSnapshot.child("rating").getChildren()){
+                                for (DataSnapshot child : dataSnapshot.child("rating")
+                                        .getChildren()){
 
-                                    ratingSum = ratingSum + Integer.valueOf(child.getValue().toString());
+                                    ratingSum = ratingSum + Integer.valueOf(child.getValue()
+                                            .toString());
                                     ratingTotal++;
                                 }
                                 if (ratingTotal != 0){
                                     ratingAverage = ratingSum/ratingTotal;
 
-                                    productsViewHolder.productRatedRatingBar.setRating(ratingAverage);
+                                  productsViewHolder.productRatedRatingBar.setRating(ratingAverage);
                                 }
 
                             }
@@ -120,18 +142,23 @@ public class ViewProductsActivity extends AppCompatActivity {
                                 .into(productsViewHolder.productRatingViewImage);
 
                         productsViewHolder.productRatingName.setText(products.getProductName());
-                        productsViewHolder.productRatingManufacturer.setText(products.getProductManufactureCompany());
-                        productsViewHolder.productRatingDescription.setText(products.getProductDescription());
+                        productsViewHolder.productRatingManufacturer
+                                .setText(products.getProductManufactureCompany());
+                        productsViewHolder.productRatingDescription
+                                .setText(products.getProductDescription());
 
 
                     }
 
                     @NonNull
                     @Override
-                    public ProductsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    public ProductsViewHolder onCreateViewHolder
+                            (@NonNull ViewGroup parent, int viewType) {
                         View view = LayoutInflater
                                 .from(parent.getContext())
-                                .inflate(R.layout.all_baby_products_display_layout, parent, false);
+                                .inflate(R.layout.all_baby_products_display_layout,
+                                        parent,
+                                        false);
                         ProductsViewHolder viewHolder = new ProductsViewHolder(view);
 
                         return viewHolder;
@@ -178,14 +205,16 @@ public class ViewProductsActivity extends AppCompatActivity {
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(ViewProductsActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new
+                Intent(ViewProductsActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
     }
 
     //open rate products activity
     private void SendUserToRateBabyProductsActivity() {
-        Intent rateProductsActivityIntent = new Intent(ViewProductsActivity.this, RateBabyProductsActivity.class);
+        Intent rateProductsActivityIntent = new
+                Intent(ViewProductsActivity.this, RateBabyProductsActivity.class);
         finish();
         startActivity(rateProductsActivityIntent);
     }

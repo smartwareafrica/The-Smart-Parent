@@ -162,6 +162,13 @@
     <string name="hello">HELLO</string>
     <string name="splash_screen">splash screen</string>
     <string name="add_products">Add Products</string>
+    <string name="bathing_and_skin_care">Bathing And Skin Care</string>
+    <string name="select_a_category">For more information please select one of each category.</string>
+    <string name="baby_diapers">Baby Diapers</string>
+    <string name="baby_food">Baby Food</string>
+    <string name="baby_health">Baby Health</string>
+    <string name="baby_s_safety">Baby\'s Safety</string>
+    <string name="toys">Toys</string>
 
     <string-array name="gender_names">
         <item>Male</item>

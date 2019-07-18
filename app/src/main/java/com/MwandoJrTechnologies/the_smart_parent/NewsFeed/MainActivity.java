@@ -166,7 +166,8 @@ public class MainActivity extends AppCompatActivity {
                                 .into(navProfileImage);
 
                     } else {
-                        Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "You need to update your profile", Snackbar.LENGTH_LONG);
+                        Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content),
+                                "You need to update your profile", Snackbar.LENGTH_LONG);
                         snackBar.show();
                     }
                 }
@@ -197,10 +198,12 @@ public class MainActivity extends AppCompatActivity {
     private void checkConnectionStatus() {
 
         if (ConnectionChecker.isConnectedToNetwork(this)) {
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Internet Connection", Snackbar.LENGTH_SHORT);
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                    "Internet Connection", Snackbar.LENGTH_SHORT);
             snackbar.show();
         } else {
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "NETWORK ERROR! Please check your Internet connection", Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                    "NETWORK ERROR! Please check your Internet connection", Snackbar.LENGTH_LONG);
             snackbar.show();
         }
     }
@@ -223,7 +226,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<Posts, PostsViewHolder> fireBaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Posts, PostsViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull PostsViewHolder viewHolder, final int position, @NonNull Posts posts) {
+                    protected void onBindViewHolder(@NonNull PostsViewHolder viewHolder,
+                                                    final int position, @NonNull Posts posts) {
 
                         posts = getItem(position);
                         final String PostKey = getRef(position).getKey();
@@ -231,7 +235,9 @@ public class MainActivity extends AppCompatActivity {
                         final String userID = posts.getUid();
 
 
-                        Picasso.get().load(posts.getProfileImage()).placeholder(R.drawable.profile_image_placeholder).into(viewHolder.profileImg);
+                        Picasso.get().load(posts.getProfileImage())
+                                .placeholder(R.drawable.profile_image_placeholder)
+                                .into(viewHolder.profileImg);
                         viewHolder.usersName.setText(posts.getFullName());
                         viewHolder.postTime.setText(posts.getTime());
                         viewHolder.postDate.setText(posts.getDate());
@@ -240,33 +246,38 @@ public class MainActivity extends AppCompatActivity {
                         //view the specific users profile
                         viewHolder.profileImg.setOnClickListener(v -> {
 
-                            Intent profileIntent = new Intent(MainActivity.this, OtherParentsProfileActivity.class);
+                            Intent profileIntent = new Intent(MainActivity.this,
+                                    OtherParentsProfileActivity.class);
                             profileIntent.putExtra("visit_user_id", userID);
                             startActivity(profileIntent);
                         });
 
                         //view the specific users profile
                         viewHolder.usersName.setOnClickListener(v -> {
-                            Intent profileIntent = new Intent(MainActivity.this, OtherParentsProfileActivity.class);
+                            Intent profileIntent = new Intent(MainActivity.this,
+                                    OtherParentsProfileActivity.class);
                             profileIntent.putExtra("visit_user_id", userID);
                             startActivity(profileIntent);
                         });
 
                         //send post key to click post activity
                         viewHolder.itemView.setOnClickListener(v -> {
-                            Intent clickPostIntent = new Intent(MainActivity.this, ClickPostActivity.class);
+                            Intent clickPostIntent = new Intent(MainActivity.this,
+                                    ClickPostActivity.class);
                             clickPostIntent.putExtra("PostKey", PostKey);
                             startActivity(clickPostIntent);
                         });
 
                         //open comments activity
                         viewHolder.commentOnPost.setOnClickListener(v -> {
-                            Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
+                            Intent commentsIntent = new Intent(MainActivity.this,
+                                    CommentsActivity.class);
                             commentsIntent.putExtra("PostKey", PostKey);
                             startActivity(commentsIntent);
                         });
                         viewHolder.postResponses.setOnClickListener(v -> {
-                            Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
+                            Intent commentsIntent = new Intent(MainActivity.this,
+                                    CommentsActivity.class);
                             commentsIntent.putExtra("PostKey", PostKey);
                             startActivity(commentsIntent);
                         });
@@ -277,7 +288,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @NonNull
                     @Override
-                    public PostsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    public PostsViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+                                                              int viewType) {
                         View view = LayoutInflater
                                 .from(parent.getContext())
                                 .inflate(R.layout.all_post_items_layout, parent, false);
@@ -329,7 +341,10 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     if (dataSnapshot.child(PostKey).hasChild("Comments")) {
-                        countComments = (int) dataSnapshot.child(PostKey).child("Comments").getChildrenCount();
+                        countComments = (int) dataSnapshot
+                                .child(PostKey)
+                                .child("Comments")
+                                .getChildrenCount();
                         postResponses.setText(Integer.toString(countComments) + " Responses");
                     } else {
                         //  countComments = (int) dataSnapshot.child(PostKey).getChildrenCount();
@@ -431,7 +446,8 @@ public class MainActivity extends AppCompatActivity {
     //navigation drawer toggle
     private ActionBarDrawerToggle setupDrawerToggle() {
         // for Hamburger icon
-        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        return new ActionBarDrawerToggle(this,
+                mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
     // The action bar home/up action should open or close the drawer.
@@ -472,7 +488,8 @@ public class MainActivity extends AppCompatActivity {
 
     //opening the login activity
     private void SendUserToLoginActivity() {
-        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent loginIntent = new
+                Intent(MainActivity.this, LoginActivity.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
         finish();
@@ -480,7 +497,8 @@ public class MainActivity extends AppCompatActivity {
 
     //opens edit profile activity
     private void SendUserToEditProfileActivity() {
-        Intent profileIntent = new Intent(MainActivity.this, EditProfileActivity.class);
+        Intent profileIntent = new
+                Intent(MainActivity.this, EditProfileActivity.class);
         profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(profileIntent);
         finish();
@@ -488,7 +506,8 @@ public class MainActivity extends AppCompatActivity {
 
     //opens edit profile activity
     private void SendUserToProfileActivity() {
-        Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+        Intent profileIntent = new
+                Intent(MainActivity.this, ProfileActivity.class);
         profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(profileIntent);
         finish();
@@ -496,7 +515,8 @@ public class MainActivity extends AppCompatActivity {
 
     //opens activity for users to write their questions
     private void SendUserToWriteQueryActivity() {
-        Intent writeQueryIntent = new Intent(MainActivity.this, WriteQueryActivity.class);
+        Intent writeQueryIntent = new
+                Intent(MainActivity.this, WriteQueryActivity.class);
         startActivity(writeQueryIntent);
     }
 
@@ -510,7 +530,8 @@ public class MainActivity extends AppCompatActivity {
     //open stories activity
     private void SendUserToStoriesActivity() {
 
-        Intent storiesActivityIntent = new Intent(MainActivity.this, StoriesActivity.class);
+        Intent storiesActivityIntent = new
+                Intent(MainActivity.this, StoriesActivity.class);
         finish();
         startActivity(storiesActivityIntent);
 
@@ -518,13 +539,15 @@ public class MainActivity extends AppCompatActivity {
 
     //opens the Feedback activity
     private void SendUserToFeedbackActivity() {
-        Intent feedbackActivityIntent = new Intent(MainActivity.this, FeedbackActivity.class);
+        Intent feedbackActivityIntent = new
+                Intent(MainActivity.this, FeedbackActivity.class);
         finish();
         startActivity(feedbackActivityIntent);
     }
 
     private void SendUserToAddProductsActivity() {
-        Intent addProductActivityIntent = new Intent(MainActivity.this, AddProductsActivity.class);
+        Intent addProductActivityIntent = new
+                Intent(MainActivity.this, AddProductsActivity.class);
         finish();
         startActivity(addProductActivityIntent);
     }
@@ -532,7 +555,8 @@ public class MainActivity extends AppCompatActivity {
     //opens all chat messages layout
     private void SendUserToAllChatMessagesActivity() {
 
-        Intent allChatMessagesActivityIntent = new Intent(MainActivity.this, AllChatMessagesActivity.class);
+        Intent allChatMessagesActivityIntent = new
+                Intent(MainActivity.this, AllChatMessagesActivity.class);
         finish();
         startActivity(allChatMessagesActivityIntent);
     }
@@ -540,14 +564,16 @@ public class MainActivity extends AppCompatActivity {
     //opens search other parents activity
     private void SendUserToSearchOtherParentsActivity() {
 
-        Intent searchOtherParentsActivityIntent = new Intent(MainActivity.this, SearchOtherParentsActivity.class);
+        Intent searchOtherParentsActivityIntent = new
+                Intent(MainActivity.this, SearchOtherParentsActivity.class);
         finish();
         startActivity(searchOtherParentsActivityIntent);
     }
 
     private void SendUserToGrowthAnalysisActivity() {
 
-        Intent growthAnalysisActivityIntent = new Intent(MainActivity.this, GrowthAnalysisActivity.class);
+        Intent growthAnalysisActivityIntent = new
+                Intent(MainActivity.this, GrowthAnalysisActivity.class);
         finish();
         startActivity(growthAnalysisActivityIntent);
 
@@ -555,14 +581,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void SendUserToAlarmRemindersActivity() {
 
-        Intent remindersActivityIntent = new Intent(MainActivity.this, RemindersActivity.class);
+        Intent remindersActivityIntent = new
+                Intent(MainActivity.this, RemindersActivity.class);
         finish();
         startActivity(remindersActivityIntent);
     }
 
     //open view products activity
     private void SendUserToProductCategoryActivity() {
-        Intent viewProductsActivityIntent = new Intent(MainActivity.this, ProductCategory.class);
+        Intent viewProductsActivityIntent = new
+                Intent(MainActivity.this, ProductCategory.class);
         finish();
         startActivity(viewProductsActivityIntent);
     }

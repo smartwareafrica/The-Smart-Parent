@@ -12,68 +12,249 @@
 
     <TextView
         android:id="@+id/grid_text"
-        android:text="hello there"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/toolbar"
-        android:layout_height="wrap_content" />
-
-    <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/all_baby_products_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_margin="3dp"
+        android:background="@drawable/custom_border"
+        android:text="@string/select_a_category"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/grid_text"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="10dp"
-        app:columnCount="2">
+        android:layout_marginBottom="10dp"
+        android:background="#F8F5F5"
+        android:fillViewport="true">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="0dp"
-            app:layout_columnWeight="1"
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/all_baby_products_layout"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawableTop="@mipmap/project_logo"
-            android:text="Diapers"
-            app:layout_gravity="fill_horizontal" />
+            android:clipToPadding="true"
+            android:fitsSystemWindows="true"
+            android:horizontalSpacing="2dp"
+            android:verticalSpacing="2dp"
+            app:columnCount="2"
+            app:rowCount="3">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="0dp"
-            app:layout_columnWeight="1"
-            android:layout_height="wrap_content"
-            android:drawableTop="@mipmap/project_logo"
-            android:text="Bathing And Skin Care"
-            app:layout_gravity="fill_horizontal" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/category_diapers"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="3dp"
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill_horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="0dp"
-            app:layout_columnWeight="1"
-            android:layout_height="wrap_content"
-            android:drawableTop="@mipmap/project_logo"
-            android:text="Food"
-            app:layout_gravity="fill_horizontal" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="0dp"
-            app:layout_columnWeight="1"
-            android:layout_height="wrap_content"
-            android:drawableTop="@mipmap/project_logo"
-            android:text="health"
-            app:layout_gravity="fill_horizontal" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/baby_diapers"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/baby_diaper" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="0dp"
-            app:layout_columnWeight="1"
-            android:layout_height="wrap_content"
-            android:drawableTop="@mipmap/project_logo"
-            android:text="safety"
-            app:layout_gravity="fill_horizontal" />
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:drawableTop="@mipmap/project_logo"
-            android:text="Toys"
-            app:layout_columnWeight="1"
-            app:layout_gravity="fill_horizontal" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:text="@string/baby_diapers"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
 
-    </androidx.gridlayout.widget.GridLayout>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/category_bathing_and_skin_care"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="3dp"
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill_horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/bathing_and_skin_care"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/baby_bathing_and_skin_care" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:text="@string/bathing_and_skin_care"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/category_baby_food"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="3dp"
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill_horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/baby_food"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/baby_food" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:text="@string/baby_food"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/category_baby_health"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="3dp"
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill_horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/baby_health"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/baby_health" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:text="@string/baby_health"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/category_baby_safety"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="3dp"
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill_horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/baby_s_safety"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/baby_safety" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:text="@string/baby_s_safety"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/category_baby_toys"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="3dp"
+                app:layout_columnWeight="1"
+                app:layout_gravity="fill_horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/toys"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/baby_toys" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:text="@string/toys"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.gridlayout.widget.GridLayout>
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_to_add_products_activity"

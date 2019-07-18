@@ -80,7 +80,8 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, connectionResult -> {
 
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Google SignIn Failed...,Please Try Again", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                            "Google SignIn Failed...,Please Try Again", Snackbar.LENGTH_LONG);
                     snackbar.show();
 
                 }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
@@ -120,10 +121,12 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = result.getSignInAccount();
                 fireBaseAuthWithGoogle(account);
 
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please wait while we are getting your results...", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                        "Please wait while we are getting your results...", Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Sorry! Cannot get your Account results", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                        "Sorry! Cannot get your Account results", Snackbar.LENGTH_LONG);
                 snackbar.show();
                 progressDialog.dismiss();
             }
@@ -148,7 +151,8 @@ public class LoginActivity extends AppCompatActivity {
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
                         String message = task.getException().toString();
                         SendUserToLoginActivity();
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error Occurred: " + message, Snackbar.LENGTH_LONG);
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                                "An error Occurred: " + message, Snackbar.LENGTH_LONG);
                         snackbar.show();
                         progressDialog.dismiss();
                     }
@@ -214,7 +218,8 @@ public class LoginActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                         } else {
                             String message = task.getException().getMessage();
-                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                                    "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
                             snackbar.show();
                             progressDialog.dismiss();
                         }
@@ -234,7 +239,8 @@ public class LoginActivity extends AppCompatActivity {
             SendUserToMainActivity();
 
         } else {
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please verify your email address first", Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                    "Please verify your email address first", Snackbar.LENGTH_LONG);
             snackbar.show();
             mAuth.signOut();
         }

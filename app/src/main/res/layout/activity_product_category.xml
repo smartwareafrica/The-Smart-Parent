@@ -10,11 +10,18 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
+    <TextView
+        android:id="@+id/grid_text"
+        android:text="hello there"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_height="wrap_content" />
+
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/all_baby_products_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/grid_text"
         android:horizontalSpacing="10dp"
         android:verticalSpacing="10dp"
         app:columnCount="2">

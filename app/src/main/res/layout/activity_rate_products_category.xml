@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ProductCategory">
+    tools:context="com.MwandoJrTechnologies.the_smart_parent.BabyProducts.RateProductsCategoryActivity">
 
     <include
         android:id="@+id/toolbar"
@@ -43,7 +43,7 @@
             app:rowCount="3">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/category_diapers"
+                android:id="@+id/rate_category_diapers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -79,7 +79,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/category_bathing_and_skin_care"
+                android:id="@+id/rate_category_bathing_and_skin_care"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -114,7 +114,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/category_baby_food"
+                android:id="@+id/rate_category_baby_food"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -149,7 +149,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/category_baby_health"
+                android:id="@+id/rate_category_baby_health"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -184,7 +184,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/category_baby_safety"
+                android:id="@+id/rate_category_baby_safety"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -219,7 +219,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/category_baby_toys"
+                android:id="@+id/rate_category_baby_toys"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
@@ -255,21 +255,5 @@
 
         </androidx.gridlayout.widget.GridLayout>
     </ScrollView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_to_add_products_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="end|bottom"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="70dp"
-        android:elevation="@dimen/default_gap"
-        android:src="@drawable/ic_add_white_24dp"
-        android:visibility="gone"
-        tools:ignore="RelativeOverlap" />
 
 </RelativeLayout>

@@ -1,5 +1,11 @@
 package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
+/**
+ * The entry point to the questions posed by Users
+ *
+ * Navigation Drawer is inflated in this activity
+ */
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,7 +21,7 @@ import android.widget.TextView;
 
 import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.AddProductsActivity;
 import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ProductCategory;
-import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ViewProductsActivity;
+import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.RateProductsCategoryActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Chats.AllChatMessagesActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Chats.SearchOtherParentsActivity;
 import com.MwandoJrTechnologies.the_smart_parent.ConnectionChecker;
@@ -135,8 +141,13 @@ public class MainActivity extends AppCompatActivity {
             swipeRefreshLayout.setRefreshing(false);
         });
 
-        //for navigation drawer
-        //display current logged in user details only
+
+        /*
+         * for navigation drawer
+         *
+         * display current logged in user details only
+         */
+
         usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -152,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // set email in username field
                     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    assert firebaseUser != null;
                     String email = firebaseUser.getEmail();
                     navEmail.setText(email);
 
@@ -414,11 +426,14 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_baby_products:
                 SendUserToProductCategoryActivity();
                 break;
-            case R.id.nav_feedback:
-                SendUserToFeedbackActivity();
+            case R.id.nav_rate_products:
+                SendUserToRateBabyProductsActivity();
                 break;
             case R.id.nav_add_products:
                 SendUserToAddProductsActivity();
+                break;
+            case R.id.nav_feedback:
+                SendUserToFeedbackActivity();
                 break;
             case R.id.nav_logout:
                 mAuth.signOut();
@@ -593,5 +608,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent(MainActivity.this, ProductCategory.class);
         finish();
         startActivity(viewProductsActivityIntent);
+    }
+
+    //Opens rate baby products
+    private void SendUserToRateBabyProductsActivity() {
+        Intent rateProductsIntent = new
+                Intent(MainActivity.this, RateProductsCategoryActivity.class);
+        finish();
+        startActivity(rateProductsIntent);
     }
 }

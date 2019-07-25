@@ -58,11 +58,12 @@ public class StoriesActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Stories");
         mAuth = FirebaseAuth.getInstance();
-        currentUserID =mAuth.getCurrentUser().getUid();
+        currentUserID = mAuth.getCurrentUser().getUid();
 
         mAuthListener = firebaseAuth -> {
             if (mAuth.getCurrentUser() == null) {
-                Intent loginIntent = new Intent(StoriesActivity.this, RegisterActivity.class);
+                Intent loginIntent = new
+                        Intent(StoriesActivity.this, RegisterActivity.class);
                 loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(loginIntent);
             }
@@ -70,7 +71,8 @@ public class StoriesActivity extends AppCompatActivity {
 
         addStoryFAB = findViewById(R.id.fab_to_add_story_activity);
 
-        if (!currentUserID.equals("K7Ng2Q3dXiQIGo56hjfsvkAvFgB2") ){
+        //Only admin can add stories
+        if (!currentUserID.equals("K7Ng2Q3dXiQIGo56hjfsvkAvFgB2")) {
             addStoryFAB.hide();
         }
         addStoryFAB.setOnClickListener(v -> SendUserToCreateStoryActivity());
@@ -82,7 +84,8 @@ public class StoriesActivity extends AppCompatActivity {
 
         mAuth.addAuthStateListener(mAuthListener);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(StoriesActivity.this);
+        LinearLayoutManager linearLayoutManager = new
+                LinearLayoutManager(StoriesActivity.this);
         //initialize recyclerView and FIreBase objects
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
@@ -93,36 +96,41 @@ public class StoriesActivity extends AppCompatActivity {
                         .build();
 
 
-        FirebaseRecyclerAdapter<StoriesModalAdapterClass, StoriesModalAdapterClassViewHolder> firebaseRecyclerAdapter = new
+        FirebaseRecyclerAdapter<StoriesModalAdapterClass, StoriesModalAdapterClassViewHolder>
+                firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<StoriesModalAdapterClass, StoriesModalAdapterClassViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder
+                    (@NonNull StoriesModalAdapterClassViewHolder viewHolder,
+                     int position, @NonNull StoriesModalAdapterClass model) {
 
-                FirebaseRecyclerAdapter<StoriesModalAdapterClass, StoriesModalAdapterClassViewHolder>(options) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull StoriesModalAdapterClassViewHolder viewHolder, int position, @NonNull StoriesModalAdapterClass model) {
+                final String post_key = getRef(position).getKey();
+                viewHolder.setTitle(model.getTitle());
+                viewHolder.setDesc(model.getcontents());
+                viewHolder.setImageUrl(getApplicationContext(), model.getImageUrl());
+                viewHolder.setAuthorName(model.getAuthorName());
+                viewHolder.mView.setOnClickListener(view -> {
+                    Intent singleActivity = new
+                            Intent(StoriesActivity.this,
+                            SingleStoryActivity.class);
+                    singleActivity.putExtra("PostID", post_key);
+                    startActivity(singleActivity);
+                });
+            }
 
-                        final String post_key = getRef(position).getKey();
-                        viewHolder.setTitle(model.getTitle());
-                        viewHolder.setDesc(model.getcontents());
-                        viewHolder.setImageUrl(getApplicationContext(), model.getImageUrl());
-                        viewHolder.setAuthorName(model.getAuthorName());
-                        viewHolder.mView.setOnClickListener(view -> {
-                            Intent singleActivity = new Intent(StoriesActivity.this, SingleStoryActivity.class);
-                            singleActivity.putExtra("PostID", post_key);
-                            startActivity(singleActivity);
-                        });
-                    }
+            @NonNull
+            @Override
+            public StoriesModalAdapterClassViewHolder
+            onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-                    @NonNull
-                    @Override
-                    public StoriesModalAdapterClassViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater
+                        .from(parent.getContext())
+                        .inflate(R.layout.stories_card_items, parent, false);
 
-                        View view = LayoutInflater
-                                .from(parent.getContext())
-                                .inflate(R.layout.stories_card_items, parent, false);
-
-                        StoriesModalAdapterClassViewHolder viewHolder = new StoriesModalAdapterClassViewHolder(view);
-                        return viewHolder;
-                    }
-                };
+                StoriesModalAdapterClassViewHolder viewHolder = new
+                        StoriesModalAdapterClassViewHolder(view);
+                return viewHolder;
+            }
+        };
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -175,17 +183,23 @@ public class StoriesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        SendUserToMainActivity();
+    }
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(StoriesActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new
+                Intent(StoriesActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
     }
 
     private void SendUserToCreateStoryActivity() {
 
-        Intent createStoryActivityIntent = new Intent(StoriesActivity.this, CreateStoryActivity.class);
+        Intent createStoryActivityIntent = new
+                Intent(StoriesActivity.this, CreateStoryActivity.class);
         finish();
         startActivity(createStoryActivityIntent);
 

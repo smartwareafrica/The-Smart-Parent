@@ -68,7 +68,12 @@ public class CommentsActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        postsReference = FirebaseDatabase.getInstance().getReference().child("Posts").child(post_key).child("Comments");
+        postsReference = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("Posts")
+                .child(post_key)
+                .child("Comments");
 
 
         commentsList = findViewById(R.id.comments_list);
@@ -77,23 +82,25 @@ public class CommentsActivity extends AppCompatActivity {
         commentsInputText = findViewById(R.id.comment_input);
         postCommentButton = findViewById(R.id.post_comment_button);
 
-        postCommentButton.setOnClickListener(v -> usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String fullName = dataSnapshot.child("fullName").getValue().toString();
+        postCommentButton
+                .setOnClickListener(v -> usersRef.child(currentUserID)
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    String fullName = dataSnapshot.child("fullName").getValue().toString();
 
-                    ValidateComment(fullName);
+                                    ValidateComment(fullName);
 
-                    commentsInputText.setText("");
-                }
-            }
+                                    commentsInputText.setText("");
+                                }
+                            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        }));
+                            }
+                        }));
 
     }
 
@@ -106,35 +113,39 @@ public class CommentsActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         commentsList.setLayoutManager(linearLayoutManager);
 
-        final FirebaseRecyclerOptions<Comments> options=
+        final FirebaseRecyclerOptions<Comments> options =
                 new FirebaseRecyclerOptions.Builder<Comments>()
-                .setQuery(postsReference, Comments.class)
-                .build();
+                        .setQuery(postsReference, Comments.class)
+                        .build();
 
         FirebaseRecyclerAdapter<Comments, CommentsViewHolder> fireBaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Comments, CommentsViewHolder>(options){
-            @Override
-            protected void onBindViewHolder(@NonNull CommentsViewHolder commentsViewHolder, int i, @NonNull Comments comments) {
-                comments = getItem(i);
+                new FirebaseRecyclerAdapter<Comments, CommentsViewHolder>(options) {
+                    @Override
+                    protected void
+                    onBindViewHolder
+                            (@NonNull CommentsViewHolder commentsViewHolder,
+                             int i,
+                             @NonNull Comments comments) {
+                        comments = getItem(i);
 
-                commentsViewHolder.myFullName.setText(comments.getFullName());
-                commentsViewHolder.myComment.setText(comments.getComment());
-                commentsViewHolder.myDate.setText(comments.getDate());
-                commentsViewHolder.myTime.setText(comments.getTime());
+                        commentsViewHolder.myFullName.setText(comments.getFullName());
+                        commentsViewHolder.myComment.setText(comments.getComment());
+                        commentsViewHolder.myDate.setText(comments.getDate());
+                        commentsViewHolder.myTime.setText(comments.getTime());
 
-            }
+                    }
 
-            @NonNull
-            @Override
-            public CommentsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    @NonNull
+                    @Override
+                    public CommentsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-                View view = LayoutInflater
-                        .from(parent.getContext())
-                        .inflate(R.layout.all_comments_layout, parent, false);
-                CommentsViewHolder commentsViewHolder = new CommentsViewHolder(view);
-                return commentsViewHolder;
-            }
-        };
+                        View view = LayoutInflater
+                                .from(parent.getContext())
+                                .inflate(R.layout.all_comments_layout, parent, false);
+                        CommentsViewHolder commentsViewHolder = new CommentsViewHolder(view);
+                        return commentsViewHolder;
+                    }
+                };
 
         commentsList.setLayoutManager(linearLayoutManager);
         commentsList.setAdapter(fireBaseRecyclerAdapter);
@@ -142,7 +153,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     }
 
-    public static class CommentsViewHolder extends RecyclerView.ViewHolder{
+    public static class CommentsViewHolder extends RecyclerView.ViewHolder {
 
         TextView myFullName;
         TextView myComment;
@@ -165,7 +176,10 @@ public class CommentsActivity extends AppCompatActivity {
         String commentText = commentsInputText.getText().toString();
 
         if (TextUtils.isEmpty(commentText)) {
-            Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Please write text to respond...", Snackbar.LENGTH_SHORT);
+            Snackbar snackBar = Snackbar
+                    .make(findViewById(android.R.id.content),
+                            "Please write text to respond...",
+                            Snackbar.LENGTH_SHORT);
             snackBar.show();
         } else {
             //setting current date and time to generate random keys for the users images posted
@@ -191,10 +205,15 @@ public class CommentsActivity extends AppCompatActivity {
             postsReference.child(randomKey).updateChildren(commentsMap)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Response Added", Snackbar.LENGTH_SHORT);
+                            Snackbar snackBar = Snackbar
+                                    .make(findViewById(android.R.id.content),
+                                            "Response Added", Snackbar.LENGTH_SHORT);
                             snackBar.show();
-                        }else {
-                            Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Could not comment, Please try again", Snackbar.LENGTH_SHORT);
+                        } else {
+                            Snackbar snackBar = Snackbar
+                                    .make(findViewById(android.R.id.content),
+                                            "Could not comment, Please try again",
+                                            Snackbar.LENGTH_SHORT);
                             snackBar.show();
                         }
 
@@ -218,7 +237,8 @@ public class CommentsActivity extends AppCompatActivity {
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(CommentsActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new
+                Intent(CommentsActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
     }

@@ -75,15 +75,40 @@ public class ProfileActivity extends AppCompatActivity {
 
                 if (dataSnapshot.exists()) {
                     if (dataSnapshot.hasChild("profileImage")) {
-                        String myProfileImage = Objects.requireNonNull(dataSnapshot.child("profileImage").getValue()).toString();
-                        Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(userProfilePicture);
+                        String myProfileImage = Objects
+                                .requireNonNull(dataSnapshot
+                                        .child("profileImage")
+                                        .getValue())
+                                .toString();
+                        Picasso.get()
+                                .load(myProfileImage)
+                                .placeholder(R.drawable.profile_image_placeholder)
+                                .into(userProfilePicture);
 
-                        String myStatus = dataSnapshot.child("status").getValue().toString();
-                        String myGender = dataSnapshot.child("gender").getValue().toString();
-                        String myFullName = dataSnapshot.child("fullName").getValue().toString();
-                        String myPhoneNumber = dataSnapshot.child("phoneNumber").getValue().toString();
-                        String myDateOfBirth = dataSnapshot.child("dob").getValue().toString();
-                        String myNumberOfChildren = dataSnapshot.child("numberOfChildren").getValue().toString();
+                        String myStatus = dataSnapshot
+                                .child("status")
+                                .getValue()
+                                .toString();
+                        String myGender = dataSnapshot
+                                .child("gender")
+                                .getValue()
+                                .toString();
+                        String myFullName = dataSnapshot
+                                .child("fullName")
+                                .getValue()
+                                .toString();
+                        String myPhoneNumber = dataSnapshot
+                                .child("phoneNumber")
+                                .getValue()
+                                .toString();
+                        String myDateOfBirth = dataSnapshot
+                                .child("dob")
+                                .getValue()
+                                .toString();
+                        String myNumberOfChildren = dataSnapshot
+                                .child("numberOfChildren")
+                                .getValue()
+                                .toString();
 
                         userStatus.setText(myStatus);
                         fullName.setText("Name: " + myFullName);
@@ -93,7 +118,10 @@ public class ProfileActivity extends AppCompatActivity {
                         numberOfChildren.setText("Number of children: " + myNumberOfChildren);
                     }
                 } else {
-                    Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Please update your profile", Snackbar.LENGTH_INDEFINITE);
+                    Snackbar snackBar = Snackbar
+                            .make(findViewById(android.R.id.content),
+                                    "Please update your profile",
+                                    Snackbar.LENGTH_INDEFINITE);
                     snackBar.show();
                     SendUserToProfileSettingsActivity();
                 }
@@ -120,14 +148,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(ProfileActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new
+                Intent(ProfileActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
     }
 
     //opens activity to edit profile
     private void SendUserToProfileSettingsActivity() {
-        Intent editProfileIntent = new Intent(ProfileActivity.this, ProfileSettingsActivity.class);
+        Intent editProfileIntent = new
+                Intent(ProfileActivity.this, ProfileSettingsActivity.class);
         finish();
         startActivity(editProfileIntent);
     }

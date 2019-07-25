@@ -20,8 +20,6 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_go_to_rate_products"
         android:visibility="gone"

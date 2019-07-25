@@ -12,11 +12,11 @@
 
 
     <LinearLayout
-        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,6 +29,7 @@
                 android:layout_width="120dp"
                 android:layout_height="110dp"
                 android:padding="1dp"
+                android:background="@drawable/custom_border"
                 android:src="@drawable/profile_image_placeholder"
                 tools:ignore="ContentDescription" />
 
@@ -42,9 +43,10 @@
                     android:id="@+id/view_product_rating_product_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
                     android:text="@string/product_name"
                     android:textColor="@android:color/black"
-                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="20dp"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
@@ -52,57 +54,63 @@
                     android:id="@+id/view_product_rating_manufacturer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/product_manufacturer"
                     android:layout_marginStart="2dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/product_manufacturer"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:orientation="vertical"
-                    android:padding="2dp">
-
-                    <TextView
-                        android:gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:text="@string/rating"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <RatingBar
-                        android:layout_gravity="center"
-                        android:id="@+id/view_product_rating_bar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:numStars="5"
-                        android:stepSize="1"
-                        />
-                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/view_product_rating_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/product_description"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
         <View
             android:id="@+id/separator"
+            android:layout_marginTop="5dp"
             android:layout_width="fill_parent"
             android:layout_height="0.5dip"
             android:background="#ffffff" />
 
         <TextView
-            android:layout_marginStart="4dp"
-            android:id="@+id/view_product_rating_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/product_description"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="@string/rating"
+            android:layout_gravity="center"
             android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <RatingBar
+            android:id="@+id/view_product_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:numStars="5"
+            android:isIndicator="true"
+            android:clickable="false"
+            android:focusable="false"
+            android:stepSize="1" />
+        <TextView
+            android:id="@+id/view_product_more_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textAlignment="textEnd"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:text="@string/more_details_and_comments_on_product"/>
 
     </LinearLayout>
 

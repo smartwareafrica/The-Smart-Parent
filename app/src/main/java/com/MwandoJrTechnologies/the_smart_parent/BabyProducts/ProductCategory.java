@@ -32,6 +32,7 @@ public class ProductCategory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_category);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -83,7 +84,7 @@ public class ProductCategory extends AppCompatActivity {
     private void SendUserToViewProductsActivity_food() {
         Intent viewFoodIntent = new
                 Intent(ProductCategory.this, ViewProductsActivity.class);
-        String food = "Food";
+        String food = "food";
         viewFoodIntent.putExtra("product_category", food);
         startActivity(viewFoodIntent);
     }

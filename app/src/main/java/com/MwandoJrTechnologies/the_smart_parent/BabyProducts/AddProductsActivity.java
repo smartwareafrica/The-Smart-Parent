@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -39,7 +40,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class AddProductsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AddProductsActivity extends AppCompatActivity implements
+        AdapterView.OnItemSelectedListener {
 
     final static int galleryPick = 1;
     private Spinner productCategoryDropDown;
@@ -72,10 +74,16 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
 
 
         //specify path in database
-        productsDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Products");
+        productsDatabaseReference = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("Products");
 
         //specify path in fireBase storage
-        productImageStorageReference = FirebaseStorage.getInstance().getReference().child("ProductImages");
+        productImageStorageReference = FirebaseStorage
+                .getInstance()
+                .getReference()
+                .child("ProductImages");
 
         productCategoryDropDown = findViewById(R.id.product_category_spinner);
         productImage = findViewById(R.id.product_image_view);
@@ -122,7 +130,8 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
         categories.add("toys");
 
         //create array adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dataAdapter = new
+                ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -138,23 +147,27 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
         String item = parent.getItemAtPosition(position).toString();
 
         SaveDateAndTimeToFireBaseStorage();
-        productsDatabaseReference.child(productRandomName).child("category").setValue(item);
+        productsDatabaseReference.child(productRandomName)
+                .child("category").setValue(item);
 
-        productsDatabaseReference.child(productRandomName).child("category").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild("category")){
+        productsDatabaseReference.child(productRandomName)
+                .child("category")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild("category")) {
 
-                    productsDatabaseReference.child(productRandomName).child("category").setValue(item);
+                            productsDatabaseReference.child(productRandomName)
+                                    .child("category").setValue(item);
 
-                }
-            }
+                        }
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
 
     }
 
@@ -163,6 +176,9 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
         //ignore
     }
 
+    /**
+     * Generate random Key for products
+     */
     private void SaveDateAndTimeToFireBaseStorage() {
         //setting current date and time to generate random keys for the users images posted
         //setting current date
@@ -175,7 +191,9 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
         saveCurrentTime = currentTime.format(callForTime.getTime());
 
-        productRandomName = saveCurrentDate + saveCurrentTime;
+        final String uniqueKey = productsDatabaseReference.push().getKey();
+
+        productRandomName = uniqueKey + " " + saveCurrentDate + saveCurrentTime;
 
     }
 
@@ -207,8 +225,12 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
                 Uri resultUri = result.getUri();
                 productImage.setImageURI(resultUri);
 
-                //creating a filepath for pushing cropped image to fireBase storage by unique user id
-                final StorageReference filePath = productImageStorageReference.child(resultUri.getLastPathSegment() + editTextProductName + ".jpg");
+                /**
+                 * creating a filepath for pushing cropped image to fireBase storage by unique user id
+                 */
+                //
+                final StorageReference filePath = productImageStorageReference
+                        .child(resultUri.getLastPathSegment() + editTextProductName + ".jpg");
 
                 //now store in fireBase storage
                 final UploadTask uploadTask = filePath.putFile(resultUri);
@@ -220,7 +242,12 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
                             throw task.getException();
                         }
 
-                        //get the url...initialize downloadImageUrl at the most to ie....String downloadImageUrl
+                        /**
+                         * get the url...initialize downloadImageUrl at the most to
+                         *
+                         * Example: String downloadImageUrl
+                         */
+                        //
                         downloadImageUrl = filePath.getDownloadUrl().toString();
                         return filePath.getDownloadUrl();
 
@@ -233,7 +260,10 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
 
                             addLinkToFireBaseDatabase();
 
-                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Good", Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar = Snackbar
+                                    .make(findViewById(android.R.id.content),
+                                            "Good",
+                                            Snackbar.LENGTH_SHORT);
                             snackbar.show();
                             progressDialog.dismiss();
                         }
@@ -244,15 +274,22 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void addLinkToFireBaseDatabase() {
-        productsDatabaseReference.child(productRandomName).child("productImage").setValue(downloadImageUrl).addOnCompleteListener(task -> {
+        productsDatabaseReference.child(productRandomName)
+                .child("productImage").setValue(downloadImageUrl).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 progressDialog.dismiss();
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Product image uploaded successfully uploaded...", Snackbar.LENGTH_SHORT);
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(android.R.id.content),
+                                "Product image uploaded successfully uploaded...",
+                                Snackbar.LENGTH_SHORT);
                 snackbar.show();
             } else {
                 progressDialog.dismiss();
                 String message = task.getException().getMessage();
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error occurred  " + message, Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(android.R.id.content),
+                         "Error occurred  " + message,
+                                Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -263,7 +300,10 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
     private void saveProductInformation() {
         final String productName = editTextProductName.getText().toString().trim();
         String productDescription = editTextProductDescription.getText().toString().trim();
-        String productManufactureCompany = editTextProductManufactureCompany.getText().toString().trim();
+        String productManufactureCompany = editTextProductManufactureCompany
+                        .getText()
+                        .toString()
+                        .trim();
 
         if (productName.isEmpty()) {
             editTextProductName.setError("You add a product name");
@@ -291,15 +331,24 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
             productMap.put("productDescription", productDescription);
             productMap.put("productManufactureCompany", productManufactureCompany);
             productMap.put("ratings", "ratings");
-            productsDatabaseReference.child(productRandomName).updateChildren(productMap).addOnCompleteListener(task -> {
+            productMap.put("productKey", productRandomName);
+
+            productsDatabaseReference.child(productRandomName)
+                    .updateChildren(productMap)
+                    .addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Product upload successful", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content),
+                             "Product upload successful", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     progressDialog.dismiss();
 
                 } else {
                     String message = task.getException().getMessage();
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred,please try again " + message, Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content),
+                             "An error occurred,please try again " + message,
+                                    Snackbar.LENGTH_LONG);
                     snackbar.show();
                     progressDialog.dismiss();
                 }
@@ -319,21 +368,32 @@ public class AddProductsActivity extends AppCompatActivity implements AdapterVie
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            SendUserToViewProductsActivity();
+            SendUserToMainActivity();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        SendUserToMainActivity();
+    }
 
-    //open view products activity
+    /**
+     * Intent Methods
+     */
     private void SendUserToViewProductsActivity() {
-        Intent viewProductsActivityIntent = new Intent(AddProductsActivity.this, ViewProductsActivity.class);
+        Intent viewProductsActivityIntent = new
+                Intent(AddProductsActivity.this, ViewProductsActivity.class);
         finish();
         startActivity(viewProductsActivityIntent);
     }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
+    private void SendUserToMainActivity() {
+        Intent mainActivityIntent = new
+                Intent(AddProductsActivity.this, MainActivity.class);
+        finish();
+        startActivity(mainActivityIntent);
     }
+
+
 }

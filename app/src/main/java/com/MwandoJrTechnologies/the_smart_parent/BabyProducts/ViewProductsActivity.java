@@ -41,9 +41,8 @@ public class ViewProductsActivity extends AppCompatActivity {
     String currentUserID;
     private String productCategory;
 
-    private AppCompatButton goToRateProductsButton;
-
     private RecyclerView allProductsRecyclerView;
+
 
     private TextView viewCategoryTv;
 
@@ -54,7 +53,7 @@ public class ViewProductsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
         mAuth = FirebaseAuth.getInstance();
-        currentUserID = mAuth.getCurrentUser().getUid();
+        currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,12 +62,10 @@ public class ViewProductsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("View Product rating");
 
 
-        goToRateProductsButton = findViewById(R.id.button_go_to_rate_products);
         allProductsRecyclerView = findViewById(R.id.all_baby_products_layout);
 
         viewCategoryTv = findViewById(R.id.tv_view_product_cat);
 
-        goToRateProductsButton.setOnClickListener(v -> SendUserToRateBabyProductsActivity());
 
         /**
          * Receiving data inside onCreate() method of Second Activity
@@ -105,49 +102,43 @@ public class ViewProductsActivity extends AppCompatActivity {
                     protected void onBindViewHolder(@NonNull ProductsViewHolder productsViewHolder,
                                                     int position, @NonNull Products products) {
 
-
-                        productsReference.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                int ratingSum = 0;
-                                float ratingTotal = 0;
-                                float ratingAverage = 0;
-
-                                for (DataSnapshot child : dataSnapshot.child("rating")
-                                        .getChildren()){
-
-                                    ratingSum = ratingSum + Integer.valueOf(child.getValue()
-                                            .toString());
-                                    ratingTotal++;
-                                }
-                                if (ratingTotal != 0){
-                                    ratingAverage = ratingSum/ratingTotal;
-
-                                  productsViewHolder.productRatedRatingBar.setRating(ratingAverage);
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                        //gets the products unique key
+                        final String productKey = products.getProductKey();
 
 
                         Picasso.get()
                                 .load(products.getProductImage())
                                 .placeholder(R.mipmap.project_logo)
                                 .into(productsViewHolder.productRatingViewImage);
-
-                        productsViewHolder.productRatingName.setText(products.getProductName());
-                        productsViewHolder.productRatingManufacturer
+                        productsViewHolder
+                                .productRatingName
+                                .setText(products.getProductName());
+                        productsViewHolder
+                                .productRatingManufacturer
                                 .setText(products.getProductManufactureCompany());
-                        productsViewHolder.productRatingDescription
+                        productsViewHolder
+                                .productRatingDescription
                                 .setText(products.getProductDescription());
+                        productsViewHolder
+                                .productRatedRatingBar
+                                .setRating(products.getProductRating());
 
 
+                        //working on the click event to view more details on the products
+                        productsViewHolder.productsMoreDetailsAndComments.setOnClickListener(v -> {
+
+                            Intent individualProductIntent = new
+                                    Intent(ViewProductsActivity.this,
+                                    IndividualProductActivity.class);
+                            individualProductIntent
+                                    .putExtra
+                                            ("product_key", productKey);
+                            individualProductIntent
+                                    .putExtra("product_category", productCategory);
+                            finish();
+                            startActivity(individualProductIntent);
+
+                        });
                     }
 
                     @NonNull
@@ -171,13 +162,14 @@ public class ViewProductsActivity extends AppCompatActivity {
     }
 
 
-    private static class ProductsViewHolder extends RecyclerView.ViewHolder{
+    private static class ProductsViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView productRatingViewImage;
         private TextView productRatingName;
         private TextView productRatingManufacturer;
         private TextView productRatingDescription;
         private RatingBar productRatedRatingBar;
+        private TextView productsMoreDetailsAndComments;
 
         public ProductsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -187,6 +179,7 @@ public class ViewProductsActivity extends AppCompatActivity {
             productRatingManufacturer = itemView.findViewById(R.id.view_product_rating_manufacturer);
             productRatingDescription = itemView.findViewById(R.id.view_product_rating_description);
             productRatedRatingBar = itemView.findViewById(R.id.view_product_rating_bar);
+            productsMoreDetailsAndComments = itemView.findViewById(R.id.view_product_more_details);
         }
     }
 
@@ -211,11 +204,4 @@ public class ViewProductsActivity extends AppCompatActivity {
         startActivity(mainActivityIntent);
     }
 
-    //open rate products activity
-    private void SendUserToRateBabyProductsActivity() {
-        Intent rateProductsActivityIntent = new
-                Intent(ViewProductsActivity.this, RateBabyProductsActivity.class);
-        finish();
-        startActivity(rateProductsActivityIntent);
-    }
 }

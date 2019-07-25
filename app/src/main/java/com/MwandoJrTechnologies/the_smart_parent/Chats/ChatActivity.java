@@ -99,7 +99,8 @@ public class ChatActivity extends AppCompatActivity {
                         Messages messages = dataSnapshot.getValue(Messages.class);
                         messageList.add(messages);
 
-                        messageAdapter.notifyDataSetChanged(); //whenever new message is added it will be displayed
+                        //whenever new message is added it will be displayed
+                        messageAdapter.notifyDataSetChanged();
                     }
                 }
 
@@ -130,16 +131,20 @@ public class ChatActivity extends AppCompatActivity {
 
         String messageText = userMessageInput.getText().toString();
         if (TextUtils.isEmpty(messageText)) {
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please type message email", Snackbar.LENGTH_SHORT);
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(android.R.id.content),
+                            "Please type message email", Snackbar.LENGTH_SHORT);
             snackbar.show();
         } else {
             //create a node of messages to display to both the sender and receiver
 
             //create node of messages for the sender
-            String message_sender_reference = "Messages/ " + messageSenderID + "/" + messageReceiverID;
+            String message_sender_reference =
+                    "Messages/ " + messageSenderID + "/" + messageReceiverID;
 
             //create node of messages for the receiver
-            String message_receiver_reference = "Messages/ " + messageReceiverID + "/" + messageSenderID;
+            String message_receiver_reference =
+                    "Messages/ " + messageReceiverID + "/" + messageSenderID;
 
             //create message unique key
             DatabaseReference user_message_key = rootReference
@@ -154,12 +159,14 @@ public class ChatActivity extends AppCompatActivity {
             //setting current date and time to generate random keys for the users images posted
             //setting current date
             Calendar callForDate = Calendar.getInstance();
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat
+                    currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
             saveCurrentDate = currentDate.format(callForDate.getTime());
 
             //setting current date
             Calendar callForTime = Calendar.getInstance();
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat
+                    currentTime = new SimpleDateFormat("HH:mm:ss");
             saveCurrentTime = currentTime.format(callForTime.getTime());
 
             Map<String, String> messageTextBody = new HashMap<>();
@@ -170,22 +177,26 @@ public class ChatActivity extends AppCompatActivity {
             messageTextBody.put("from", messageSenderID);
 
 
-            //all message information
-            Map<String, Object> messageBodyDetails = new HashMap<String, Object>();
-            //now display message for sender and receiver
-            messageBodyDetails.put(message_sender_reference + "/" + message_push_id, messageTextBody);
-            messageBodyDetails.put(message_receiver_reference + "/" + message_push_id, messageTextBody);
+        //all message information
+        Map<String, Object> messageBodyDetails = new HashMap<String, Object>();
+        //now display message for sender and receiver
+        messageBodyDetails.put(message_sender_reference + "/" + message_push_id, messageTextBody);
+        messageBodyDetails.put(message_receiver_reference + "/" + message_push_id, messageTextBody);
 
             rootReference.updateChildren(messageBodyDetails).addOnCompleteListener(task -> {
                 if (task.isSuccessful()){
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Message sent successfully", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content),
+                                    "Message sent successfully", Snackbar.LENGTH_SHORT);
                     snackbar.show();
 
                     userMessageInput.setText("");
 
                 }else {
                     String message = task.getException().toString();
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error: " + message, Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content),
+                                    "Error: " + message, Snackbar.LENGTH_SHORT);
                     snackbar.show();
 
                     userMessageInput.setText("");
@@ -201,18 +212,23 @@ public class ChatActivity extends AppCompatActivity {
 
         receiverName.setText(messageReceiverName);
 
-        rootReference.child("Users").child(messageReceiverID).addValueEventListener(new ValueEventListener() {
+        rootReference.child("Users")
+                .child(messageReceiverID)
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
 
-                    //retrieve from db
-                    final String userName = dataSnapshot.child("fullName").getValue().toString();
-                    final String profileImage = dataSnapshot.child("profileImage").getValue().toString();
+            //retrieve from db
+            final String userName = dataSnapshot.child("fullName").getValue().toString();
+            final String profileImage = dataSnapshot.child("profileImage").getValue().toString();
 
-                    //set values
-                    receiverName.setText(userName);
-                    Picasso.get().load(profileImage).placeholder(R.drawable.profile_image_placeholder).into(receiverProfileImage);
+                //set values
+                receiverName.setText(userName);
+                Picasso.get()
+                        .load(profileImage)
+                        .placeholder(R.drawable.profile_image_placeholder)
+                        .into(receiverProfileImage);
                 }
             }
 
@@ -235,7 +251,8 @@ public class ChatActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowCustomEnabled(true);
-        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View action_bar_view = layoutInflater.inflate(R.layout.chat_custom_toolbar, null);
         actionBar.setCustomView(action_bar_view);
 
@@ -268,7 +285,8 @@ public class ChatActivity extends AppCompatActivity {
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(ChatActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new
+                Intent(ChatActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
     }

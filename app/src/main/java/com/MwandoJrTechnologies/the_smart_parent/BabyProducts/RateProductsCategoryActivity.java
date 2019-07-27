@@ -2,7 +2,7 @@ package com.MwandoJrTechnologies.the_smart_parent.BabyProducts;
 
 /**
  * Activity showing various product categories and how they  can be rated
- *
+ * <p>
  * Each category opens the specific products in the category for rating
  */
 
@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
@@ -41,14 +42,70 @@ public class RateProductsCategoryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
         getSupportActionBar().setTitle("Rate Products");
 
-        babyDiapersCard = findViewById(R.id.category_diapers);
+        babyDiapersCard = findViewById(R.id.rate_category_diapers);
         bathingAndSkinCareCard = findViewById(R.id.rate_category_bathing_and_skin_care);
         babyFoodCard = findViewById(R.id.rate_category_baby_food);
         babyHealthCard = findViewById(R.id.rate_category_baby_health);
         babySafetyCard = findViewById(R.id.rate_category_baby_safety);
         babyToysCard = findViewById(R.id.rate_category_baby_toys);
 
+
+        babyDiapersCard.setOnClickListener(v -> SendUserToBabyDiapers());
+        bathingAndSkinCareCard.setOnClickListener(v -> SendUserToBathingAndSkinCareCard());
+        babyFoodCard.setOnClickListener(v -> SendUserToBabyFood());
+        babyHealthCard.setOnClickListener(v -> SendUserToBabyHealth());
+        babySafetyCard.setOnClickListener(v -> SendUserToBabySafety());
+        babyToysCard.setOnClickListener(v -> SendUserBabyToys());
     }
+
+    private void SendUserToBabyDiapers() {
+        Intent rateDiapersIntent = new
+                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+        String diapers = "diapers";
+        rateDiapersIntent.putExtra("product_category", diapers);
+        startActivity(rateDiapersIntent);
+    }
+
+    private void SendUserToBathingAndSkinCareCard() {
+        Intent rateBathingAndSkinCareIntent = new
+                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+        String bathing = "bathingAndSkinCare";
+        rateBathingAndSkinCareIntent.putExtra("product_category", bathing);
+        startActivity(rateBathingAndSkinCareIntent);
+    }
+
+    private void SendUserToBabyFood() {
+        Intent rateFoodIntent = new
+                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+        String food = "food";
+        rateFoodIntent.putExtra("product_category", food);
+        startActivity(rateFoodIntent);
+    }
+
+    private void SendUserToBabyHealth() {
+        Intent rateHealthIntent = new
+                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+        String health = "health";
+        rateHealthIntent.putExtra("product_category", health);
+        startActivity(rateHealthIntent);
+    }
+
+    private void SendUserToBabySafety() {
+        Intent rateSafetyIntent = new
+                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+        String safety = "safety";
+        rateSafetyIntent.putExtra("product_category", safety);
+        startActivity(rateSafetyIntent);
+    }
+
+    private void SendUserBabyToys() {
+        Intent rateToysIntent = new
+                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+        String toys = "toys";
+        rateToysIntent.putExtra("product_category", toys);
+        startActivity(rateToysIntent);
+    }
+
 
     @Override
     public void onBackPressed() {

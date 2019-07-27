@@ -47,10 +47,6 @@
             android:icon="@drawable/ic_star_border_white_24dp"
             android:title="@string/rate_products" />
         <item
-            android:id="@+id/nav_add_products"
-            android:icon="@drawable/ic_add_white_24dp"
-            android:title="@string/add_products" />
-        <item
             android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_feedback_black_24dp"
             android:title="@string/feedback" />

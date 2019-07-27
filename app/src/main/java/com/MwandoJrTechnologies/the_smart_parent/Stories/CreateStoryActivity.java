@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.MwandoJrTechnologies.the_smart_parent.R;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -19,9 +20,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.Objects;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -36,7 +40,6 @@ public class CreateStoryActivity extends AppCompatActivity {
     private EditText storyAuthorName;
     private Button postBtn;
     private StorageReference storage;
-    private FirebaseDatabase database;
     private DatabaseReference databaseRef;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseUsers;
@@ -62,14 +65,16 @@ public class CreateStoryActivity extends AppCompatActivity {
         databaseRef = FirebaseDatabase.getInstance().getReference().child("Stories");
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
+        mDatabaseUsers = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("Users")
+                .child(mCurrentUser.getUid());
 
         imageBtn = findViewById(R.id.imageBtn);
         //picking image from gallery
         imageBtn.setOnClickListener(view -> {
-            Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            galleryIntent.setType("image/*");
-            startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+            CropImage.activity().start(CreateStoryActivity.this);
         });
         // posting to Firebase
         postBtn.setOnClickListener(view -> {
@@ -83,6 +88,7 @@ public class CreateStoryActivity extends AppCompatActivity {
             final String PostTitle = textTitle.getText().toString().trim();
             final String PostDesc = textDesc.getText().toString().trim();
             final String authorName = storyAuthorName.getText().toString().trim();
+
             // do a check for empty fields
             if (PostTitle.isEmpty()) {
                 textTitle.setError("Write title");
@@ -92,9 +98,9 @@ public class CreateStoryActivity extends AppCompatActivity {
                 storyAuthorName.setError("Please name your author");
             } else {
 
-
-
-                StorageReference filepath = storage.child("StoriesImages").child(uri.getLastPathSegment());
+                StorageReference filepath = storage
+                        .child("StoriesImages")
+                        .child(uri.getLastPathSegment() + ".jpg");
                 filepath.putFile(uri).addOnSuccessListener(taskSnapshot -> {
 
                     //getting the post image download url
@@ -118,6 +124,7 @@ public class CreateStoryActivity extends AppCompatActivity {
                                             }
                                         });
                             }
+
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
                             }
@@ -128,14 +135,36 @@ public class CreateStoryActivity extends AppCompatActivity {
         });
     }
 
-
+    //method for picking the chosen image from my gallery
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //image from gallery result
-        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
-            uri = data.getData();
-            imageBtn.setImageURI(uri);
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == RESULT_OK) {
+                assert result != null;
+
+                Uri resultUri = result.getUri();
+
+                uri = data.getData();
+                //imageBtn.setImageURI(null);
+              //  imageBtn.setImageURI(uri);
+                Picasso.get()
+                        .load(resultUri)
+                        .placeholder(R.drawable.baby_bathing_and_skin_care)
+                        .into(imageBtn);
+
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception e = Objects.requireNonNull(result).getError();
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(android.R.id.content),
+                                "Cropping error" + e, Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            }
         }
     }
 

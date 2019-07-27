@@ -88,9 +88,8 @@ public class CommentsActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
-                                    String fullName = dataSnapshot.child("fullName").getValue().toString();
 
-                                    ValidateComment(fullName);
+                                    ValidateComment();
 
                                     commentsInputText.setText("");
                                 }
@@ -118,8 +117,8 @@ public class CommentsActivity extends AppCompatActivity {
                         .setQuery(postsReference, Comments.class)
                         .build();
 
-        FirebaseRecyclerAdapter<Comments, CommentsViewHolder> fireBaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Comments, CommentsViewHolder>(options) {
+        FirebaseRecyclerAdapter<Comments, CommentsViewHolder> fireBaseRecyclerAdapter = new
+                 FirebaseRecyclerAdapter<Comments, CommentsViewHolder>(options) {
                     @Override
                     protected void
                     onBindViewHolder
@@ -137,7 +136,8 @@ public class CommentsActivity extends AppCompatActivity {
 
                     @NonNull
                     @Override
-                    public CommentsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    public CommentsViewHolder onCreateViewHolder
+                            (@NonNull ViewGroup parent, int viewType) {
 
                         View view = LayoutInflater
                                 .from(parent.getContext())
@@ -171,7 +171,7 @@ public class CommentsActivity extends AppCompatActivity {
         }
     }
 
-    private void ValidateComment(String fullName) {
+    private void ValidateComment() {
 
         String commentText = commentsInputText.getText().toString();
 
@@ -200,7 +200,6 @@ public class CommentsActivity extends AppCompatActivity {
             commentsMap.put("comment", commentText);
             commentsMap.put("date", saveCurrentDate);
             commentsMap.put("time", saveCurrentTime);
-            commentsMap.put("fullName", fullName);
 
             postsReference.child(randomKey).updateChildren(commentsMap)
                     .addOnCompleteListener(task -> {

@@ -85,29 +85,29 @@ public class ProfileActivity extends AppCompatActivity {
                                 .placeholder(R.drawable.profile_image_placeholder)
                                 .into(userProfilePicture);
 
-                        String myStatus = dataSnapshot
+                        String myStatus = Objects.requireNonNull(dataSnapshot
                                 .child("status")
-                                .getValue()
+                                .getValue())
                                 .toString();
-                        String myGender = dataSnapshot
+                        String myGender = Objects.requireNonNull(dataSnapshot
                                 .child("gender")
-                                .getValue()
+                                .getValue())
                                 .toString();
-                        String myFullName = dataSnapshot
+                        String myFullName = Objects.requireNonNull(dataSnapshot
                                 .child("fullName")
-                                .getValue()
+                                .getValue())
                                 .toString();
-                        String myPhoneNumber = dataSnapshot
+                        String myPhoneNumber = Objects.requireNonNull(dataSnapshot
                                 .child("phoneNumber")
-                                .getValue()
+                                .getValue())
                                 .toString();
-                        String myDateOfBirth = dataSnapshot
+                        String myDateOfBirth = Objects.requireNonNull(dataSnapshot
                                 .child("dob")
-                                .getValue()
+                                .getValue())
                                 .toString();
-                        String myNumberOfChildren = dataSnapshot
+                        String myNumberOfChildren = Objects.requireNonNull(dataSnapshot
                                 .child("numberOfChildren")
-                                .getValue()
+                                .getValue())
                                 .toString();
 
                         userStatus.setText(myStatus);

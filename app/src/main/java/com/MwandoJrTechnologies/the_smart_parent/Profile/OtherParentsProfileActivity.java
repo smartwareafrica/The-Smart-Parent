@@ -22,6 +22,7 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OtherParentsProfileActivity extends AppCompatActivity {
@@ -37,10 +38,10 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
     private Button openChatButton;
 
     private DatabaseReference otherParentProfileUserReference;
-   // private FirebaseAuth mAuth;
+    // private FirebaseAuth mAuth;
 
     private String otherParentUserID;
-  //  private String currentParentUserID;
+    //  private String currentParentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,50 +55,78 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
         getSupportActionBar().setTitle("View Profile");
 
-      //  mAuth = FirebaseAuth.getInstance();
-     //   currentParentUserID = mAuth.getCurrentUser().getUid();
+        //  mAuth = FirebaseAuth.getInstance();
+        //   currentParentUserID = mAuth.getCurrentUser().getUid();
 
 
         //get the users id passed from main activity
         otherParentUserID = getIntent().getExtras().get("visit_user_id").toString();
 
         //get now a reference to the users node
-        otherParentProfileUserReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        otherParentProfileUserReference = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("Users");
 
         InitializeFields();
 
-        otherParentProfileUserReference.child(otherParentUserID).addValueEventListener(new ValueEventListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        otherParentProfileUserReference
+                .child(otherParentUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.exists()) {
-                    String myProfileImage = dataSnapshot.child("profileImage").getValue().toString();
-                    String myStatus = dataSnapshot.child("status").getValue().toString();
-                    String myFullName = dataSnapshot.child("fullName").getValue().toString();
-                    String myPhoneNumber = dataSnapshot.child("phoneNumber").getValue().toString();
-                    String myDateOfBirth = dataSnapshot.child("dob").getValue().toString();
-                    String myGender = dataSnapshot.child("gender").getValue().toString();
-                    String myNumberOfChildren = dataSnapshot.child("numberOfChildren").getValue().toString();
+                        if (dataSnapshot.exists()) {
+                            String myProfileImage = Objects.requireNonNull(dataSnapshot
+                                    .child("profileImage")
+                                    .getValue())
+                                    .toString();
+                            String myStatus = Objects.requireNonNull(dataSnapshot
+                                    .child("status")
+                                    .getValue())
+                                    .toString();
+                            String myFullName = Objects.requireNonNull(dataSnapshot
+                                    .child("fullName")
+                                    .getValue())
+                                    .toString();
+                            String myPhoneNumber = Objects.requireNonNull(dataSnapshot
+                                    .child("phoneNumber")
+                                    .getValue())
+                                    .toString();
+                            String myDateOfBirth = Objects.requireNonNull(dataSnapshot
+                                    .child("dob")
+                                    .getValue())
+                                    .toString();
+                            String myGender = Objects.requireNonNull(dataSnapshot
+                                    .child("gender")
+                                    .getValue())
+                                    .toString();
+                            String myNumberOfChildren = dataSnapshot
+                                    .child("numberOfChildren")
+                                    .getValue().toString();
 
-                    Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(userProfilePicture);
-                    userStatus.setText(myStatus);
-                    fullName.setText("NAME: " + myFullName);
-                    phoneNumber.setText("Phone Number: " + myPhoneNumber);
-                    dateOfBirth.setText("DOB: " + myDateOfBirth);
-                    userGender.setText("Gender: " + myGender);
-                    numberOfChildren.setText("Number of children: " + myNumberOfChildren);
-                }
-            }
+                            Picasso.get()
+                                    .load(myProfileImage)
+                                    .placeholder(R.drawable.profile_image_placeholder)
+                                    .into(userProfilePicture);
+                            userStatus.setText(myStatus);
+                            fullName.setText("NAME: " + myFullName);
+                            phoneNumber.setText("Phone Number: " + myPhoneNumber);
+                            dateOfBirth.setText("DOB: " + myDateOfBirth);
+                            userGender.setText("Gender: " + myGender);
+                            numberOfChildren.setText("Number of children: " + myNumberOfChildren);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+                    }
+                });
 
         openChatButton.setOnClickListener(v -> {
-            Intent chatIntent = new Intent(OtherParentsProfileActivity.this, ChatActivity.class);
+            Intent chatIntent = new
+                    Intent(OtherParentsProfileActivity.this, ChatActivity.class);
             chatIntent.putExtra("visit_user_id", otherParentUserID);
             startActivity(chatIntent);
         });
@@ -131,7 +160,8 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(OtherParentsProfileActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new
+                Intent(OtherParentsProfileActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
     }

@@ -1,5 +1,9 @@
 package com.MwandoJrTechnologies.the_smart_parent.Profile;
 
+/**
+ * Editing the users profile
+ */
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -13,7 +17,6 @@ import android.widget.EditText;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +30,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,11 +41,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileSettingsActivity extends AppCompatActivity {
-
-    final static int galleryPick = 1;
 
     private ProgressDialog progressDialog;
 
@@ -71,8 +72,15 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
-        profileSettingsReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
-        userProfileImageRef = FirebaseStorage.getInstance().getReference().child("ProfilePictures");
+        profileSettingsReference = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("Users")
+                .child(currentUserID);
+        userProfileImageRef = FirebaseStorage
+                .getInstance()
+                .getReference()
+                .child("ProfilePictures");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -125,16 +133,42 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
 
                     if (dataSnapshot.hasChild("profileImage")) {
-                        String myProfileImage = Objects.requireNonNull(dataSnapshot.child("profileImage").getValue()).toString();
-                        Picasso.get().load(myProfileImage).placeholder(R.drawable.profile_image_placeholder).into(profileSettingImage);
+                        String myProfileImage = Objects
+                                .requireNonNull(dataSnapshot
+                                        .child("profileImage")
+                                        .getValue())
+                                .toString();
+                        Picasso.get()
+                                .load(myProfileImage)
+                                .placeholder(R.drawable.profile_image_placeholder)
+                                .into(profileSettingImage);
                     }
 
-                    String myStatus = Objects.requireNonNull(dataSnapshot.child("status").getValue()).toString();
-                    String myFullName = Objects.requireNonNull(dataSnapshot.child("fullName").getValue()).toString();
-                    String myPhoneNumber = Objects.requireNonNull(dataSnapshot.child("phoneNumber").getValue()).toString();
-                    String myDateOfBirth = Objects.requireNonNull(dataSnapshot.child("dob").getValue()).toString();
-                    String myGender = Objects.requireNonNull(dataSnapshot.child("gender").getValue()).toString();
-                    String myNumberOfChildren = Objects.requireNonNull(dataSnapshot.child("numberOfChildren").getValue()).toString();
+                    String myStatus = Objects
+                            .requireNonNull(dataSnapshot.child("status")
+                                    .getValue())
+                            .toString();
+                    String myFullName = Objects
+                            .requireNonNull(dataSnapshot.child("fullName")
+                                    .getValue())
+                            .toString();
+                    String myPhoneNumber = Objects
+                            .requireNonNull(dataSnapshot.child("phoneNumber")
+                                    .getValue())
+                            .toString();
+                    String myDateOfBirth = Objects
+                            .requireNonNull(dataSnapshot.child("dob")
+                                    .getValue())
+                            .toString();
+                    /**
+                     * String myGender = Objects
+                     * .requireNonNull(dataSnapshot.child("gender")
+                     * .getValue()).toString();
+                     */
+                    String myNumberOfChildren = Objects
+                            .requireNonNull(dataSnapshot.child("numberOfChildren")
+                                    .getValue())
+                            .toString();
 
 
                     profileSettingsStatus.setText(myStatus);
@@ -154,12 +188,20 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         profileSettingsSaveButton.setOnClickListener(v -> ValidateAccountsInformation());
 
         profileSettingImage.setOnClickListener(v -> {
-//opening gallery to choose image
-            Intent galleryIntent = new Intent();
-            galleryIntent.setType("image/*");
-            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(galleryIntent, galleryPick);
+
+            //method for choosing an image file
+            imageFileChooser();
+
         });
+    }
+
+    /**
+     * helper method for choosing new image, from camera or gallery
+     */
+
+    private void imageFileChooser() {
+
+        CropImage.activity().start(ProfileSettingsActivity.this);
     }
 
 
@@ -169,19 +211,12 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == galleryPick && resultCode == RESULT_OK && data != null) {
-            Uri imageUri = data.getData();
-
-            //adding crop image functionality using arthurHub library on github
-            CropImage.activity()
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1, 1)
-                    .start(this);
-        }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode == RESULT_OK) {
+                assert result != null;
 
                 //show progress dialog
                 progressDialog.setTitle("Profile Image");
@@ -191,20 +226,21 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
                 Uri resultUri = result.getUri();
 
-                //creating a filepath for pushing cropped image to fireBase storage by unique user id
-                final StorageReference filePath = userProfileImageRef.child(resultUri.getLastPathSegment() + currentUserID + ".jpg");
+                //creating a filepath for pushing cropped image to fireBase storage by user id
+                final StorageReference filePath = userProfileImageRef
+                        .child(resultUri.getLastPathSegment() + currentUserID + ".jpg");
 
                 //now store in fireBase storage
                 final UploadTask uploadTask = filePath.putFile(resultUri);
 
                 uploadTask.addOnSuccessListener(taskSnapshot -> {
 
-                    Task<Uri> UriTask = uploadTask.continueWithTask(task -> {
+                    Task<Uri> uriTask = uploadTask.continueWithTask(task -> {
                         if (!task.isSuccessful()) {
                             throw task.getException();
                         }
 
-                        //get the url...INITIALISE downloadImageUrl at the most to ie....String downloadImageUrl
+                        //get the url...INITIALISE downloadImageUrl
                         downloadImageUrl = filePath.getDownloadUrl().toString();
                         return filePath.getDownloadUrl();
 
@@ -215,7 +251,9 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                             //get the link
                             downloadImageUrl = task.getResult().toString();
                             addLinkToFireBaseDatabase();
-                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Good", Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar = Snackbar
+                                    .make(findViewById(android.R.id.content),
+                                            "Good", Snackbar.LENGTH_SHORT);
                             snackbar.show();
                         }
                     });
@@ -225,21 +263,24 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     }
 
     private void addLinkToFireBaseDatabase() {
-        profileSettingsReference.child("profileImage").setValue(downloadImageUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    progressDialog.dismiss();
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "profile image uploaded successfully uploaded...", Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                } else {
-                    progressDialog.dismiss();
-                    String message = task.getException().getMessage();
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error occurred  " + message, Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                }
-            }
-        });
+        profileSettingsReference
+                .child("profileImage")
+                .setValue(downloadImageUrl)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        progressDialog.dismiss();
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                                "profile image uploaded successfully uploaded...",
+                                Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    } else {
+                        progressDialog.dismiss();
+                        String message = task.getException().getMessage();
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                                "Error occurred  " + message, Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    }
+                });
     }
 
 
@@ -253,13 +294,13 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         if (status.isEmpty()) {
             profileSettingsStatus.setError("Please update your status");
-            profileSettingsStatus.requestFocus();
+            // profileSettingsStatus.requestFocus();
             progressDialog.dismiss();
         }
 
         if (fullName.isEmpty()) {
             profileSettingsFullName.setError("Please write your full name");
-            profileSettingsFullName.requestFocus();
+            //  profileSettingsFullName.requestFocus();
             progressDialog.dismiss();
         }
         if (phoneNumber.isEmpty()) {
@@ -277,8 +318,9 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             progressDialog.dismiss();
         }
         if (fullName.isEmpty()) {
-            profileSettingsNumberOfChildren.setError("Please Enter number of children you have if none enter 0");
-            profileSettingsNumberOfChildren.requestFocus();
+            profileSettingsNumberOfChildren
+                    .setError("Please Enter number of children you have if none enter 0");
+            // profileSettingsNumberOfChildren.requestFocus();
             progressDialog.dismiss();
         } else {
 
@@ -299,22 +341,24 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
 
                     SendUserToMainActivity();
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Account Updated Successfully", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content),
+                                    "Account Updated Successfully",
+                                    Snackbar.LENGTH_LONG);
                     snackbar.show();
                     progressDialog.dismiss();
 
                 } else {
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred,Please try again", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content),
+                                    "An error occurred,Please try again",
+                                    Snackbar.LENGTH_LONG);
                     snackbar.show();
                     progressDialog.dismiss();
 
                 }
-
             });
-
-
         }
-
     }
 
 
@@ -332,8 +376,10 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(ProfileSettingsActivity.this, MainActivity.class);
-        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent mainActivityIntent = new
+                Intent(ProfileSettingsActivity.this, MainActivity.class);
+        mainActivityIntent
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainActivityIntent);
         finish();
     }

@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        /*
+        /**
          * for navigation drawer
          *
          * display current logged in user details only
@@ -402,6 +402,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_home:
                 SendUserToMainActivity();
                 break;
+
             case R.id.nav_stories:
                 SendUserToStoriesActivity();
                 break;
@@ -416,9 +417,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_profile:
                 SendUserToProfileActivity();
                 break;
+
             case R.id.nav_growthAnalysis:
                 SendUserToGrowthAnalysisActivity();
                 break;
+
             case R.id.nav_reminders:
                 SendUserToAlarmRemindersActivity();
 
@@ -426,15 +429,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_baby_products:
                 SendUserToProductCategoryActivity();
                 break;
+
             case R.id.nav_rate_products:
                 SendUserToRateBabyProductsActivity();
                 break;
-            case R.id.nav_add_products:
-                SendUserToAddProductsActivity();
-                break;
+
             case R.id.nav_feedback:
                 SendUserToFeedbackActivity();
                 break;
+
             case R.id.nav_logout:
                 mAuth.signOut();
                 SendUserToLoginActivity();
@@ -506,8 +509,8 @@ public class MainActivity extends AppCompatActivity {
         Intent loginIntent = new
                 Intent(MainActivity.this, LoginActivity.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(loginIntent);
         finish();
+        startActivity(loginIntent);
     }
 
     //opens edit profile activity
@@ -558,13 +561,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent(MainActivity.this, FeedbackActivity.class);
         finish();
         startActivity(feedbackActivityIntent);
-    }
-
-    private void SendUserToAddProductsActivity() {
-        Intent addProductActivityIntent = new
-                Intent(MainActivity.this, AddProductsActivity.class);
-        finish();
-        startActivity(addProductActivityIntent);
     }
 
     //opens all chat messages layout

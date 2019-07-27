@@ -29,6 +29,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SearchOtherParentsActivity extends AppCompatActivity {
@@ -74,7 +75,9 @@ public class SearchOtherParentsActivity extends AppCompatActivity {
 
     private void SearchOtherParentsByName(String searchBoxInput) {
 
-        Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Searching", Snackbar.LENGTH_LONG);
+        Snackbar snackBar = Snackbar
+                .make(findViewById(android.R.id.content),
+                        "Searching", Snackbar.LENGTH_LONG);
         snackBar.show();
 
         //the search query
@@ -82,14 +85,17 @@ public class SearchOtherParentsActivity extends AppCompatActivity {
                 .startAt(searchBoxInput).endAt(searchBoxInput + "\uf8ff");
 
 
-        final FirebaseRecyclerOptions<FindParents> options = new FirebaseRecyclerOptions.Builder<FindParents>()
+        final FirebaseRecyclerOptions<FindParents> options = new
+                FirebaseRecyclerOptions.Builder<FindParents>()
                 .setQuery(searchParentsQuery, FindParents.class)
                 .build();
 
         FirebaseRecyclerAdapter<FindParents, FindParentsViewHolder>
                 fireBaseRecyclerAdapter = new FirebaseRecyclerAdapter<FindParents, FindParentsViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull FindParentsViewHolder findParentsViewHolder, int i, @NonNull FindParents findParents) {
+            protected void onBindViewHolder
+                    (@NonNull FindParentsViewHolder findParentsViewHolder, int i,
+                     @NonNull FindParents findParents) {
                 findParents = getItem(i);
 
                 final String userName = findParents.getFullName();
@@ -105,12 +111,13 @@ public class SearchOtherParentsActivity extends AppCompatActivity {
                     //create an alert builder box
                     CharSequence options[] = new CharSequence[]{
 
-                          "View " + userName + "'s Profile",
+                            "View " + userName + "'s Profile",
                             "Send Message"
 
                     };
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SearchOtherParentsActivity.this);
+                    AlertDialog.Builder builder = new
+                            AlertDialog.Builder(SearchOtherParentsActivity.this);
                     builder.setTitle("Profile Options");
 
                     //now make it selectable
@@ -118,18 +125,21 @@ public class SearchOtherParentsActivity extends AppCompatActivity {
 
                         if (which == 0) {
 
-                            Intent profileIntent = new Intent(SearchOtherParentsActivity.this, OtherParentsProfileActivity.class);
+                            Intent profileIntent = new
+                                    Intent(SearchOtherParentsActivity.this,
+                                    OtherParentsProfileActivity.class);
                             profileIntent.putExtra("visit_user_id", userID);
                             startActivity(profileIntent);
 
                         }
                         if (which == 1) {
 
-                            Intent chatIntent = new Intent(SearchOtherParentsActivity.this, ChatActivity.class);
+                            Intent chatIntent = new
+                                    Intent(SearchOtherParentsActivity.this,
+                                    ChatActivity.class);
                             chatIntent.putExtra("visit_user_id", userID);
                             startActivity(chatIntent);
                         }
-
                     });
 
                     builder.show();
@@ -139,11 +149,15 @@ public class SearchOtherParentsActivity extends AppCompatActivity {
 
             @NonNull
             @Override
-            public FindParentsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public FindParentsViewHolder
+            onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
                 View view = LayoutInflater
                         .from(parent.getContext())
-                        .inflate(R.layout.all_parents_search_result_layout, parent, false);
+                        .inflate
+                                (R.layout.all_parents_search_result_layout,
+                                        parent,
+                                        false);
                 FindParentsViewHolder findParentsViewHolder = new FindParentsViewHolder(view);
 
                 return findParentsViewHolder;
@@ -167,7 +181,10 @@ public class SearchOtherParentsActivity extends AppCompatActivity {
         public void setProfileImage(String profileImage) {
 
             CircleImageView myProfileImage = mView.findViewById(R.id.all_users_profile_image);
-            Picasso.get().load(profileImage).placeholder(R.drawable.profile_image_placeholder).into(myProfileImage);
+            Picasso.get()
+                    .load(profileImage)
+                    .placeholder(R.drawable.profile_image_placeholder)
+                    .into(myProfileImage);
 
         }
 
@@ -183,6 +200,11 @@ public class SearchOtherParentsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        SendUserToMainActivity();
+    }
 
     //activate back button
     @Override
@@ -198,7 +220,8 @@ public class SearchOtherParentsActivity extends AppCompatActivity {
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(SearchOtherParentsActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new
+                Intent(SearchOtherParentsActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
     }

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
+import com.MwandoJrTechnologies.the_smart_parent.Profile.ProfileSettingsActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,7 +44,6 @@ import androidx.appcompat.widget.Toolbar;
 public class AddProductsActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
-    final static int galleryPick = 1;
     private Spinner productCategoryDropDown;
     private EditText editTextProductName;
     private EditText editTextProductDescription;
@@ -94,9 +94,7 @@ public class AddProductsActivity extends AppCompatActivity implements
 
         progressDialog = new ProgressDialog(this);
 
-        buttonUploadProduct.setOnClickListener(v ->
-
-        {
+        buttonUploadProduct.setOnClickListener(v -> {
             //show progress dialog
             progressDialog.setTitle("Product Upload");
             progressDialog.setMessage("Uploading product, Please wait...");
@@ -105,16 +103,6 @@ public class AddProductsActivity extends AppCompatActivity implements
 
             saveProductInformation();
 
-        });
-
-        productImage.setOnClickListener(v ->
-
-        {
-            //opening gallery to choose image
-            Intent galleryIntent = new Intent();
-            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-            galleryIntent.setType("image/*");
-            startActivityForResult(galleryIntent, galleryPick);
         });
 
         // for category dropdown
@@ -136,10 +124,25 @@ public class AddProductsActivity extends AppCompatActivity implements
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-
         // attaching data adapter to spinner
         productCategoryDropDown.setAdapter(dataAdapter);
+
+        productImage.setOnClickListener(v -> {
+            //method for choosing an image file
+            imageFileChooser();
+        });
     }
+
+
+    /**
+     * helper method for choosing new image, from camera or gallery
+     */
+
+    private void imageFileChooser() {
+
+        CropImage.activity().start(AddProductsActivity.this);
+    }
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -193,7 +196,7 @@ public class AddProductsActivity extends AppCompatActivity implements
 
         final String uniqueKey = productsDatabaseReference.push().getKey();
 
-        productRandomName = uniqueKey + " " + saveCurrentDate + saveCurrentTime;
+        productRandomName = uniqueKey;
 
     }
 
@@ -202,19 +205,12 @@ public class AddProductsActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == galleryPick && resultCode == RESULT_OK && data != null) {
-            Uri imageUri = data.getData();
-
-            //adding crop image functionality using arthurHub library on github
-            CropImage.activity()
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1, 1)
-                    .start(this);
-        }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode == RESULT_OK) {
+                assert result != null;
 
                 //show progress dialog
                 progressDialog.setTitle("Product Image");
@@ -228,7 +224,6 @@ public class AddProductsActivity extends AppCompatActivity implements
                 /**
                  * creating a filepath for pushing cropped image to fireBase storage by unique user id
                  */
-                //
                 final StorageReference filePath = productImageStorageReference
                         .child(resultUri.getLastPathSegment() + editTextProductName + ".jpg");
 
@@ -237,17 +232,12 @@ public class AddProductsActivity extends AppCompatActivity implements
 
                 uploadTask.addOnSuccessListener(taskSnapshot -> {
 
-                    Task<Uri> UriTask = uploadTask.continueWithTask(task -> {
+                    Task<Uri> uriTask = uploadTask.continueWithTask(task -> {
                         if (!task.isSuccessful()) {
                             throw task.getException();
                         }
+                        //get the url
 
-                        /**
-                         * get the url...initialize downloadImageUrl at the most to
-                         *
-                         * Example: String downloadImageUrl
-                         */
-                        //
                         downloadImageUrl = filePath.getDownloadUrl().toString();
                         return filePath.getDownloadUrl();
 
@@ -258,13 +248,9 @@ public class AddProductsActivity extends AppCompatActivity implements
                             //get the link
                             downloadImageUrl = task.getResult().toString();
 
+                            //Method to add link to firebase database
                             addLinkToFireBaseDatabase();
 
-                            Snackbar snackbar = Snackbar
-                                    .make(findViewById(android.R.id.content),
-                                            "Good",
-                                            Snackbar.LENGTH_SHORT);
-                            snackbar.show();
                             progressDialog.dismiss();
                         }
                     });
@@ -275,24 +261,26 @@ public class AddProductsActivity extends AppCompatActivity implements
 
     private void addLinkToFireBaseDatabase() {
         productsDatabaseReference.child(productRandomName)
-                .child("productImage").setValue(downloadImageUrl).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                progressDialog.dismiss();
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(android.R.id.content),
-                                "Product image uploaded successfully uploaded...",
-                                Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            } else {
-                progressDialog.dismiss();
-                String message = task.getException().getMessage();
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(android.R.id.content),
-                         "Error occurred  " + message,
-                                Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
-        });
+                .child("productImage")
+                .setValue(downloadImageUrl)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        progressDialog.dismiss();
+                        Snackbar snackbar = Snackbar
+                                .make(findViewById(android.R.id.content),
+                                        "Product image uploaded successfully...",
+                                        Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    } else {
+                        progressDialog.dismiss();
+                        String message = task.getException().getMessage();
+                        Snackbar snackbar = Snackbar
+                                .make(findViewById(android.R.id.content),
+                                        "Error occurred  " + message,
+                                        Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                });
     }
 
 
@@ -301,9 +289,9 @@ public class AddProductsActivity extends AppCompatActivity implements
         final String productName = editTextProductName.getText().toString().trim();
         String productDescription = editTextProductDescription.getText().toString().trim();
         String productManufactureCompany = editTextProductManufactureCompany
-                        .getText()
-                        .toString()
-                        .trim();
+                .getText()
+                .toString()
+                .trim();
 
         if (productName.isEmpty()) {
             editTextProductName.setError("You add a product name");
@@ -330,33 +318,32 @@ public class AddProductsActivity extends AppCompatActivity implements
             productMap.put("productName", productName);
             productMap.put("productDescription", productDescription);
             productMap.put("productManufactureCompany", productManufactureCompany);
-            productMap.put("ratings", "ratings");
             productMap.put("productKey", productRandomName);
 
             productsDatabaseReference.child(productRandomName)
                     .updateChildren(productMap)
                     .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Snackbar snackbar = Snackbar
-                            .make(findViewById(android.R.id.content),
-                             "Product upload successful", Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                    progressDialog.dismiss();
+                        if (task.isSuccessful()) {
+                            Snackbar snackbar = Snackbar
+                                    .make(findViewById(android.R.id.content),
+                                            "Product upload successful", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                            progressDialog.dismiss();
 
-                } else {
-                    String message = task.getException().getMessage();
-                    Snackbar snackbar = Snackbar
-                            .make(findViewById(android.R.id.content),
-                             "An error occurred,please try again " + message,
-                                    Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                    progressDialog.dismiss();
-                }
-            });
+                        } else {
+                            String message = task.getException().getMessage();
+                            Snackbar snackbar = Snackbar
+                                    .make(findViewById(android.R.id.content),
+                                            "An error occurred,please try again " + message,
+                                            Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            progressDialog.dismiss();
+                        }
+                    });
 
             //start view product activity
             finish();
-            SendUserToViewProductsActivity();
+            SendUserToMainActivity();
         }
     }
 

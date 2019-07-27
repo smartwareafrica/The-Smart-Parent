@@ -269,7 +269,7 @@
         android:layout_marginBottom="70dp"
         android:elevation="@dimen/default_gap"
         android:src="@drawable/ic_add_white_24dp"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:ignore="RelativeOverlap" />
 
 </RelativeLayout>

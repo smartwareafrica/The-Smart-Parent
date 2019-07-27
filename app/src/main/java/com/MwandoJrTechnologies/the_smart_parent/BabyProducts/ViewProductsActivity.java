@@ -105,7 +105,6 @@ public class ViewProductsActivity extends AppCompatActivity {
                         //gets the products unique key
                         final String productKey = products.getProductKey();
 
-
                         Picasso.get()
                                 .load(products.getProductImage())
                                 .placeholder(R.mipmap.project_logo)

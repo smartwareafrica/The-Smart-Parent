@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class RateBabyProductsActivity extends AppCompatActivity {
 
     private RecyclerView productsRecyclerView;
-    private AppCompatButton goToViewProductRatingsButton;
+    private AppCompatButton goToTateProductCategory;
 
     private DatabaseReference productsReference;
     private FirebaseAuth mAuth;
@@ -55,31 +55,36 @@ public class RateBabyProductsActivity extends AppCompatActivity {
         productsReference = FirebaseDatabase.getInstance().getReference().child("Products");
 
         productsRecyclerView = findViewById(R.id.rate_products_recycler_view);
-        goToViewProductRatingsButton = findViewById(R.id.button_go_to_rate_products);
+        goToTateProductCategory = findViewById(R.id.button_go_to_rate_products);
 
 
-        goToViewProductRatingsButton.setOnClickListener(v -> SendUserToViewProductsActivity());
+        goToTateProductCategory.setOnClickListener(v -> SendUserToRateProductsCategory());
 
         DisplayAllProductsLayouts();
     }
 
     private void DisplayAllProductsLayouts() {
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(RateBabyProductsActivity.this);
+        LinearLayoutManager linearLayoutManager = new
+                LinearLayoutManager(RateBabyProductsActivity.this);
 
         productsRecyclerView.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
 
 
-        final FirebaseRecyclerOptions<Products> options = new FirebaseRecyclerOptions.Builder<Products>()
+        final FirebaseRecyclerOptions<Products> options = new
+                FirebaseRecyclerOptions.Builder<Products>()
                 .setQuery(productsReference, Products.class)
                 .build();
 
-        FirebaseRecyclerAdapter<Products, ProductsViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Products, ProductsViewHolder>(options) {
+        FirebaseRecyclerAdapter<Products, ProductsViewHolder> firebaseRecyclerAdapter = new
+                 FirebaseRecyclerAdapter<Products, ProductsViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull ProductsViewHolder productsViewHolder, int position, @NonNull Products products) {
+                    protected void onBindViewHolder
+                            (@NonNull ProductsViewHolder productsViewHolder,
+                             int position,
+                             @NonNull Products products) {
 
                         final String productID = getRef(position).getKey();
 
@@ -89,16 +94,27 @@ public class RateBabyProductsActivity extends AppCompatActivity {
                                 .placeholder(R.mipmap.project_logo)
                                 .into(productsViewHolder.productRatingImage);
 
-                        productsViewHolder.productRatingDisplayName.setText(products.getProductName());
-                        productsViewHolder.productRatingManufacturerName.setText(products.getProductManufactureCompany());
-                        productsViewHolder.productRatingDisplayDescription.setText(products.getProductDescription());
+                        productsViewHolder
+                                .productRatingDisplayName
+                                .setText(products.getProductName());
+                        productsViewHolder
+                                .productRatingManufacturerName
+                                .setText(products.getProductManufactureCompany());
+                        productsViewHolder
+                                .productRatingDisplayDescription
+                                .setText(products.getProductDescription());
 
                         //perform rating
-                        productsViewHolder.productRatingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+                        productsViewHolder
+                                .productRatingBar
+                                .setOnRatingBarChangeListener
+                                        ((ratingBar, rating, fromUser) -> {
 
-                            productsReference.child(productID).child("rating").child(currentUserID).setValue(rating);
-
-
+                            productsReference
+                                    .child(Objects.requireNonNull(productID))
+                                    .child("rating")
+                                    .child(currentUserID)
+                                    .setValue(rating);
                             //assign user who rates it
 
                         });
@@ -106,11 +122,15 @@ public class RateBabyProductsActivity extends AppCompatActivity {
 
                     @NonNull
                     @Override
-                    public ProductsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    public ProductsViewHolder
+                    onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
                         View view = LayoutInflater
                                 .from(parent.getContext())
-                                .inflate(R.layout.all_baby_product_rating_layout, parent, false);
+                                .inflate(R.layout
+                                        .all_baby_product_rating_layout,
+                                        parent,
+                                        false);
                         ProductsViewHolder viewHolder = new ProductsViewHolder(view);
 
                         return viewHolder;
@@ -150,17 +170,18 @@ public class RateBabyProductsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            SendUserToViewProductsActivity();
+            SendUserToRateProductsCategory();
         }
         return super.onOptionsItemSelected(item);
     }
 
 
     //open view products activity
-    private void SendUserToViewProductsActivity() {
-        Intent viewProductsActivityIntent = new Intent(RateBabyProductsActivity.this, ViewProductsActivity.class);
+    private void SendUserToRateProductsCategory() {
+        Intent rateProductsCategoryActivityIntent = new Intent
+                (RateBabyProductsActivity.this, RateProductsCategoryActivity.class);
         finish();
-        startActivity(viewProductsActivityIntent);
+        startActivity(rateProductsCategoryActivityIntent);
     }
 
 }

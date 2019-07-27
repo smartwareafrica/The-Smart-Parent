@@ -126,7 +126,11 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
 
-                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Registration is successful, please check your EMAIL and verify your account...", Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar
+                                    .make(findViewById(android.R.id.content),
+                                    "Registration is successful, \r\n" +
+                                            " Please check your EMAIL and verify your account...",
+                                            Snackbar.LENGTH_LONG);
                             snackbar.show();
 
 
@@ -135,7 +139,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                         } else {
                             String message = task.getException().getMessage();
-                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                                    "An Error Occurred: " + message, Snackbar.LENGTH_LONG);
                             snackbar.show();
                             progressDialog.dismiss();
                         }
@@ -156,7 +161,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 } else {
                     String message = task.getException().getMessage();
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error: " + message, Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                            "Error: " + message, Snackbar.LENGTH_LONG);
                     snackbar.show();
                     mAuth.signOut();
                 }

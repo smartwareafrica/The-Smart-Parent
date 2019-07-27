@@ -42,12 +42,12 @@
         android:layout_marginBottom="70dp"
         android:elevation="@dimen/default_gap"
         android:src="@drawable/ic_add_white_24dp"
-        android:text="view category"
+        android:text="@string/category_name"
         android:background="#ffffff"
         android:textColor="#000000"
         android:gravity="center"
         android:textSize="40sp"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:ignore="RelativeOverlap" />
 
 

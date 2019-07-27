@@ -1,5 +1,10 @@
 package com.MwandoJrTechnologies.the_smart_parent.NewsFeed;
 
+/**
+ * Where parents ask all of their questions
+ */
+
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -79,7 +84,9 @@ public class WriteQueryActivity extends AppCompatActivity {
     private void ValidatePostInformation() {
         post = editTextWriteQuery.getText().toString();
         if (TextUtils.isEmpty(post)) {
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please ask a question", Snackbar.LENGTH_SHORT);
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(android.R.id.content),
+                            "Please ask a question", Snackbar.LENGTH_SHORT);
             snackbar.show();
         } else {
 
@@ -98,12 +105,14 @@ public class WriteQueryActivity extends AppCompatActivity {
         //setting current date and time to generate random keys for the users images posted
         //setting current date
         Calendar callForDate = Calendar.getInstance();
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat currentDate = new
+                SimpleDateFormat("dd-MMMM-yyyy");
         saveCurrentDate = currentDate.format(callForDate.getTime());
 
         //setting current date
         Calendar callForTime = Calendar.getInstance();
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat currentTime = new
+                SimpleDateFormat("HH:mm:ss");
         saveCurrentTime = currentTime.format(callForTime.getTime());
 
         postRandomName = saveCurrentDate + saveCurrentTime;
@@ -136,10 +145,16 @@ public class WriteQueryActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //validation if child exists then we execute
                 if (dataSnapshot.exists()) {
-                    final String userFullName = dataSnapshot.child("fullName").getValue().toString();
-                    final String userProfileImage = dataSnapshot.child("profileImage").getValue().toString();
+                    final String userFullName = dataSnapshot
+                            .child("fullName")
+                            .getValue()
+                            .toString();
+                    final String userProfileImage = dataSnapshot
+                            .child("profileImage")
+                            .getValue()
+                            .toString();
 
-                    HashMap postsMap = new HashMap();
+                    HashMap<String, Object> postsMap = new HashMap<>();
                     postsMap.put("uid", currentUserID);
                     postsMap.put("date", saveCurrentDate);
                     postsMap.put("time", saveCurrentTime);
@@ -151,12 +166,18 @@ public class WriteQueryActivity extends AppCompatActivity {
                     postsReference.child(currentUserID + postRandomName).updateChildren(postsMap)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
-                                     SendUserToMainActivity();
-                                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "New Question Updated Successfully.", Snackbar.LENGTH_SHORT);
+                                    SendUserToMainActivity();
+                                    Snackbar snackbar = Snackbar
+                                            .make(findViewById(android.R.id.content),
+                                                    "New Question Updated Successfully.",
+                                                    Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                     progressDialog.dismiss();
                                 } else {
-                                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please try again. An error occurred", Snackbar.LENGTH_SHORT);
+                                    Snackbar snackbar = Snackbar
+                                            .make(findViewById(android.R.id.content),
+                                                    "Please try again. An error occurred",
+                                                    Snackbar.LENGTH_SHORT);
                                     snackbar.show();
                                     progressDialog.dismiss();
                                 }
@@ -179,7 +200,8 @@ public class WriteQueryActivity extends AppCompatActivity {
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(WriteQueryActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new
+                Intent(WriteQueryActivity.this, MainActivity.class);
         finish();
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         startActivity(mainActivityIntent);

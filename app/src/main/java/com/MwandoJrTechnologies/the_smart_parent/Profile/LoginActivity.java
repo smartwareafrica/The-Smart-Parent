@@ -51,11 +51,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        if (mAuth.getCurrentUser() != null) {
-            //start View profile fragment here
-            // OpenViewProfileFragment();
-        }
-
         editTextEmail = findViewById(R.id.login_email);
         editTextPassword = findViewById(R.id.login_password);
         buttonSignIn = findViewById(R.id.button_sign_in);
@@ -71,7 +66,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
         // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
@@ -122,7 +118,8 @@ public class LoginActivity extends AppCompatActivity {
                 fireBaseAuthWithGoogle(account);
 
                 Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                        "Please wait while we are getting your results...", Snackbar.LENGTH_LONG);
+                        "Please wait while we are getting your results...",
+                        Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
                 Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
@@ -249,15 +246,18 @@ public class LoginActivity extends AppCompatActivity {
 
     //open login activity
     private void SendUserToRegisterActivity() {
-        Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+        Intent registerIntent = new
+                Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(registerIntent);
 
     }
 
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
-        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent mainActivityIntent = new
+                Intent(LoginActivity.this, MainActivity.class);
+        mainActivityIntent
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         finish();
         startActivity(mainActivityIntent);
     }
@@ -265,14 +265,17 @@ public class LoginActivity extends AppCompatActivity {
     //opens login activity
     private void SendUserToLoginActivity() {
         Intent loginIntent = new Intent(LoginActivity.this, LoginActivity.class);
-        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        loginIntent
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
 
     }
 
     private void SendUserToResetPasswordActivity() {
-        Intent resetPasswordIntent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
-        resetPasswordIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent resetPasswordIntent = new
+                Intent(LoginActivity.this, ResetPasswordActivity.class);
+        resetPasswordIntent
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(resetPasswordIntent);
     }
 }

@@ -39,6 +39,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -153,11 +154,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
         });
         profileImage.setOnClickListener(v -> {
-            //opening gallery to choose image
-            Intent galleryIntent = new Intent();
-            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-            galleryIntent.setType("image/*");
-            startActivityForResult(galleryIntent, galleryPick);
+            //method for choosing an image file
+            imageFileChooser();
         });
         usersReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -173,7 +171,8 @@ public class EditProfileActivity extends AppCompatActivity {
                                 .into(profileImage);
 
                     } else {
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Please select a profile picture first", Snackbar.LENGTH_LONG);
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                                "Please select a profile picture first", Snackbar.LENGTH_LONG);
                         snackbar.show();
 
                     }
@@ -187,26 +186,34 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * helper method for choosing new image, from camera or gallery
+     */
 
-    //adding a profile image to fireBase storage
-    //method for picking the chosen image from my gallery
+    private void imageFileChooser() {
+
+        CropImage.activity().start(EditProfileActivity.this);
+    }
+
+    /**
+     * adding a profile image to fireBase storage
+     * <p>
+     * method for picking the chosen image from my gallery
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == galleryPick && resultCode == RESULT_OK && data != null) {
-            Uri imageUri = data.getData();
-
-            //adding crop image functionality using arthurHub library on github
-            CropImage.activity()
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1, 1)
-                    .start(this);
-        }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode == RESULT_OK) {
+                assert result != null;
 
                 //show progress dialog
                 progressDialog.setTitle("Profile Image");
@@ -216,20 +223,22 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 Uri resultUri = result.getUri();
 
-                //creating a filepath for pushing cropped image to fireBase storage by unique user id
-                final StorageReference filePath = userProfileImageRef.child(resultUri.getLastPathSegment() + currentUserID + ".jpg");
+                //Adding to storage by User ID
+                final StorageReference filePath = userProfileImageRef
+                        .child(resultUri
+                                .getLastPathSegment() + currentUserID + ".jpg");
 
                 //now store in fireBase storage
                 final UploadTask uploadTask = filePath.putFile(resultUri);
 
                 uploadTask.addOnSuccessListener(taskSnapshot -> {
 
-                    Task<Uri> UriTask = uploadTask.continueWithTask(task -> {
+                    Task<Uri> uri = uploadTask.continueWithTask(task -> {
                         if (!task.isSuccessful()) {
                             throw task.getException();
                         }
 
-                        //get the url...INITIALISE downloadImageUrl at the most to ie....String downloadImageUrl
+                        //get the url
                         downloadImageUrl = filePath.getDownloadUrl().toString();
                         return filePath.getDownloadUrl();
 
@@ -249,18 +258,27 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void addLinkToFireBaseDatabase() {
-        usersReference.child("profileImage").setValue(downloadImageUrl).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                progressDialog.dismiss();
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "profile image uploaded successfully uploaded...", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            } else {
-                progressDialog.dismiss();
-                String message = task.getException().getMessage();
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Error occurred  " + message, Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
-        });
+        usersReference
+                .child("profileImage")
+                .setValue(downloadImageUrl)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        progressDialog.dismiss();
+                        Snackbar snackbar = Snackbar
+                                .make(findViewById(android.R.id.content),
+                                        "profile image uploaded successfully uploaded...",
+                                        Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    } else {
+                        progressDialog.dismiss();
+                        String message = task.getException().getMessage();
+                        Snackbar snackbar = Snackbar
+                                .make(findViewById(android.R.id.content),
+                                        "Error occurred  " + message,
+                                        Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                });
     }
 
     @Override
@@ -316,13 +334,19 @@ public class EditProfileActivity extends AppCompatActivity {
             usersReference.updateChildren(userMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     SendUserToMainActivity();
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Your details saved successfully", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content),
+                                    "Your details saved successfully",
+                                    Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     progressDialog.dismiss();
 
                 } else {
                     String message = task.getException().getMessage();
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "An error occurred,please try again " + message, Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content),
+                                    "An error occurred,please try again " + message,
+                                    Snackbar.LENGTH_SHORT);
                     snackbar.show();
                     progressDialog.dismiss();
                 }
@@ -340,33 +364,5 @@ public class EditProfileActivity extends AppCompatActivity {
         startActivity(registerIntent);
     }
 }
-
-/**
- * //checking of the username exists in the database
- * private boolean checkIfUserNameExists() {
- * <p>
- * String username = editTextUsername.getText().toString().trim();
- * Query usernameQuery = FirebaseDatabase.getInstance()
- * .getReference()
- * .child("Users")
- * .orderByChild("userName")
- * .equalTo(username);
- * usernameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
- *
- * @Override public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
- * <p>
- * if (dataSnapshot.getChildrenCount() > 0) {
- * <p>
- * //should stop further execution
- * <p>
- * }
- * }
- * @Override public void onCancelled(@NonNull DatabaseError databaseError) {
- * //display error
- * }
- * });
- * return true;
- * }
- */
 
 

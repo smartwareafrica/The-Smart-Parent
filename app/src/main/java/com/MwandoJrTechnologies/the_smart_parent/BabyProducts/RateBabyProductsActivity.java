@@ -1,5 +1,7 @@
 package com.MwandoJrTechnologies.the_smart_parent.BabyProducts;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import com.squareup.picasso.Picasso;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
@@ -32,10 +35,12 @@ public class RateBabyProductsActivity extends AppCompatActivity {
     private RecyclerView productsRecyclerView;
     private AppCompatButton goToTateProductCategory;
 
+    private String rateProductCategory;
+    private TextView customCategoryName;
+
     private DatabaseReference productsReference;
     private FirebaseAuth mAuth;
     String currentUserID;
-
 
 
     @Override
@@ -57,10 +62,20 @@ public class RateBabyProductsActivity extends AppCompatActivity {
         productsRecyclerView = findViewById(R.id.rate_products_recycler_view);
         goToTateProductCategory = findViewById(R.id.button_go_to_rate_products);
 
+        /**
+         * Receiving data inside onCreate() method of Second Activity
+         *
+         * Get extra method
+         */
+        rateProductCategory = getIntent().getExtras().get("product_category").toString();
+
 
         goToTateProductCategory.setOnClickListener(v -> SendUserToRateProductsCategory());
 
         DisplayAllProductsLayouts();
+
+        //for the toolbar
+        categoryCustomToolbar();
     }
 
     private void DisplayAllProductsLayouts() {
@@ -79,7 +94,7 @@ public class RateBabyProductsActivity extends AppCompatActivity {
                 .build();
 
         FirebaseRecyclerAdapter<Products, ProductsViewHolder> firebaseRecyclerAdapter = new
-                 FirebaseRecyclerAdapter<Products, ProductsViewHolder>(options) {
+                FirebaseRecyclerAdapter<Products, ProductsViewHolder>(options) {
                     @Override
                     protected void onBindViewHolder
                             (@NonNull ProductsViewHolder productsViewHolder,
@@ -110,14 +125,14 @@ public class RateBabyProductsActivity extends AppCompatActivity {
                                 .setOnRatingBarChangeListener
                                         ((ratingBar, rating, fromUser) -> {
 
-                            productsReference
-                                    .child(Objects.requireNonNull(productID))
-                                    .child("rating")
-                                    .child(currentUserID)
-                                    .setValue(rating);
-                            //assign user who rates it
+                                            productsReference
+                                                    .child(Objects.requireNonNull(productID))
+                                                    .child("rating")
+                                                    .child(currentUserID)
+                                                    .setValue(rating);
+                                            //assign user who rates it
 
-                        });
+                                        });
                     }
 
                     @NonNull
@@ -128,7 +143,7 @@ public class RateBabyProductsActivity extends AppCompatActivity {
                         View view = LayoutInflater
                                 .from(parent.getContext())
                                 .inflate(R.layout
-                                        .all_baby_product_rating_layout,
+                                                .all_baby_product_rating_layout,
                                         parent,
                                         false);
                         ProductsViewHolder viewHolder = new ProductsViewHolder(view);
@@ -143,7 +158,7 @@ public class RateBabyProductsActivity extends AppCompatActivity {
     }
 
 
-    private static class ProductsViewHolder extends RecyclerView.ViewHolder{
+    private static class ProductsViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView productRatingImage;
         private TextView productRatingDisplayName;
@@ -161,6 +176,52 @@ public class RateBabyProductsActivity extends AppCompatActivity {
             productRatingBar = itemView.findViewById(R.id.product_rating_bar);
 
         }
+    }
+
+
+    /**
+     * The customized toolbar to display the category name
+     */
+    @SuppressLint("SetTextI18n")
+    private void categoryCustomToolbar() {
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle(" ");
+
+        //connect chat custom
+        ActionBar actionBar = getSupportActionBar();
+        Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(true);
+        LayoutInflater layoutInflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View action_bar_view = layoutInflater
+                .inflate(R.layout.product_category_custom_toolbar, null);
+        actionBar.setCustomView(action_bar_view);
+
+        customCategoryName = findViewById(R.id.custom_category_name);
+
+        if (rateProductCategory.equals("diapers")) {
+            //set values
+            customCategoryName.setText("Diapers");
+
+        } else if (rateProductCategory.equals("bathingAndSkinCare")) {
+            customCategoryName.setText("Bathing & Skin Care");
+
+        } else if (rateProductCategory.equals("food")) {
+            customCategoryName.setText("Baby Food");
+
+        } else if (rateProductCategory.equals("safety")) {
+            customCategoryName.setText("Baby Safety");
+
+        } else if (rateProductCategory.equals("health")) {
+            customCategoryName.setText("Baby Health");
+
+        } else if (rateProductCategory.equals("toys")) {
+            customCategoryName.setText("Baby Toys");
+        }
+
     }
 
     //activate back button

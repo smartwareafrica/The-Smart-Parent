@@ -45,9 +45,12 @@ public class CommentsActivity extends AppCompatActivity {
     private DatabaseReference usersRef;
     private DatabaseReference postsReference;
     private FirebaseAuth mAuth;
+    private String currentUserID;
 
     private String post_key;
-    private String currentUserID;
+    private String user_query;
+
+    private TextView usersQuery;
 
 
     @Override
@@ -64,6 +67,7 @@ public class CommentsActivity extends AppCompatActivity {
 
 
         post_key = getIntent().getExtras().get("PostKey").toString();
+        user_query = getIntent().getExtras().get("user_query").toString();
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
@@ -75,6 +79,8 @@ public class CommentsActivity extends AppCompatActivity {
                 .child(post_key)
                 .child("Comments");
 
+        usersQuery = findViewById(R.id.text_view_users_query);
+        usersQuery.setText(user_query);
 
         commentsList = findViewById(R.id.comments_list);
         commentsList.setHasFixedSize(true);

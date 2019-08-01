@@ -31,25 +31,5 @@
         android:text="@string/rate"
         android:textColor="@android:color/white" />
 
-    <TextView
-        android:id="@+id/tv_view_product_cat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="end|bottom"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="70dp"
-        android:elevation="@dimen/default_gap"
-        android:src="@drawable/ic_add_white_24dp"
-        android:text="@string/category_name"
-        android:background="#ffffff"
-        android:textColor="#000000"
-        android:gravity="center"
-        android:textSize="40sp"
-        android:visibility="gone"
-        tools:ignore="RelativeOverlap" />
-
-
 
 </RelativeLayout>

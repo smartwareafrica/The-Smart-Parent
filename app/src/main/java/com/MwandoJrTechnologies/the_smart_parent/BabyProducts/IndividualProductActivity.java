@@ -19,12 +19,9 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -269,7 +266,7 @@ public class IndividualProductActivity extends AppCompatActivity {
                             Snackbar.LENGTH_SHORT);
             snackBar.show();
         } else {
-            HashMap reviewsMap = new HashMap();
+            HashMap<String, Object> reviewsMap = new HashMap<>();
             reviewsMap.put("uid", currentUserID);
             reviewsMap.put("review", reviewText);
             reviewsMap.put("fullName", fullName);

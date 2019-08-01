@@ -210,7 +210,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void DisplayReceiverInformation() {
 
-        receiverName.setText(messageReceiverName);
+      //  receiverName.setText(messageReceiverName);
 
         rootReference.child("Users")
                 .child(messageReceiverID)

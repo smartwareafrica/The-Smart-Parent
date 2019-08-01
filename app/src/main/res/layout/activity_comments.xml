@@ -14,41 +14,70 @@
         android:layout_height="match_parent"
         android:background="#CEDDEC">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/comments_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:layout_alignParentStart="true"
-        android:layout_margin="5dp" />
+        <TextView
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:id="@+id/text_view_users_query"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/log_into_your_account"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-    <EditText
-        android:id="@+id/comment_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="10dp"
-        android:padding="15dp"
-        android:background="@android:color/white"
-        android:autofillHints="@string/please_write_your_response_here"
-        android:hint="@string/please_write_your_response_here"
-        android:inputType="textMultiLine"
-        android:textSize="15sp"
-        tools:targetApi="o" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/comments_list"
+            android:layout_below="@+id/text_view_users_query"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/my_linear_layout"
+            android:layout_alignParentStart="true"
+            android:layout_margin="5dp"
+            android:fitsSystemWindows="true" />
 
-    <ImageButton
-        android:id="@+id/post_comment_button"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_alignBottom="@+id/comment_input"
-        android:layout_marginEnd="5dp"
-        android:layout_alignParentEnd="true"
-        android:contentDescription="@string/comment_on_post"
-        android:padding="15dp"
-        android:src="@drawable/ic_send_black_24dp" />
+
+        <LinearLayout
+            android:id="@+id/my_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/background_light"
+            android:orientation="horizontal">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_enter_email"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_weight=".80">
+
+                <EditText
+                    android:id="@+id/comment_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="@string/please_write_your_response_here"
+                    android:background="@android:color/white"
+                    android:hint="@string/please_write_your_response_here"
+                    android:inputType="textMultiLine"
+                    android:padding="17dp"
+                    android:textSize="15sp"
+                    tools:ignore="Autofill"
+                    tools:targetApi="o" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/post_comment_button"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight=".20"
+                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                android:contentDescription="@string/attach_an_image"
+                android:src="@drawable/ic_send_black_24dp" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 

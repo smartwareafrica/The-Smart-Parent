@@ -72,15 +72,24 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
 
         //retrieve receivers profile image
-        usersDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(fromUserID);
+        usersDatabaseReference = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("Users")
+                .child(fromUserID);
         usersDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.hasChild("profileImage")){
 
-                    String receiverImage = dataSnapshot.child("profileImage").getValue().toString();
-                    Picasso.get().load(receiverImage).placeholder(R.drawable.profile_image_placeholder)
+                    String receiverImage = dataSnapshot
+                            .child("profileImage")
+                            .getValue()
+                            .toString();
+                    Picasso.get()
+                            .load(receiverImage)
+                            .placeholder(R.drawable.profile_image_placeholder)
                             .into(holder.receiverProfileImage);
                 }
             }
@@ -98,7 +107,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                     //display the message to the sender and to the receiver
             //for the receiver
             if (fromUserID.equals(messageSenderID)) {
-                holder.senderMessageText.setBackgroundResource(R.drawable.sender_text_message_background);
+                holder.senderMessageText
+                        .setBackgroundResource(R.drawable.sender_text_message_background);
                 holder.senderMessageText.setTextColor(Color.WHITE);
                 holder.senderMessageText.setGravity(Gravity.LEFT);
                 holder.senderMessageText.setText(messages.getMessage());
@@ -110,7 +120,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                 holder.receiverMessageText.setVisibility(View.VISIBLE);
                 holder.receiverProfileImage.setVisibility(View.VISIBLE);
 
-                holder.receiverMessageText.setBackgroundResource(R.drawable.receiver_text_message_background);
+                holder.receiverMessageText
+                        .setBackgroundResource(R.drawable.receiver_text_message_background);
                 holder.receiverMessageText.setTextColor(Color.WHITE);
                 holder.receiverMessageText.setGravity(Gravity.LEFT);
                 holder.receiverMessageText.setText(messages.getMessage());

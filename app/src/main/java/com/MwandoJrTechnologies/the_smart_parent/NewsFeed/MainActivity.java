@@ -215,7 +215,8 @@ public class MainActivity extends AppCompatActivity {
             snackbar.show();
         } else {
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                    "NETWORK ERROR! Please check your Internet connection", Snackbar.LENGTH_LONG);
+                    "NETWORK ERROR! Please check your Internet connection",
+                    Snackbar.LENGTH_LONG);
             snackbar.show();
         }
     }
@@ -224,7 +225,8 @@ public class MainActivity extends AppCompatActivity {
 
         Query sortPostsInDescendingOrder = postsReference.orderByChild("counter");
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        LinearLayoutManager linearLayoutManager = new
+                LinearLayoutManager(MainActivity.this);
         //new posts at top and old to bottom
         postList.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setReverseLayout(true);
@@ -246,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
                         final String userID = posts.getUid();
 
+                        final String userQuery = posts.getDescription();
 
                         Picasso.get().load(posts.getProfileImage())
                                 .placeholder(R.drawable.profile_image_placeholder)
@@ -277,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent clickPostIntent = new Intent(MainActivity.this,
                                     ClickPostActivity.class);
                             clickPostIntent.putExtra("PostKey", PostKey);
+                            clickPostIntent.putExtra("user_query", userQuery);
                             startActivity(clickPostIntent);
                         });
 
@@ -285,12 +289,14 @@ public class MainActivity extends AppCompatActivity {
                             Intent commentsIntent = new Intent(MainActivity.this,
                                     CommentsActivity.class);
                             commentsIntent.putExtra("PostKey", PostKey);
+                            commentsIntent.putExtra("user_query", userQuery);
                             startActivity(commentsIntent);
                         });
                         viewHolder.postResponses.setOnClickListener(v -> {
                             Intent commentsIntent = new Intent(MainActivity.this,
                                     CommentsActivity.class);
                             commentsIntent.putExtra("PostKey", PostKey);
+                            commentsIntent.putExtra("user_query", userQuery);
                             startActivity(commentsIntent);
                         });
 

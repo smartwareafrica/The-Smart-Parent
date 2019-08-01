@@ -13,7 +13,6 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
@@ -60,7 +59,8 @@ public class RateProductsCategoryActivity extends AppCompatActivity {
 
     private void SendUserToBabyDiapers() {
         Intent rateDiapersIntent = new
-                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+                Intent(RateProductsCategoryActivity.this,
+                RateBabyProductsActivity.class);
         String diapers = "diapers";
         rateDiapersIntent.putExtra("product_category", diapers);
         startActivity(rateDiapersIntent);
@@ -68,7 +68,8 @@ public class RateProductsCategoryActivity extends AppCompatActivity {
 
     private void SendUserToBathingAndSkinCareCard() {
         Intent rateBathingAndSkinCareIntent = new
-                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+                Intent(RateProductsCategoryActivity.this,
+                RateBabyProductsActivity.class);
         String bathing = "bathingAndSkinCare";
         rateBathingAndSkinCareIntent.putExtra("product_category", bathing);
         startActivity(rateBathingAndSkinCareIntent);
@@ -76,7 +77,8 @@ public class RateProductsCategoryActivity extends AppCompatActivity {
 
     private void SendUserToBabyFood() {
         Intent rateFoodIntent = new
-                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+                Intent(RateProductsCategoryActivity.this,
+                RateBabyProductsActivity.class);
         String food = "food";
         rateFoodIntent.putExtra("product_category", food);
         startActivity(rateFoodIntent);
@@ -84,7 +86,8 @@ public class RateProductsCategoryActivity extends AppCompatActivity {
 
     private void SendUserToBabyHealth() {
         Intent rateHealthIntent = new
-                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+                Intent(RateProductsCategoryActivity.this,
+                RateBabyProductsActivity.class);
         String health = "health";
         rateHealthIntent.putExtra("product_category", health);
         startActivity(rateHealthIntent);
@@ -92,7 +95,8 @@ public class RateProductsCategoryActivity extends AppCompatActivity {
 
     private void SendUserToBabySafety() {
         Intent rateSafetyIntent = new
-                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+                Intent(RateProductsCategoryActivity.this,
+                RateBabyProductsActivity.class);
         String safety = "safety";
         rateSafetyIntent.putExtra("product_category", safety);
         startActivity(rateSafetyIntent);
@@ -100,7 +104,8 @@ public class RateProductsCategoryActivity extends AppCompatActivity {
 
     private void SendUserBabyToys() {
         Intent rateToysIntent = new
-                Intent(RateProductsCategoryActivity.this, RateBabyProductsActivity.class);
+                Intent(RateProductsCategoryActivity.this,
+                RateBabyProductsActivity.class);
         String toys = "toys";
         rateToysIntent.putExtra("product_category", toys);
         startActivity(rateToysIntent);

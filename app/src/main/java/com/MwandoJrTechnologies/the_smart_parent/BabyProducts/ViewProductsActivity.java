@@ -1,8 +1,9 @@
 package com.MwandoJrTechnologies.the_smart_parent.BabyProducts;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,21 +16,17 @@ import com.MwandoJrTechnologies.the_smart_parent.NewsFeed.MainActivity;
 import com.MwandoJrTechnologies.the_smart_parent.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,10 +38,9 @@ public class ViewProductsActivity extends AppCompatActivity {
     String currentUserID;
     private String productCategory;
 
+    private TextView customCategoryName;
+
     private RecyclerView allProductsRecyclerView;
-
-
-    private TextView viewCategoryTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +51,7 @@ public class ViewProductsActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUserID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
-        getSupportActionBar().setTitle("View Product rating");
-
-
         allProductsRecyclerView = findViewById(R.id.all_baby_products_layout);
-
-        viewCategoryTv = findViewById(R.id.tv_view_product_cat);
 
 
         /**
@@ -72,12 +59,13 @@ public class ViewProductsActivity extends AppCompatActivity {
          *
          * Get extra method
          */
-
         productCategory = getIntent().getExtras().get("product_category").toString();
-        viewCategoryTv.setText(productCategory);
 
         productsReference = FirebaseDatabase.getInstance().getReference().child("Products");
         Query categoryQuery = productsReference.orderByChild("category").equalTo(productCategory);
+
+        //for the toolbar
+        categoryCustomToolbar();
 
         DisplayAllProductsLayouts();
     }
@@ -180,6 +168,52 @@ public class ViewProductsActivity extends AppCompatActivity {
             productRatedRatingBar = itemView.findViewById(R.id.view_product_rating_bar);
             productsMoreDetailsAndComments = itemView.findViewById(R.id.view_product_more_details);
         }
+    }
+
+    /**
+     * The customized toolbar to display the category name
+     */
+    @SuppressLint("SetTextI18n")
+    private void categoryCustomToolbar() {
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle(" ");
+
+
+        //connect chat custom
+        ActionBar actionBar = getSupportActionBar();
+        Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(true);
+        LayoutInflater layoutInflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View action_bar_view = layoutInflater
+                .inflate(R.layout.product_category_custom_toolbar, null);
+        actionBar.setCustomView(action_bar_view);
+
+        customCategoryName = findViewById(R.id.custom_category_name);
+
+        if (productCategory.equals("diapers")) {
+            //set values
+            customCategoryName.setText("Diapers");
+
+        } else if (productCategory.equals("bathingAndSkinCare")) {
+            customCategoryName.setText("Bathing & Skin Care");
+
+        } else if (productCategory.equals("food")) {
+            customCategoryName.setText("Baby Food");
+
+        } else if (productCategory.equals("safety")) {
+            customCategoryName.setText("Baby Safety");
+
+        } else if (productCategory.equals("health")) {
+            customCategoryName.setText("Baby Health");
+
+        } else if (productCategory.equals("toys")) {
+            customCategoryName.setText("Baby Toys");
+        }
+
     }
 
     //activate back button

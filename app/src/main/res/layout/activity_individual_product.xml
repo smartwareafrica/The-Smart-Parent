@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp">
 
-
             <ImageView
                 android:id="@+id/individual_product_image_view"
                 android:layout_width="80dp"
@@ -42,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
                     android:text="@string/product_name"
                     android:textColor="@android:color/black"
                     android:textSize="22sp"
@@ -53,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="4dp"
                     android:text="@string/product_manufacturer"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
@@ -118,41 +117,53 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/individual_product_reviews_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_review">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/text_review"
+            android:layout_above="@+id/my_linear_layout">
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/comment_input_text_field"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        <LinearLayout
+            android:id="@+id/my_linear_layout"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="60dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="60dp"
-            android:layout_marginBottom="10dp">
+            android:background="@android:color/background_light"
+            android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/individual_product_comment_input"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:hint="@string/please_write_your_response_here"
-                android:inputType="textMultiLine"
-                android:textSize="15sp" />
-        </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageButton
-            android:id="@+id/individual_product_comment_send"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_alignBottom="@+id/comment_input_text_field"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="5dp"
-            android:contentDescription="@string/comment_on_post"
-            android:src="@drawable/ic_send_black_24dp" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_enter_email"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_weight=".80">
+
+                <EditText
+                    android:id="@+id/individual_product_comment_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"
+                    android:hint="@string/please_write_your_response_here"
+                    android:inputType="textMultiLine"
+                    android:padding="17dp"
+                    android:textSize="15sp"
+                    tools:ignore="Autofill" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/individual_product_comment_send"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight=".20"
+                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                android:contentDescription="@string/attach_an_image"
+                android:src="@drawable/ic_send_black_24dp" />
+        </LinearLayout>
 
     </RelativeLayout>
 

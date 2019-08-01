@@ -34,15 +34,15 @@
                     android:id="@+id/product_rate_image"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:scaleType="centerCrop"
                     android:layout_gravity="center"
                     android:src="@drawable/profile_image_placeholder"
                     tools:ignore="ContentDescription" />
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="110dp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:layout_marginBottom="2dp"
@@ -57,7 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="5dp"
+                        android:layout_margin="1dp"
                         android:text="@string/rate2"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
@@ -91,16 +91,15 @@
                        android:textColor="@android:color/black"
                        android:textSize="12sp"
                        android:textStyle="bold" />
-
-                   <RatingBar
-                       android:layout_marginBottom="2dp"
-                       android:id="@+id/product_rating_bar"
+                   <TextView
+                       android:layout_marginTop="2dp"
+                       android:id="@+id/product_rate_description"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:layout_gravity="center"
-                       android:numStars="5"
-                       android:stepSize="1"
-                       android:theme="@style/RatingBar" />
+                       android:layout_marginStart="5dp"
+                       android:text="@string/product_description"
+                       android:textColor="@android:color/black"
+                       android:textSize="15sp"/>
                </LinearLayout>
 
             </LinearLayout>
@@ -112,15 +111,15 @@
             android:layout_height="0.5dip"
             android:background="#ffffff" />
 
-        <TextView
-            android:layout_marginTop="2dp"
-            android:id="@+id/product_rate_description"
+        <RatingBar
+            android:layout_marginBottom="2dp"
+            android:id="@+id/product_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="@string/product_description"
-            android:textColor="@android:color/black"
-            android:textSize="15sp"/>
+            android:layout_gravity="center"
+            android:numStars="5"
+            android:stepSize="1"
+            android:theme="@style/RatingBar" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

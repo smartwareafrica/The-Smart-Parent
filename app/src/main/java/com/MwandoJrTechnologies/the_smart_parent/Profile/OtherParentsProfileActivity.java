@@ -102,9 +102,10 @@ public class OtherParentsProfileActivity extends AppCompatActivity {
                                     .child("gender")
                                     .getValue())
                                     .toString();
-                            String myNumberOfChildren = dataSnapshot
+                            String myNumberOfChildren = Objects.requireNonNull(dataSnapshot
                                     .child("numberOfChildren")
-                                    .getValue().toString();
+                                    .getValue())
+                                    .toString();
 
                             Picasso.get()
                                     .load(myProfileImage)

@@ -10,6 +10,11 @@
             android:id="@+id/nav_stories"
             android:icon="@drawable/ic_receipt_black_24dp"
             android:title="@string/stories" />
+
+        <item
+            android:id="@+id/nav_find_clinics"
+            android:icon="@drawable/ic_find_in_page_black_24dp"
+            android:title="@string/find_clinics_around" />
         <item
             android:id="@+id/nav_chats"
             android:icon="@drawable/ic_chat_white_24dp"
@@ -23,17 +28,11 @@
             android:icon="@drawable/ic_person_outline_white_24dp"
             android:title="@string/profile" />
 
-
-        <item
-            android:id="@+id/nav_growthAnalysis"
-            android:icon="@drawable/ic_timeline_white_24dp"
-            android:title="@string/growth_analysis" />
-
-
         <item
             android:id="@+id/nav_reminders"
             android:icon="@drawable/ic_notifications_active_black_24dp"
             android:title="@string/reminders" />
+
         <item
             android:id="@+id/nav_baby_products"
             android:icon="@drawable/ic_star_half_white_24dp"
@@ -46,6 +45,13 @@
             android:id="@+id/nav_rate_products"
             android:icon="@drawable/ic_star_border_white_24dp"
             android:title="@string/rate_products" />
+
+
+        <item
+            android:id="@+id/nav_growthAnalysis"
+            android:icon="@drawable/ic_timeline_white_24dp"
+            android:title="@string/growth_analysis" />
+
         <item
             android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_feedback_black_24dp"
@@ -55,6 +61,6 @@
     <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/ic_phonelink_lock_white_24dp"
-        android:title="@string/logout"/>
+        android:title="@string/logout" />
 
 </menu>

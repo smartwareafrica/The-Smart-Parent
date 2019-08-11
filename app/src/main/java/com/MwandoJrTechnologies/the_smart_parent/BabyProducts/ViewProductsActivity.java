@@ -62,7 +62,6 @@ public class ViewProductsActivity extends AppCompatActivity {
         productCategory = getIntent().getExtras().get("product_category").toString();
 
         productsReference = FirebaseDatabase.getInstance().getReference().child("Products");
-        Query categoryQuery = productsReference.orderByChild("category").equalTo(productCategory);
 
         //for the toolbar
         categoryCustomToolbar();
@@ -76,13 +75,18 @@ public class ViewProductsActivity extends AppCompatActivity {
                 LinearLayoutManager(ViewProductsActivity.this);
 
         allProductsRecyclerView.setLayoutManager(linearLayoutManager);
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setReverseLayout(false);
+        linearLayoutManager.setStackFromEnd(false);
+
+        Query categoryQuery = productsReference
+                .orderByChild("category")
+                .equalTo(productCategory);
 
         final FirebaseRecyclerOptions<Products> options = new
                 FirebaseRecyclerOptions.Builder<Products>()
-                .setQuery(productsReference, Products.class)
+                .setQuery(categoryQuery, Products.class)
                 .build();
+
 
         FirebaseRecyclerAdapter<Products, ProductsViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Products, ProductsViewHolder>(options) {
@@ -182,7 +186,7 @@ public class ViewProductsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(" ");
 
 
-        //connect chat custom
+        //connect custom bar
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowCustomEnabled(true);

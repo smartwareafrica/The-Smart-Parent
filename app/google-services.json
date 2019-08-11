@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "837309674522-tu9815cm5or5sjqgbbces4042vhvuhlc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mwandojrtechnologies.the_smart_parent",
+            "certificate_hash": "0df95b8e70d9bbc9e4c0c786267c0fc5b2de04fe"
+          }
+        },
+        {
           "client_id": "837309674522-9rmhs8tuqsq11ft3vb5uv88umv7uu96v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -33,20 +41,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "837309674522-uqt05p1ruqij0s2aig9e5v3evbes3f1i.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

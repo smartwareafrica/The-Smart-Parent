@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AllChatMessagesActivity extends AppCompatActivity {
@@ -50,72 +51,91 @@ public class AllChatMessagesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);  //for the back button
         getSupportActionBar().setTitle("My Chats");
 
-
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
-        chatsReference = FirebaseDatabase.getInstance().getReference().child("Messages").child(currentUserID);
-        usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        chatsReference = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("Messages")
+                .child(currentUserID);
+        usersReference = FirebaseDatabase.
+                getInstance()
+                .getReference()
+                .child("Users");
 
 
         allChatsList = findViewById(R.id.all_chats_layout);
 
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AllChatMessagesActivity.this);
+        LinearLayoutManager linearLayoutManager = new
+                LinearLayoutManager(AllChatMessagesActivity.this);
 
         allChatsList.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
 
-        FirebaseRecyclerOptions<FindParents> options = new FirebaseRecyclerOptions.Builder<FindParents>()
+        FirebaseRecyclerOptions<FindParents> options = new
+                FirebaseRecyclerOptions.Builder<FindParents>()
                 .setQuery(chatsReference, FindParents.class)
                 .build();
 
         FirebaseRecyclerAdapter<FindParents, allChatsViewHolder> adapter =
                 new FirebaseRecyclerAdapter<FindParents, allChatsViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull allChatsViewHolder allChatsViewHolder, int position, @NonNull FindParents findParents) {
+                    protected void
+                    onBindViewHolder(@NonNull allChatsViewHolder allChatsViewHolder,
+                                     int position, @NonNull FindParents findParents) {
                         //get the user ID of each of the users message in the messages node
                         final String usersIDs = getRef(position).getKey();
 
-                        usersReference.child(usersIDs).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        usersReference.child(usersIDs)
+                                .addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                if (dataSnapshot.hasChild("profileImage")) {
-                                    final String retrieveProfileImage = dataSnapshot.child("profileImage").getValue().toString();
+                                        if (dataSnapshot.hasChild("profileImage")) {
+                                            final String retrieveProfileImage = dataSnapshot
+                                                    .child("profileImage").getValue().toString();
 
-                                    //display profile picture
-                                    Picasso.get()
-                                            .load(retrieveProfileImage)
-                                            .placeholder(R.drawable.profile_image_placeholder)
-                                            .into(allChatsViewHolder.allChatsProfileImage);
-                                }
+                                            //display profile picture
+                                            Picasso.get()
+                                                    .load(retrieveProfileImage)
+                                                    .placeholder(R.drawable
+                                                            .profile_image_placeholder)
+                                                    .into(allChatsViewHolder.allChatsProfileImage);
+                                        }
 
-                                final String retrieveUserFullName = dataSnapshot.child("fullName").getValue().toString();
-                                final String retrieveUserStatus = dataSnapshot.child("status").getValue().toString();
+                                        final String retrieveUserFullName = dataSnapshot
+                                                .child("fullName")
+                                                .getValue()
+                                                .toString();
+                                        final String retrieveUserStatus = dataSnapshot
+                                                .child("status")
+                                                .getValue()
+                                                .toString();
 
-                                //now display the values
-                                allChatsViewHolder.allChatsUserName.setText(retrieveUserFullName);
-                                allChatsViewHolder.allChatsUserStatus.setText(retrieveUserStatus);
+                                        //now display the values
+                                        allChatsViewHolder.allChatsUserName.setText(retrieveUserFullName);
+                                        allChatsViewHolder.allChatsUserStatus.setText(retrieveUserStatus);
 
-                            }
+                                    }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
+                                    }
+                                });
                     }
 
                     @NonNull
                     @Override
-                    public allChatsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    public allChatsViewHolder
+                    onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
                         View view = LayoutInflater
                                 .from(parent.getContext())
@@ -123,7 +143,6 @@ public class AllChatMessagesActivity extends AppCompatActivity {
 
                         return new allChatsViewHolder(view);
                     }
-
                 };
 
         allChatsList.setLayoutManager(linearLayoutManager);
@@ -134,7 +153,8 @@ public class AllChatMessagesActivity extends AppCompatActivity {
         allChatsList.setAdapter(new RecyclerView.Adapter() {
             @NonNull
             @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public RecyclerView.ViewHolder
+            onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 return null;
             }
 
@@ -180,9 +200,15 @@ public class AllChatMessagesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        SendUserToMainActivity();
+    }
+
     //open main activity
     private void SendUserToMainActivity() {
-        Intent mainActivityIntent = new Intent(AllChatMessagesActivity.this, MainActivity.class);
+        Intent mainActivityIntent = new
+                Intent(AllChatMessagesActivity.this, MainActivity.class);
         finish();
         startActivity(mainActivityIntent);
     }

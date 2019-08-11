@@ -171,11 +171,18 @@
     <string name="toys">Toys</string>
     <string name="rate_products">Rate Products</string>
     <string name="more_details_and_comments_on_product">MORE DETAILS and Comments</string>
+    <string name="title_activity_find_clinics_map">Map</string>
+    <string name="find_clinics_around">Find Clinics Around</string>
 
     <string-array name="gender_names">
         <item>Male</item>
         <item>Female</item>
         <item>Other</item>
+    </string-array>
+
+    <string-array name="news_feed_query_options">
+        <item>Edit Query</item>
+        <item>Delete Query</item>
     </string-array>
 
 

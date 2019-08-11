@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,6 +14,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@+id/button_send_message"
         android:fillViewport="true">
 
         <LinearLayout
@@ -22,9 +24,9 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:background="@color/colorPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#E9EAF0"
                 android:padding="10dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -89,21 +91,16 @@
                 style="@style/TextViewStyle"
                 android:text="@string/number_of_children" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button_send_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="40dp"
-                android:backgroundTint="#0F6A9C"
-                android:drawableStart="@drawable/outline_comment_white_48dp"
-                android:text="@string/send_message"
-                android:textAlignment="center" />
-
         </LinearLayout>
     </ScrollView>
 
-
-</LinearLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_send_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:backgroundTint="#0F6A9C"
+        android:text="@string/send_message"
+        android:textAlignment="center" />
+</RelativeLayout>

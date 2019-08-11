@@ -19,13 +19,13 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.AddProductsActivity;
 import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.ProductCategory;
 import com.MwandoJrTechnologies.the_smart_parent.BabyProducts.RateProductsCategoryActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Chats.AllChatMessagesActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Chats.SearchOtherParentsActivity;
 import com.MwandoJrTechnologies.the_smart_parent.ConnectionChecker;
 import com.MwandoJrTechnologies.the_smart_parent.FeedbackActivity;
+import com.MwandoJrTechnologies.the_smart_parent.FindClinics.FindClinicsMapActivity;
 import com.MwandoJrTechnologies.the_smart_parent.GrowthAnalysis.GrowthAnalysisActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.EditProfileActivity;
 import com.MwandoJrTechnologies.the_smart_parent.Profile.LoginActivity;
@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                                                               int viewType) {
                         View view = LayoutInflater
                                 .from(parent.getContext())
-                                .inflate(R.layout.all_post_items_layout, parent, false);
+                                .inflate(R.layout.all_parents_queries_layout, parent, false);
                         PostsViewHolder viewHolder = new PostsViewHolder(view);
                         return viewHolder;
                     }
@@ -398,7 +398,8 @@ public class MainActivity extends AppCompatActivity {
     private void hideNavigationDrawerItem() {
 
         Menu menu = navigationView.getMenu();
-        menu.findItem(R.id.nav_chats).setVisible(false);
+        //decide to make menu item visible or invisible
+        menu.findItem(R.id.nav_chats).setVisible(true);
     }
 
     // when user selects navigation drawer items
@@ -412,6 +413,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_stories:
                 SendUserToStoriesActivity();
                 break;
+
+            case R.id.nav_find_clinics:
+                SendUserToFindClinicsActivity();
+                break;
+
             case R.id.nav_chats:
                 SendUserToAllChatMessagesActivity();
                 break;
@@ -424,10 +430,6 @@ public class MainActivity extends AppCompatActivity {
                 SendUserToProfileActivity();
                 break;
 
-            case R.id.nav_growthAnalysis:
-                SendUserToGrowthAnalysisActivity();
-                break;
-
             case R.id.nav_reminders:
                 SendUserToAlarmRemindersActivity();
 
@@ -438,6 +440,10 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.nav_rate_products:
                 SendUserToRateBabyProductsActivity();
+                break;
+
+            case R.id.nav_growthAnalysis:
+                SendUserToGrowthAnalysisActivity();
                 break;
 
             case R.id.nav_feedback:
@@ -619,4 +625,13 @@ public class MainActivity extends AppCompatActivity {
         finish();
         startActivity(rateProductsIntent);
     }
+
+    //opens find clinics activity
+    private void SendUserToFindClinicsActivity() {
+        Intent findClinicsIntent = new
+                Intent(MainActivity.this, FindClinicsMapActivity.class);
+        finish();
+        startActivity(findClinicsIntent);
+    }
+
 }

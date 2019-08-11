@@ -18,6 +18,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
@@ -69,7 +70,6 @@ public class RateBabyProductsActivity extends AppCompatActivity {
          */
         rateProductCategory = getIntent().getExtras().get("product_category").toString();
 
-
         goToTateProductCategory.setOnClickListener(v -> SendUserToRateProductsCategory());
 
         DisplayAllProductsLayouts();
@@ -84,13 +84,16 @@ public class RateBabyProductsActivity extends AppCompatActivity {
                 LinearLayoutManager(RateBabyProductsActivity.this);
 
         productsRecyclerView.setLayoutManager(linearLayoutManager);
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setReverseLayout(false);
+        linearLayoutManager.setStackFromEnd(false);
 
+        Query categoryQuery = productsReference
+                .orderByChild("category")
+                .equalTo(rateProductCategory);
 
         final FirebaseRecyclerOptions<Products> options = new
                 FirebaseRecyclerOptions.Builder<Products>()
-                .setQuery(productsReference, Products.class)
+                .setQuery(categoryQuery, Products.class)
                 .build();
 
         FirebaseRecyclerAdapter<Products, ProductsViewHolder> firebaseRecyclerAdapter = new

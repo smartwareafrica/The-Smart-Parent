@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.MwandoJrTechnologies.the_smart_parent">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -16,7 +18,15 @@
         android:roundIcon="@drawable/smart_parent_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BabyProducts.RateProductsCategoryActivity"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".FindClinics.FindClinicsMapActivity"
+            android:label="@string/title_activity_find_clinics_map"/>
+        <activity android:name=".BabyProducts.RateProductsCategoryActivity" />
         <activity android:name=".BabyProducts.IndividualProductActivity" />
         <activity android:name=".BabyProducts.ProductCategory" />
         <activity android:name=".Stories.SingleStoryActivity" />
